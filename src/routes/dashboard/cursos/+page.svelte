@@ -1,6 +1,8 @@
-<script>
+<script lang="ts">
     import { CornerUpLeft } from "lucide-svelte";
-    import CourseItem from "$lib/components/courses/item.svelte"
+    import CourseItem from "$lib/components/courses/item.svelte";
+
+    let { data } = $props();
 </script>
 
 <div class="container mx-auto flex flex-col my-4">
@@ -11,10 +13,17 @@
 
     <div class="title">Cursos</div>
     <div class="flex flex-col gap-4 my-4">
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
+        {#await data['courses']}
+            <p>Carregando cursos...</p>
+        {:then courses}
+            {#each courses['courses'] as course}
+                <CourseItem
+                    courseName={course['name']}
+                    slug={course['slug']}
+                />
+            {/each}
+        {:catch error}
+            <p>Algo deu errado: {error.message}</p>
+        {/await}
     </div>
 </div>

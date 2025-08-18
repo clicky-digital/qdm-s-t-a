@@ -3,9 +3,9 @@
     import { Brain, Computer, Download, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
     import { goto } from '$app/navigation';
 
-    let { courseName, professor, slug } = $props() ;
+    let { trailName, professor, slug } = $props() ;
     function redirectPage (){
-        goto('/dashboard/cursos/'+slug)
+        goto('/dashboard/trilhas/'+slug)
     }
 </script>
 
@@ -15,7 +15,7 @@
 
     <div class="flex flex-col gap-1">
         <div class="text-slate-900 text-lg font-bold">
-            {courseName}
+            {trailName}
         </div>
 
         <div class="text-gray-500 text-sm">

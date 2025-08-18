@@ -5,6 +5,8 @@
   import Module from "$lib/components/assistir/modules.svelte";
 
   let { params } = page;
+  let promise = fetch("http://localhost/api/v1/get-trails/"+params.slug)
+      .then(res => res.json());
 
   let items = [
     {
@@ -121,6 +123,13 @@
     <div class="title">Nome do Curso</div>
     <div class="text-gray-400 text-sm">Prof. Marcus Ennes</div>
 
+    {#await promise}
+        <p>Carregando trilhas...</p>
+    {:then trail}
+        {trail['trail'][0]['name']}
+    {:catch error}
+        <p>Algo deu errado: {error.message}</p>
+    {/await}
     <div class="flex flex-col gap-4 my-4">
       <Module modules={items} />
     </div>

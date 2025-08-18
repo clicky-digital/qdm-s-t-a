@@ -1,15 +1,5 @@
 <script lang="ts">
 	import { User, Lock } from "lucide-svelte";
-
-	let email: string = "";
-	let password: string = "";
-	let rememberPassword: boolean = false;
-
-	let error: string = "";
-
-	const handleSubmit = () => {
-		console.log(email, password);
-	};
 </script>
 
 <div class="bg-slate-900 h-screen flex justify-center items-center">
@@ -28,8 +18,8 @@
 			<div
 				class="bg-slate-800 w-full max-w-md p-6 rounded-2xl border border-gray-500 shadow-sm pt-10 mt-10"
 			>
-				<form 
-					on:submit|preventDefault={handleSubmit}
+				<form
+                    method="POST" action="?/login"
 					class="w-full flex flex-col gap-3"
 				>
 					<div class="flex items-center justify-center w-full border-gray-300 sm:text-sm bg-white p-1 rounded-full">
@@ -41,7 +31,6 @@
 							type="email"
 							name="email"
 							id="email"
-							bind:value={email}
 							class="block w-full sm:text-sm border-0 bg-transparent focus:border-0 focus:ring-0 h-5"
 							placeholder="Email"
 							autocomplete="email"
@@ -57,7 +46,6 @@
 							type="password"
 							name="password"
 							id="password"
-							bind:value={password}
 							class="block w-full sm:text-sm border-0 bg-transparent focus:border-0 focus:ring-0 h-5"
 							placeholder="Password"
 							autocomplete="current-password"
@@ -79,10 +67,10 @@
 						<label 
 							class="flex items-center justify-center w-full text-xs p-1 text-gray-100 gap-2"
 						>
-							<input 
+							<input
+                                name="rememeberPassword"
 								type="checkbox"
-								class="w-4 h-4 border-gray-300 rounded-sm" 
-								bind:checked={rememberPassword}
+								class="w-4 h-4 border-gray-300 rounded-sm"
 							/>
 								Lembrar minha senha
 						</label>
