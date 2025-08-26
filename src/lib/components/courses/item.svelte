@@ -3,14 +3,12 @@
     import { Brain, Computer, Download, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
     import { goto } from '$app/navigation';
 
-    let { courseName, professor, slug } = $props() ;
-    function redirectPage (){
-        goto('/dashboard/cursos/'+slug)
-    }
+    let { courseName, professor, slug } = $props();
 </script>
 
 <div class="h-60 w-full bg-gray-100 rounded relative flex gap-6 items-center p-4">
     <div class="w-72 h-full bg-gray-600 rounded-lg">
+        <img class="w-full h-full" src="https://images3.alphacoders.com/857/thumb-1920-857795.png" alt="">
     </div>
 
     <div class="flex flex-col gap-1">
@@ -23,12 +21,12 @@
         </div>
 
         <div>
-            <Button variant="default">
+            <Button variant="default" class="cursor-pointer">
                 <Play class="w-4 h-4" />
                 Continuar
             </Button>
 
-            <Button onclick={()=>redirectPage()} variant="default" class="bg-yellow-500 hover:bg-yellow-600">
+            <Button onclick={()=>goto('/dashboard/cursos/'+slug)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
                 <LogIn class="w-4 h-4" />
                 Acessar 
             </Button>

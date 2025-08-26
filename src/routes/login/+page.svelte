@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { User, Lock } from "lucide-svelte";
+
+    let { data, form } = $props();
 </script>
 
 <div class="bg-slate-900 h-screen flex justify-center items-center">
@@ -14,10 +16,12 @@
 			<div class="flex items-center justify-center text-yellow-300 text-3xl font-bold">
 				Painel do Aluno
 			</div>
-
 			<div
 				class="bg-slate-800 w-full max-w-md p-6 rounded-2xl border border-gray-500 shadow-sm pt-10 mt-10"
 			>
+                <div class="flex items-center justify-center text-yellow-300 text-lg font-bold pb-2">
+                    {form?.message}
+                </div>
 				<form
                     method="POST" action="?/login"
 					class="w-full flex flex-col gap-3"
@@ -28,6 +32,7 @@
 						</div>
 
 						<input
+                            value="{form?.email}"
 							type="email"
 							name="email"
 							id="email"

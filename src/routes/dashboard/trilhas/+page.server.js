@@ -1,6 +1,6 @@
 export function load({ cookies }) {
 
-    let promise = fetch("http://localhost/api/v1/get-courses", {
+    let promise = fetch("http://localhost/api/v1/get-trails", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -8,5 +8,5 @@ export function load({ cookies }) {
         },
     }).then((res) => res.json());
 
-    return {courses: promise};
+    return {trails: promise};
 }

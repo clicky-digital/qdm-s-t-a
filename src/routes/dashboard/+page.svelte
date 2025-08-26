@@ -1,5 +1,5 @@
 <script lang="ts">
-
+    let { data } = $props();
 </script>
 
 <div class="container mx-auto flex flex-col gap-6 my-4">

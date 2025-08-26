@@ -1,6 +1,6 @@
 export const load = async ({cookies, params}) => {
 
-    let promise = fetch("http://localhost/api/v1/get-courses/"+params['slug'], {
+    let promise = fetch("http://localhost/api/v1/get-trails/"+params['slug'], {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -8,5 +8,5 @@ export const load = async ({cookies, params}) => {
         },
     }).then((res) => res.json());
 
-    return {course: promise};
+    return {trail: promise};
 }

@@ -7,6 +7,8 @@
 
   let selectedTab: string = "assistir";
 
+  let { avatar } = $props();
+
   const handleTabClick = (tab: string) => {
     selectedTab = tab;
   };
@@ -16,7 +18,7 @@
   <div class="container">
     <div class="flex justify-between">
       <div>
-        <a href="/" class="text-yellow-300 text-xl font-bold">
+        <a href="/dashboard" class="text-yellow-300 text-xl font-bold">
           <img src="/images/logo.png" alt="logo" class="h-10" />
         </a>
       </div>
@@ -39,7 +41,7 @@
         </div>
 
         <Avatar.Root>
-          <Avatar.Image src="/images/avatar.png" alt="avatar" />
+          <Avatar.Image src={avatar} alt="avatar" />
           <Avatar.Fallback class="bg-black text-gray-50">PJ</Avatar.Fallback>
         </Avatar.Root>
       </div>
