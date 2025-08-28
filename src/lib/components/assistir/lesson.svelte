@@ -1,7 +1,15 @@
 <script lang="ts">
     import { CircleCheck, Play, RotateCw } from "lucide-svelte";
+    import { onMount } from "svelte";
 
-    let { lesson, count } = $props();
+    let { lesson, count, metadata = $bindable() } = $props();
+    let metadataObj = $state();
+    let total_time = $state('0');
+
+    onMount(async()=>{
+        metadataObj = await metadata
+        total_time = metadataObj.total_time / 60;
+    })
 </script>
 
 <div 
@@ -19,7 +27,7 @@
             {lesson.name}
         </div>
         <div>
-            <span class="bg-slate-600 rounded p-1 text-xs">{0} min</span>
+            <span class="bg-slate-600 rounded p-1 text-xs">{total_time > 0 ? total_time.toFixed(2).replace('.', ':') : total_time} min</span>
         </div>
     </div>
 </div>
