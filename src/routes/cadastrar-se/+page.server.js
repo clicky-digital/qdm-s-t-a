@@ -3,7 +3,7 @@ export const actions = {
     register: async ({ cookies, request }) => {
         const data = await request.formData();
 
-        const response = await fetch('http://localhost/api/v1/register', {
+        const response = await fetch('https://adm.qdm-v3.mitrix.online/api/v1/register', {
             method: 'POST',
             body: JSON.stringify({
                 "name": data.get('name'),

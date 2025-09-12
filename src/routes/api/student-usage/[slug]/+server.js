@@ -12,7 +12,7 @@ export async function POST({ cookies, request, params }) {
 
     const body = await request.json();
 
-    const apiResponse = await fetch("http://localhost/api/v1/student-usage/"+params['slug'], {
+    const apiResponse = await fetch("https://adm.qdm-v3.mitrix.online/api/v1/student-usage/"+params['slug'], {
         method: "POST",
         body: JSON.stringify({
             ...body,
