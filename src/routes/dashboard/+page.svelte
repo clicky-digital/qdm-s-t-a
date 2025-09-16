@@ -1,27 +1,82 @@
 <script lang="ts">
+    import { Play } from 'lucide-svelte';
+    import { goto } from "$app/navigation";
     let { data } = $props();
+
+    let lastWatched  = $state(true);
 </script>
 
 <div class="container mx-auto flex flex-col gap-6 my-4">
     <div class="title">Continuar Assistindo</div>
 	
     <div class="grid grid-cols-3 gap-4">
-        <div class="col-span-2 h-96 bg-gray-100 rounded-2xl">
-        </div>
 
-        <div class="h-96 bg-gray-100 rounded-2xl">
-            <div class="w-full bg-slate-900 text-yellow-400 text-xl font-bold rounded-t-2xl text-center p-2">Últimas aulas assistidas</div>
-            <div class="h-full overflow-y-auto rounded-b-2xl">
-                
+        {#await data['profile']}
+            <p>Carregando Último Assistido...</p>
+        {:then profile}
+            <div class="col-span-2 h-120 {!profile.keep_watching ? 'border-gray-200 border rounded-2xl' : ''} flex justify-center">
+                {#if (profile.keep_watching)}
+                    <div class="relative flex justify-end items-center">
+                        <img class="max-h-120 rounded-2xl" src="{profile.absolute_path + '/' + profile.keep_watching.thumbnail_path}" alt="">
+                        <div class="flex absolute w-full self-end p-2 justify-between">
+                            <h2 class="text-white font-bold text-xl self-center mx-3">{profile.keep_watching.name}</h2>
+                            <button class="min-w-55 flex m-2 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={()=>{goto('./dashboard/cursos/curso/' + profile.keep_watching.name)}} >
+                                <Play class="w-6 h-6" />
+                                Continuar Assistindo
+                            </button>
+                        </div>
+                    </div>
+                {:else}
+                    <div class="self-center text-center">
+                        <div class="text-2xl">Você ainda não assistiu nenhuma aula</div>
+                        <button class="text-blue-500 underline text-sm cursor-pointer" onclick={()=>{goto('/dashboard/cursos')}}>Navegar por cursos</button>
+                    </div>
+                {/if}
+
             </div>
+        {/await}
+
+        <div class="h-120 rounded-2xl flex flex-col gap-2 border-gray-200 border">
+            <div class="w-full bg-slate-900 text-yellow-400 text-xl font-bold rounded-t-2xl text-center p-2">Últimas aulas assistidas</div>
+            {#await data['profile']}
+                <p>Carregando Últimas Aulas...</p>
+            {:then profile}
+                <div class="h-full overflow-y-auto rounded-b-2xl flex flex-col gap-2 p-2">
+                    {#if (profile.last_lessons)}
+                        {#each profile.last_lessons as lesson}
+                            <button onclick={()=>{goto('./dashboard/cursos/slug')}}>
+                                <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">
+                                    <div class="relative flex justify-center items-center">
+                                        <img class="max-h-16" src="{profile.absolute_path + '/' + lesson.thumbnails.path}" alt="">
+                                        <Play class="w-8 h-8 absolute text-white" />
+                                    </div>
+                                    <p class="h-fit">Aula 1 modulo bla bla bla abc</p>
+                                </div>
+                            </button>
+                            <hr>
+                        {/each}
+                    {:else}
+                        <div class="flex flex-col h-full w-full justify-center text-center">
+                            <p>Você ainda não assistiu nenhuma aula</p>
+                            <button class="text-blue-500 underline text-sm cursor-pointer" onclick={()=>{goto('/dashboard/cursos')}}>Navegar por cursos</button>
+                        </div>
+                    {/if}
+                </div>
+            {/await}
         </div>
     </div>
 
     <div class="title">Dashboard</div>
     <div class="flex gap-4">
-        <div class="h-60 w-full bg-gray-100 rounded-2xl"></div>
-        <div class="h-60 w-full bg-gray-100 rounded-2xl"></div>
-        <div class="h-60 w-full bg-gray-100 rounded-2xl"></div>
+        <div class="h-60 w-full flex justify-center rounded-2xl">
+            <img class="border-gray-400 rounded-2xl border-2" src="/images/dashboard-1.png"  alt="Dashboard">
+        </div>
+        <div class="h-60 w-full flex justify-center rounded-2xl">
+            <img class="border-gray-400 rounded-2xl border-2" src="/images/dashboard-2.png"  alt="Dashboard">
+        </div>
+        <div class="h-60 w-full flex justify-center rounded-2xl">
+            <img class="border-gray-400 rounded-2xl border-2" src="/images/dashboard-3.png"  alt="Dashboard">
+        </div>
     </div>
 
     <div class="flex gap-4">

@@ -11,7 +11,8 @@
 
     let { url, metadata, lesson } = $props();
 
-    let player: MediaPlayerElement;
+    let player = $state(MediaPlayerElement);
+    // let player: MediaPlayerElement;
     let interval: NodeJS.Timer;
 
     onMount(async () => {

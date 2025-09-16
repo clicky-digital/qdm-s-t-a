@@ -4,5 +4,13 @@ import { vite as vidstack } from 'vidstack/plugins';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [vidstack(), tailwindcss(), sveltekit()]
+	plugins: [
+        vidstack(),
+        tailwindcss(),
+        sveltekit()
+    ],
+    server: {
+        host: true,
+        port: 5173
+    }
 });

@@ -89,7 +89,7 @@
                                 <div class="">
                                     {#each module.lessons as lessonCard, key}
                                         <div onload={() => {lesson = lessonCard}} class="flex items-end border-b border-gray-300">
-                                            <Lesson lesson={lessonCard} count={key+1} metadata="{getLesson(lessonCard)}"/>
+                                            <Lesson lesson={lessonCard} count={key+1} metadata={getLesson(lessonCard)}/>
                                             <button class="cursor-pointer pb-3" >
                                                 {#if lesson.description}
                                                     <RotateCw class="w-4 h-4" />
