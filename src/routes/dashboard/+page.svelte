@@ -50,7 +50,7 @@
                                         <img class="max-h-16" src="{profile.absolute_path + '/' + lesson.thumbnails.path}" alt="">
                                         <Play class="w-8 h-8 absolute text-white" />
                                     </div>
-                                    <p class="h-fit">Aula 1 modulo bla bla bla abc</p>
+                                    <p class="h-fit">{lesson.name}</p>
                                 </div>
                             </button>
                             <hr>

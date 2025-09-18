@@ -9,7 +9,7 @@
     defineCustomElement(MediaPlayerElement);
     defineCustomElement(MediaProviderElement);
 
-    let { url, metadata, lesson } = $props();
+    let { url, metadata, lesson, type, id } = $props();
 
     let player = $state(MediaPlayerElement);
     // let player: MediaPlayerElement;
@@ -19,13 +19,24 @@
         if (player) {
             interval = setInterval(async () => {
                 if(!player.paused){
+                    let usageable_type = null;
+                    let usageable_id = null;
+                    if(type && id){
+                        usageable_id = id
+                        if(type == 'course'){
+                            usageable_type = 'App\\Models\\CourseLesson';
+                        } else if (type == 'trail'){
+                            usageable_type = 'App\\Models\\TrailLesson';
+                        }
+                    }
+
                     try {
                         let promise = await fetch('/api/student-usage/set', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson', 'metadata': { time: player.currentTime} })
+                            body: JSON.stringify({usageable_type: usageable_type, usageable_id: usageable_id, lesson_id: lesson.id, type: 'lesson', 'metadata': { time: player.currentTime} })
                         }).then(res => res.json());
                     } catch (error) {
                         console.error('Failed to update student usage:', error);

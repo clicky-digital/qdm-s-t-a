@@ -20,7 +20,7 @@
             <div class="title">{trail['trail']['name']}</div>
             <div class="text-gray-400 text-sm">Prof. Marcus Ennes</div>
             <div class="flex flex-col gap-4 my-4">
-                <Module modules={trail['trail_modules']} />
+                <Module modules={trail['trail_modules']}  type="trail" id={trail['trail']['id']} />
             </div>
         {:catch error}
             <p>Algo deu errado: {error.message}</p>
