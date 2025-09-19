@@ -8,7 +8,7 @@
     import { ChevronsRightIcon, CircleCheck, Play, RotateCw } from "lucide-svelte";
     import { onMount } from "svelte";
     import { isEmptyObject } from "tailwind-variants/dist/utils";
-    let { modules, type, id } = $props();
+    let { modules, type, id, activeLesson = null } = $props();
 
     let lessonKey = $state('');
     let lesson = $state({});
@@ -17,10 +17,11 @@
 
     onMount(async()=>{
         if(isEmptyObject(lesson)){
-            lesson = modules[0].lessons[0];
+            // Use activeLesson if provided, otherwise fallback to first lesson
+            lesson = activeLesson || modules[0].lessons[0];
         }
         setLesson(lesson, 0)
-        metadata = await getLesson(lesson)
+        metadata = await getLesson(lesson) 
     })
     async function getLesson(lesson) {
         if(lesson){
@@ -30,7 +31,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson'})
+                    body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson',  parent_type: type, parent_id: id })
                 }).then(res => res.json());
                 let response = await promise
                 metadata = response.metadata
@@ -49,7 +50,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson', 'metadata': metadata })
+                    body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson', 'metadata': metadata, parent_type: type, parent_id: id })
                 }).then(res => res.json());
             } catch (error) {
                 console.error('Failed to update student usage:', error);
