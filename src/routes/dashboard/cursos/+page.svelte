@@ -19,6 +19,7 @@
         {:then courses}
             {#each courses['courses'] as course}
                 <CourseItem
+                    thumbnail={course['thumbnail_path']}
                     courseName={course['name']}
                     slug={course['slug']}
                 />
