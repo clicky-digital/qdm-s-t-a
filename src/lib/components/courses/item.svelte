@@ -26,7 +26,7 @@
                 Continuar
             </Button>
 
-            <Button onclick={()=>goto('/dashboard/cursos/'+slug)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
+            <Button onclick={()=>goto('/dashboard/cursos/'+slug+'/aulas')} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
                 <LogIn class="w-4 h-4" />
                 Acessar 
             </Button>
