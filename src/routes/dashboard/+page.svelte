@@ -2,7 +2,6 @@
     import { Play } from 'lucide-svelte';
     import { goto } from "$app/navigation";
     let { data } = $props();
-
     let lastWatched  = $state(true);
 </script>
 
@@ -20,7 +19,12 @@
                         <img class="max-h-120 rounded-2xl" src="{profile.absolute_path + '/' + profile.keep_watching.thumbnail_path}" alt="">
                         <div class="flex absolute w-full self-end p-2 justify-between">
                             <h2 class="text-white font-bold text-xl self-center mx-3">{profile.keep_watching.name}</h2>
-                            <button class="min-w-55 flex m-2 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={()=>{goto('./dashboard/cursos/curso/' + profile.keep_watching.name)}} >
+                            <button class="min-w-55 flex m-2 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => { 
+                                const pathLesson = profile.keep_watching.parent.type === 'course' 
+                                    ? '/cursos/' + profile.keep_watching.parent.slug + '/' + profile.keep_watching.slug
+                                    : '/trilhas/' + profile.keep_watching.parent.slug + '/' + profile.keep_watching.slug;
+                                goto('/dashboard' + pathLesson);
+                            }}>
                                 <Play class="w-6 h-6" />
                                 Continuar Assistindo
                             </button>
@@ -44,13 +48,22 @@
                 <div class="h-full overflow-y-auto rounded-b-2xl flex flex-col gap-2 p-2">
                     {#if (profile.last_lessons)}
                         {#each profile.last_lessons as lesson}
-                            <button onclick={()=>{goto('./dashboard/cursos/slug')}}>
+                             <button onclick={() => { 
+                                const pathLesson = lesson.parent.type === 'course' 
+                                    ? '/cursos/' + lesson.parent.slug + '/' + lesson.slug
+                                    : '/trilhas/' + lesson.parent.slug + '/' + lesson.slug;
+                                goto('/dashboard' + pathLesson);
+                            }}>
                                 <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">
                                     <div class="relative flex justify-center items-center">
                                         <img class="max-h-16" src="{profile.absolute_path + '/' + lesson.thumbnails.path}" alt="">
                                         <Play class="w-8 h-8 absolute text-white" />
                                     </div>
-                                    <p class="h-fit">{lesson.name}</p>
+                                    <div class="flex flex-col text-left">
+                                        <p class="text-md text-gray-700 font-bold">Nome: {lesson.name}</p>
+                                        <p class="text-sm text-gray-500">Assistido por ultimo em: {lesson.parent.type === 'course' ? 'Cursos' : 'Trilhas'}</p>
+                                    </div>
+
                                 </div>
                             </button>
                             <hr>
