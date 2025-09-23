@@ -21,6 +21,7 @@
         {:then trails}
             {#each trails['trails'] as trail}
                 <TrailItem
+                    thumbnail={trail['thumbnail_path']}
                     trailName={trail['name']}
                     slug={trail['slug']}
                 />
