@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import { URL_BASE_API } from '$env/static/private';
 
 export async function POST({ cookies, request, params }) {
     const accessToken = cookies.get('access_token');
@@ -12,7 +13,7 @@ export async function POST({ cookies, request, params }) {
 
     const body = await request.json();
 
-    const apiResponse = await fetch("http://localhost/api/v1/student-usage/"+params['slug'], {
+    const apiResponse = await fetch(URL_BASE_API + "/api/v1/student-usage/"+params['slug'], {
         method: "POST",
         body: JSON.stringify({
             ...body,

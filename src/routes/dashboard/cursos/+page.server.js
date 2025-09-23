@@ -1,6 +1,7 @@
+import { URL_BASE_API } from '$env/static/private';
 export function load({ cookies }) {
 
-    let promise = fetch("http://localhost/api/v1/get-courses", {
+    let promise = fetch(URL_BASE_API + "/api/v1/get-courses", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

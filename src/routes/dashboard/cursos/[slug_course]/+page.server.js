@@ -1,4 +1,5 @@
 import { redirect } from "@sveltejs/kit";
+import { URL_BASE_API } from '$env/static/private';
 export const load = async ({ params, url, parent, cookies }) => {
     const slug_course = params.slug_course;
     const parentData = await parent();
@@ -22,7 +23,7 @@ export const load = async ({ params, url, parent, cookies }) => {
     }
 
     const response = await fetch(
-        `http://localhost/api/v1/get-courses/${slug_course}`,
+        `${URL_BASE_API}/api/v1/get-courses/${slug_course}`,
         {
             method: "GET",
             headers: {
