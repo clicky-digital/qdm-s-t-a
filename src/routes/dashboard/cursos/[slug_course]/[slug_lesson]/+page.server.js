@@ -2,7 +2,7 @@ export const load = async ({ cookies, params }) => {
     const slug_course = params.slug_course; 
     const slug_lesson = params.slug_lesson;
 
-    let url = `http://localhost/api/v1/get-courses/${slug_course}`;
+    let url = `https://adm.qdm-v3.mitrix.online/api/v1/get-courses/${slug_course}`;
     if (slug_lesson) { 
         url += `/${slug_lesson}`;
     }

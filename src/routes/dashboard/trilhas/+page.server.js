@@ -1,6 +1,6 @@
 export function load({ cookies }) {
 
-    let promise = fetch("http://localhost/api/v1/get-trails", {
+    let promise = fetch("https://adm.qdm-v3.mitrix.online/api/v1/get-trails", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

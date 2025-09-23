@@ -2,7 +2,7 @@ import {redirect} from "@sveltejs/kit";
 
 export const load = async ({cookies}) => {
     if(cookies.get('access_token')) {
-        let promise = fetch("http://localhost/api/v1/profile", {
+        let promise = fetch("https://adm.qdm-v3.mitrix.online/api/v1/profile", {
             method: "POST",
             body: JSON.stringify({
                'student_id': cookies.get('student_id')
