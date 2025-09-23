@@ -41,6 +41,7 @@ export const load = async ({ params, url, parent, cookies }) => {
         data.course?.course_modules?.[0]?.course_lessons?.[0]?.slug;
 
     if (firstLessonSlug) {
+        throw redirect(307, `/dashboard/cursos/${slug_course}/${firstLessonSlug}`);
     } else {
         throw redirect(302, "/dashboard/cursos");
     }
