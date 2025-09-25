@@ -1,9 +1,10 @@
 import { redirect } from '@sveltejs/kit';
+import { URL_BASE_API } from '$env/static/private';
 export const actions = {
     register: async ({ cookies, request }) => {
         const data = await request.formData();
 
-        const response = await fetch('https://adm.qdm-v3.mitrix.online/api/v1/register', {
+        const response = await fetch(URL_BASE_API + '/api/v1/register', {
             method: 'POST',
             body: JSON.stringify({
                 "name": data.get('name'),

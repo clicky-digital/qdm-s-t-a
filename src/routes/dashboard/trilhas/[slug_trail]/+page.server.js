@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-
+import { URL_BASE_API } from '$env/static/private';
 export const load = async ({ params, url, parent, cookies }) => {
     const slug_trail = params.slug_trail;
     const parentData = await parent();
@@ -16,7 +16,7 @@ export const load = async ({ params, url, parent, cookies }) => {
         }
     }
 
-    const response = await fetch(`http://localhost/api/v1/get-trails/${slug_trail}`, {
+    const response = await fetch(`${URL_BASE_API}/api/v1/get-trails/${slug_trail}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
