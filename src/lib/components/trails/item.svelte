@@ -32,13 +32,13 @@
                 Acessar 
             </Button>
             
-            <Button variant="ghost">
-                <Brain />
-            </Button>
-            
-            <Button variant="ghost">
-                <Megaphone />
-            </Button>
+<!--            <Button variant="ghost">-->
+<!--                <Brain />-->
+<!--            </Button>-->
+<!--            -->
+<!--            <Button variant="ghost">-->
+<!--                <Megaphone />-->
+<!--            </Button>-->
 
             <Button variant="ghost">
                 <Computer />
