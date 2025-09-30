@@ -2,14 +2,14 @@
     import Button from "@/components/ui/button/button.svelte";
     import { Brain, Computer, Download, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
     import { goto } from '$app/navigation';
-    import { URL_BASE_STORAGE } from '$env/static/private'
+    import { PUBLIC_URL_BASE_STORAGE } from '$env/static/private'
 
     let { trailName, professor, slug, thumbnail } = $props();
 </script>
 
 <div class="h-60 w-full bg-gray-100 rounded relative flex gap-6 items-center p-4">
     <div class="w-72 h-full bg-gray-600 rounded-lg">
-        <img class="w-full h-full" src={URL_BASE_STORAGE + "/" + thumbnail} alt="">
+        <img class="w-full h-full" src={PUBLIC_URL_BASE_STORAGE + "/" + thumbnail} alt="">
     </div>
 
     <div class="flex flex-col gap-1">
@@ -32,13 +32,13 @@
                 Acessar 
             </Button>
             
-            <Button variant="ghost">
-                <Brain />
-            </Button>
-            
-            <Button variant="ghost">
-                <Megaphone />
-            </Button>
+<!--            <Button variant="ghost">-->
+<!--                <Brain />-->
+<!--            </Button>-->
+<!--            -->
+<!--            <Button variant="ghost">-->
+<!--                <Megaphone />-->
+<!--            </Button>-->
 
             <Button variant="ghost">
                 <Computer />

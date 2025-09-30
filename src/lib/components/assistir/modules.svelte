@@ -35,6 +35,7 @@
                 }).then(res => res.json());
                 let response = await promise
                 metadata = response.metadata
+
                 return response.metadata
             } catch (error) {
                 console.error('Failed to get student usage:', error);
@@ -79,7 +80,7 @@
                         <div class="flex flex-col gap-2 w-full p-8 bg-gray-100 rounded-sm">
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="font-bold text-lg mb-2">
-                                    <span class="bg-slate-800 text-white p-2 rounded">{lessonKey ?? 1}</span>
+                                    <span class="bg-slate-800 text-white p-2 rounded">{lesson.code ?? module.lessons[0].code}</span>
                                     {lesson.name ?? module.lessons[0].name}
                                 </div>
 
@@ -94,7 +95,7 @@
                                         <div class="">
                                             {#each module.lessons as lessonCard, key}
                                                 <div onload={() => {lesson = lessonCard}} class="flex items-end border-b border-gray-300">
-                                                    <Lesson lesson={lessonCard} count={key+1} metadata={getLesson(lessonCard)}/>
+                                                    <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}/>
                                                     <button class="cursor-pointer pb-3" >
                                                         {#if lesson.description}
                                                             <RotateCw class="w-4 h-4" />

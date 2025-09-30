@@ -1,4 +1,4 @@
-import {redirect} from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import { URL_BASE_API } from '$env/static/private';
 export const load = async ({cookies}) => {
     if(cookies.get('access_token')) {
