@@ -15,6 +15,7 @@ export const actions = {
             }
         });
 
+
         if (response.status === 201) {
             let student = await response.json();
             cookies.set('student_id', student.student.id, {path:'/'});
