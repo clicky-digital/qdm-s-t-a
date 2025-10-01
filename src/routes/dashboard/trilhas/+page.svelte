@@ -6,6 +6,12 @@
 
     let { data } = $props();
 
+    function loadThumbnail(item) {
+        if (item['thumbnails']) {
+            return item['thumbnails']['path'];
+        }
+        return '/images/imagem_curso.png';
+    }
 </script>
 
 <div class="container mx-auto flex flex-col my-4">
@@ -21,7 +27,7 @@
         {:then trails}
             {#each trails['trails'] as trail}
                 <TrailItem
-                    thumbnail={trail['thumbnails']['path']}
+                    thumbnail={loadThumbnail(trail)}
                     trailName={trail['name']}
                     slug={trail['slug']}
                 />
