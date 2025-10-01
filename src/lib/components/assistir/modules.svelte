@@ -8,6 +8,8 @@
     import { ChevronsRightIcon, CircleCheck, Play, RotateCw } from "lucide-svelte";
     import { onMount } from "svelte";
     import { isEmptyObject } from "tailwind-variants/dist/utils";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
 
     let { modules, type, id, activeLesson = null, favorites } = $props();
 
@@ -79,6 +81,67 @@
             favorites = favorites.filter(id => id !== lessonId);
         }
     }
+  
+    function findNextLesson() {
+        let currentModuleIndex = -1;
+        let currentLessonIndex = -1;
+
+        for (let i = 0; i < modules.length; i++) {
+            const lessonIndex = modules[i].lessons.findIndex(l => l.id === lesson.id);
+            if (lessonIndex !== -1) {
+                currentModuleIndex = i;
+                currentLessonIndex = lessonIndex;
+                break;
+            }
+        }
+
+        if (currentModuleIndex === -1) {
+            return null;
+        }
+
+        const currentModule = modules[currentModuleIndex];
+
+        if (currentLessonIndex < currentModule.lessons.length - 1) {
+            return currentModule.lessons[currentLessonIndex + 1];
+        }
+
+        if (currentModuleIndex < modules.length - 1) {
+            const nextModule = modules[currentModuleIndex + 1];
+            if (nextModule.lessons && nextModule.lessons.length > 0) {
+                return nextModule.lessons[0];
+            }
+        }
+
+        return null;
+    }
+
+    async function markComplete() {
+        if (lesson && lesson.id) {
+            try {
+                const finalMetadata = { ...metadata };
+                finalMetadata.completed = true;
+                finalMetadata.time = finalMetadata.total_time;
+
+                metadata = finalMetadata;
+
+                await setLesson(lesson, lessonKey, finalMetadata);
+
+                const nextLesson = findNextLesson();
+
+                if (nextLesson && nextLesson.slug) {
+                    const courseSlug = $page.params.slug_course;
+
+                    const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                    
+                    await goto(newUrl);
+                } else {
+                    console.log("No next lesson found.");
+                }
+            } catch (error) {
+                console.error('Failed to mark lesson as complete:', error);
+            }
+        }
+    }
 </script>
 
 {#if modules.length === 0}
@@ -128,7 +191,6 @@
                                                             <Play class="w-4 h-4"
                                                                   onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
                                                         {/if}
-
                                                     </button>
                                                 </div>
                                             {/each}
@@ -148,9 +210,13 @@
 
                             <div class="flex justify-between items-center w-full h-full">
                                 <div>
-                                    <Button variant="default">
+                                    <Button variant="default" class={metadata?.completed ? 'bg-green-500 hover:bg-green-600' : ''} onclick={markComplete}>
                                         <CircleCheck class="w-4 h-4" />
-                                        Concluir Aula
+                                        {#if metadata?.completed}
+                                            Aula Concluída
+                                        {:else}
+                                            Concluir Aula
+                                        {/if}
                                     </Button>
                                 </div>
 

@@ -23,6 +23,15 @@
         if (player) {
             interval = setInterval(async () => {
                 if (!player.paused) {
+                    const currentTime = player.currentTime;
+                    const totalTime = player.duration;
+                    
+                    const metadataToSend = { time: currentTime };
+
+                    if (!metadata.completed && totalTime > 0 && currentTime >= totalTime - 20) {
+                        console.log("Marking lesson as completed.");
+                        metadataToSend.completed = true;
+                    }
 
                     try {
                         let promise = await fetch("/api/student-usage/set", {
@@ -35,9 +44,13 @@
                                 parent_id: id,
                                 lesson_id: lesson.id,
                                 type: "lesson",
-                                metadata: { time: player.currentTime },
+                                metadata: metadataToSend,
                             }),
                         }).then((res) => res.json());
+                        if (metadataToSend.completed) {
+                            metadata.completed = true;
+                            metadata.time = currentTime;
+                        }
                     } catch (error) {
                         console.error("Failed to update student usage:", error);
                     }
