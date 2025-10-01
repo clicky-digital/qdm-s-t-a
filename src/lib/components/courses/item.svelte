@@ -29,7 +29,7 @@
        {#if thumbnail}
             <img 
                 class="w-full h-full object-cover" 
-                src={PUBLIC_URL_BASE_STORAGE}/{thumbnail} 
+                src={`${PUBLIC_URL_BASE_STORAGE}/${thumbnail}`}
                 alt={courseName}
             />
         {:else}
