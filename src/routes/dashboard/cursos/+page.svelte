@@ -4,6 +4,13 @@
     import { goto } from "$app/navigation";
 
     let { data } = $props();
+
+    function loadThumbnail(item) {
+        if (item['thumbnails']) {
+            return item['thumbnails']['path'];
+        }
+        return '/images/imagem_curso.png';
+    }
 </script>
 
 <div class="container mx-auto flex flex-col my-4">
@@ -19,7 +26,7 @@
         {:then courses}
             {#each courses['courses'] as course}
                 <CourseItem
-                    thumbnail={course['thumbnails']['path']}
+                    thumbnail={loadThumbnail(course)}
                     courseName={course['name']}
                     slug={course['slug']}
                 />
