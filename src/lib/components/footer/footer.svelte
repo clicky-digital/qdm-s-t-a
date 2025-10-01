@@ -29,7 +29,7 @@
             <img src="/images/logo.png" alt="logo" class="w-20" />
 
             <div class="text-center">
-                © Quimica Do Monstro 2025. Todos os direitos reservados.
+                © Química Do Monstro 2025. Todos os direitos reservados.
             </div>
 
             <div class="flex gap-2">

@@ -100,6 +100,6 @@
 	</div>
 
 	<div class="text-center text-xs text-gray-100 pt-2 absolute bottom-10 left-0 right-0">
-		Químida do Monstro 2025. Todos os direitos Reservados.
+		Química do Monstro 2025. Todos os direitos Reservados.
 	</div>
 </div>

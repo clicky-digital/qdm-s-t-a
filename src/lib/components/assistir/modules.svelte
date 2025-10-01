@@ -6,8 +6,8 @@
     import Complements from "$lib/components/assistir/complements.svelte";
     import Button from "../ui/button/button.svelte";
     import { ChevronsRightIcon, CircleCheck, Play, RotateCw } from "lucide-svelte";
-    import { onMount } from "svelte";
-    import { isEmptyObject } from "tailwind-variants/dist/utils";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
     let { modules, type, id, activeLesson = null } = $props();
 
     let lessonKey = $state('');
@@ -15,15 +15,22 @@
     let metadata = $state({});
 
 
-    onMount(async()=>{
-        if(isEmptyObject(lesson)){
-            // Use activeLesson if provided, otherwise fallback to first lesson
-            lesson = activeLesson || modules[0].lessons[0];
+    $effect(() => {
+        if (activeLesson) {
+            (async () => {
+                lesson = activeLesson;
+                metadata = await getLesson(lesson);
+
+                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lesson => lesson.id === lesson.id));
+                if (moduleOfCurrentLesson) {
+                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lesson => lesson.id === lesson.id);
+                    setLesson(lesson, currentLessonIndex);
+                }
+            })();
         }
-        setLesson(lesson, 0)
-        metadata = await getLesson(lesson) 
-    })
+    });
     async function getLesson(lesson) {
+        console.log(lesson)
         if(lesson){
             try {
                 let promise = await fetch('/api/student-usage/get', {
@@ -34,9 +41,30 @@
                     body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson',  parent_type: type, parent_id: id })
                 }).then(res => res.json());
                 let response = await promise
-                metadata = response.metadata
 
-                return response.metadata
+                let api_metadata = response.metadata || {};
+
+                let lessonMetadata = null;
+
+                if (typeof lesson.metadata === 'string') {
+                    try{
+                        lessonMetadata = JSON.parse(lesson.metadata);
+                    } catch(e){
+                        console.error('Failed to parse lesson metadata:', e);
+                    }
+                } else {
+                    lessonMetadata = lesson.metadata;
+                }
+
+                if (lessonMetadata && lessonMetadata.total_time) {
+                    api_metadata.total_time = lessonMetadata.total_time;
+                } else {
+                    api_metadata.total_time = 1;
+                }
+
+                metadata = api_metadata;
+                return api_metadata;
+
             } catch (error) {
                 console.error('Failed to get student usage:', error);
             }
@@ -55,6 +83,66 @@
                 }).then(res => res.json());
             } catch (error) {
                 console.error('Failed to update student usage:', error);
+            }
+        }
+    }
+    function findNextLesson() {
+        let currentModuleIndex = -1;
+        let currentLessonIndex = -1;
+
+        for (let i = 0; i < modules.length; i++) {
+            const lessonIndex = modules[i].lessons.findIndex(l => l.id === lesson.id);
+            if (lessonIndex !== -1) {
+                currentModuleIndex = i;
+                currentLessonIndex = lessonIndex;
+                break;
+            }
+        }
+
+        if (currentModuleIndex === -1) {
+            return null;
+        }
+
+        const currentModule = modules[currentModuleIndex];
+
+        if (currentLessonIndex < currentModule.lessons.length - 1) {
+            return currentModule.lessons[currentLessonIndex + 1];
+        }
+
+        if (currentModuleIndex < modules.length - 1) {
+            const nextModule = modules[currentModuleIndex + 1];
+            if (nextModule.lessons && nextModule.lessons.length > 0) {
+                return nextModule.lessons[0];
+            }
+        }
+
+        return null;
+    }
+
+    async function markComplete() {
+        if (lesson && lesson.id) {
+            try {
+                const finalMetadata = { ...metadata };
+                finalMetadata.completed = true;
+                finalMetadata.time = finalMetadata.total_time;
+
+                metadata = finalMetadata;
+
+                await setLesson(lesson, lessonKey, finalMetadata);
+
+                const nextLesson = findNextLesson();
+
+                if (nextLesson && nextLesson.slug) {
+                    const courseSlug = $page.params.slug_course;
+
+                    const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                    
+                    await goto(newUrl);
+                } else {
+                    console.log("No next lesson found.");
+                }
+            } catch (error) {
+                console.error('Failed to mark lesson as complete:', error);
             }
         }
     }
@@ -94,15 +182,17 @@
                                     <div class="col-span-1 p-4 grid" style="grid-template-rows: 1fr 20px;">
                                         <div class="">
                                             {#each module.lessons as lessonCard, key}
+                                            {@const lessonMetadataPromise = getLesson(lessonCard)}
                                                 <div onload={() => {lesson = lessonCard}} class="flex items-end border-b border-gray-300">
-                                                    <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}/>
+                                                    <Lesson lesson={lessonCard} metadata={lessonMetadataPromise}/>
                                                     <button class="cursor-pointer pb-3" >
-                                                        {#if lesson.description}
-                                                            <RotateCw class="w-4 h-4" />
-                                                        {:else}
-                                                            <Play class="w-4 h-4" onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
-                                                        {/if}
-
+                                                        {#await lessonMetadataPromise then resolvedMetadata}
+                                                            {#if resolvedMetadata?.completed === true}
+                                                                <RotateCw class="w-4 h-4" />
+                                                            {:else}
+                                                                <Play class="w-4 h-4" onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
+                                                            {/if}
+                                                        {/await}
                                                     </button>
                                                 </div>
                                             {/each}
@@ -119,9 +209,13 @@
 
                             <div class="flex justify-between items-center w-full h-full">
                                 <div>
-                                    <Button variant="default">
+                                    <Button variant="default" class={metadata?.completed ? 'bg-green-500 hover:bg-green-600' : ''} onclick={markComplete}>
                                         <CircleCheck class="w-4 h-4" />
-                                        Concluir Aula
+                                        {#if metadata?.completed}
+                                            Aula Concluída
+                                        {:else}
+                                            Concluir Aula
+                                        {/if}
                                     </Button>
                                 </div>
 
