@@ -17,7 +17,11 @@
             <div class="col-span-2 h-120 {!profile.keep_watching ? 'border-gray-200 border rounded-2xl' : ''} flex justify-center">
                 {#if (profile.keep_watching)}
                     <div class="relative flex justify-end items-center">
-                        <img class="max-h-120 rounded-2xl" src="{PUBLIC_URL_BASE_STORAGE + '/' + profile.keep_watching.thumbnail_path}" alt="">
+                        {#if profile.keep_watching.thumbnails}
+                            <img class="max-h-120 rounded-2xl" src="{PUBLIC_URL_BASE_STORAGE + '/' + profile.keep_watching.thumbnails.path}" alt="">
+                        {:else}
+                            <img class="max-h-120 rounded-2xl" src="/images/imagem_curso.png" alt="Imagem padrão do curso">
+                        {/if}
                         <div class="flex absolute w-full self-end p-2 justify-between">
                             <h2 class="text-white font-bold text-xl self-center mx-3">{profile.keep_watching.name}</h2>
                             <button class="min-w-55 flex m-2 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => { 
@@ -53,7 +57,13 @@
                             }}>
                                 <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">
                                     <div class="relative flex justify-center items-center">
-                                        <img class="max-h-16" src="{PUBLIC_URL_BASE_STORAGE + '/' + lesson.thumbnails.path}" alt="">
+
+                                        {#if lesson.thumbnails}
+                                            <img class="max-h-16" src="{PUBLIC_URL_BASE_STORAGE + '/' + lesson.thumbnails.path}" alt="">
+                                        {:else}
+                                            <img class="max-h-16" src="/images/imagem_curso.png" alt="Imagem padrão do curso">
+                                        {/if}
+
                                         <Play class="w-8 h-8 absolute text-white" />
                                     </div>
                                     <div class="flex flex-col text-left">

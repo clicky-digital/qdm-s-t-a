@@ -1,15 +1,44 @@
 <script lang="ts">
     import Button from "@/components/ui/button/button.svelte";
-    import { Brain, Computer, Download, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
+    import { Brain, Computer, Download, Heart, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
     import { goto } from '$app/navigation';
-    import { PUBLIC_URL_BASE_STORAGE } from '$env/static/private'
+    import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
 
-    let { trailName, professor, slug, thumbnail } = $props();
+    let { trailName, professor, slug, thumbnail, trailId, isFavorited } = $props();
+
+    function toggleFavorite() {
+        fetch("/api/student-usage/favorite", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                lesson_id: trailId,
+                type: 'trail',
+                parent_type: 'trail',
+                parent_id: trailId
+            }),
+        }).then(res => res.json()).then(() => {
+            isFavorited = !isFavorited;
+        });
+    }
 </script>
 
 <div class="h-60 w-full bg-gray-100 rounded relative flex gap-6 items-center p-4">
     <div class="w-72 h-full bg-gray-600 rounded-lg">
-        <img class="w-full h-full" src={PUBLIC_URL_BASE_STORAGE + "/" + thumbnail} alt="">
+        {#if thumbnail}
+            <img 
+                class="w-full h-full object-cover" 
+                src={PUBLIC_URL_BASE_STORAGE}/{thumbnail} 
+                alt={trailName}
+            />
+        {:else}
+            <img 
+                class="w-full h-full object-cover" 
+                src="/images/imagem_curso.png" 
+                alt="Imagem padrão do curso"
+            />
+        {/if}
     </div>
 
     <div class="flex flex-col gap-1">

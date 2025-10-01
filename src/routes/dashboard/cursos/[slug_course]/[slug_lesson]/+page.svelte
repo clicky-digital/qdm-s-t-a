@@ -19,7 +19,7 @@
             <div class="title">{course['course']['name']}</div>
             <div class="text-gray-400 text-sm">Prof. Marcus Ennes</div>
             <div class="flex flex-col gap-4 my-4">
-                <Module modules={course['course_modules']} activeLesson={course['active_lesson']} type="course" id={course['course']['id']} />
+                <Module modules={course['course_modules']} activeLesson={course['active_lesson']} type="course" id={course['course']['id']} favorites={course['favorite_lessons_ids']}/>
             </div>
         {:catch error}
             <p>Algo deu errado: {error.message}</p>

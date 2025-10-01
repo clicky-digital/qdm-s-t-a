@@ -8,54 +8,75 @@
     import { ChevronsRightIcon, CircleCheck, Play, RotateCw } from "lucide-svelte";
     import { onMount } from "svelte";
     import { isEmptyObject } from "tailwind-variants/dist/utils";
-    let { modules, type, id, activeLesson = null } = $props();
 
-    let lessonKey = $state('');
+    let { modules, type, id, activeLesson = null, favorites } = $props();
+
+    let lessonKey = $state("");
     let lesson = $state({});
     let metadata = $state({});
+    let is_favorite = $state(false);
 
 
-    onMount(async()=>{
-        if(isEmptyObject(lesson)){
-            // Use activeLesson if provided, otherwise fallback to first lesson
+    onMount(async () => {
+        if (isEmptyObject(lesson)) {
             lesson = activeLesson || modules[0].lessons[0];
         }
-        setLesson(lesson, 0)
-        metadata = await getLesson(lesson) 
-    })
-    async function getLesson(lesson) {
-        if(lesson){
-            try {
-                let promise = await fetch('/api/student-usage/get', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson',  parent_type: type, parent_id: id })
-                }).then(res => res.json());
-                let response = await promise
-                metadata = response.metadata
+        setLesson(lesson, 0);
+        let lessonData = await getLesson(lesson);
+        metadata = lessonData.metadata;
+        is_favorite = lessonData.is_favorite;
+    });
 
-                return response.metadata
+    async function getLesson(lesson) {
+        if (lesson) {
+            try {
+                let promise = await fetch("/api/student-usage/get", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ lesson_id: lesson.id, type: "lesson", parent_type: type, parent_id: id })
+                }).then(res => res.json());
+                let response = await promise;
+                metadata = response.metadata;
+                is_favorite = response.is_favorite;
+
+                return { metadata: response.metadata, is_favorite: response.is_favorite };
             } catch (error) {
-                console.error('Failed to get student usage:', error);
+                console.error("Failed to get student usage:", error);
             }
         }
     }
+
     async function setLesson(lesson, key, metadata = null) {
         lessonKey = key + 1;
-        if(lesson){
+        if (lesson) {
             try {
-                let promise = await fetch('/api/student-usage/set', {
-                    method: 'POST',
+                let promise = await fetch("/api/student-usage/set", {
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ lesson_id: lesson.id, type: 'lesson', 'metadata': metadata, parent_type: type, parent_id: id })
+                    body: JSON.stringify({
+                        lesson_id: lesson.id,
+                        type: "lesson",
+                        "metadata": metadata,
+                        parent_type: type,
+                        parent_id: id
+                    })
                 }).then(res => res.json());
             } catch (error) {
-                console.error('Failed to update student usage:', error);
+                console.error("Failed to update student usage:", error);
             }
+        }
+    }
+
+    function handleFavorited(event) {
+        const { lessonId, status } = event.detail;
+        if (status) {
+            favorites = [...favorites, lessonId];
+        } else {
+            favorites = favorites.filter(id => id !== lessonId);
         }
     }
 </script>
@@ -68,8 +89,9 @@
     <Tabs.Root value={modules[0].id} class="w-full">
         <Tabs.List>
             {#each modules as module}
-                <Tabs.Trigger onclick={() => {lessonKey = null; lesson=module.lessons[0]; getLesson(module.lessons[0]); setLesson(module.lessons[0], 0)}}
-                              value={module.id}>{module.name}</Tabs.Trigger>
+                <Tabs.Trigger
+                    onclick={() => {lessonKey = null; lesson=module.lessons[0]; getLesson(module.lessons[0]); setLesson(module.lessons[0], 0)}}
+                    value={module.id}>{module.name}</Tabs.Trigger>
             {/each}
         </Tabs.List>
         {#each modules as module}
@@ -80,7 +102,8 @@
                         <div class="flex flex-col gap-2 w-full p-8 bg-gray-100 rounded-sm">
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="font-bold text-lg mb-2">
-                                    <span class="bg-slate-800 text-white p-2 rounded">{lesson.code ?? module.lessons[0].code}</span>
+                                    <span
+                                        class="bg-slate-800 text-white p-2 rounded">{lesson.code ?? module.lessons[0].code}</span>
                                     {lesson.name ?? module.lessons[0].name}
                                 </div>
 
@@ -88,19 +111,22 @@
                                     class="grid grid-cols-3 bg-slate-800 text-white rounded h-[500px]"
                                 >
                                     <div class="col-span-2 bg-gray-900 rounded-l">
-                                        <Video bind:metadata={metadata} bind:lesson={lesson} bind:type={type} bind:id={id} url={lesson.link ?? module.lessons[0].link}/>
+                                        <Video bind:metadata={metadata} bind:lesson={lesson} bind:type={type}
+                                               bind:id={id} url={lesson.link ?? module.lessons[0].link} />
                                     </div>
 
                                     <div class="col-span-1 p-4 grid" style="grid-template-rows: 1fr 20px;">
                                         <div class="">
                                             {#each module.lessons as lessonCard, key}
-                                                <div onload={() => {lesson = lessonCard}} class="flex items-end border-b border-gray-300">
-                                                    <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}/>
-                                                    <button class="cursor-pointer pb-3" >
+                                                <div class="flex items-end border-b border-gray-300">
+                                                    <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}
+                                                            is_favorite={favorites.includes(lessonCard.id)} />
+                                                    <button class="cursor-pointer pb-3">
                                                         {#if lesson.description}
                                                             <RotateCw class="w-4 h-4" />
                                                         {:else}
-                                                            <Play class="w-4 h-4" onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
+                                                            <Play class="w-4 h-4"
+                                                                  onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
                                                         {/if}
 
                                                     </button>
@@ -108,14 +134,17 @@
                                             {/each}
                                         </div>
 
-                                        <div class="text-sm pt-[7px] font-bold text-white text-end border-t border-slate-600">
+                                        <div
+                                            class="text-sm pt-[7px] font-bold text-white text-end border-t border-slate-600">
                                             Aulas assistidas 0/{module.lessons.length}
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <Complements />
+                            <Complements lesson={lesson} courseId={id} isFavorited={favorites.includes(lesson.id)}
+                                         on:favorited={handleFavorited} />
+
 
                             <div class="flex justify-between items-center w-full h-full">
                                 <div>
