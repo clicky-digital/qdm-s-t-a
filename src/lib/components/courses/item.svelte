@@ -58,7 +58,7 @@
 
             <Button onclick={() => goto(`/dashboard/cursos/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
                 <LogIn class="w-4 h-4" />
-                Acessar 
+                Acessar
             </Button>
             
 <!--            <Button variant="ghost">-->
