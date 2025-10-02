@@ -3,7 +3,7 @@
     import Button from "../ui/button/button.svelte";
     import { createEventDispatcher } from "svelte";
 
-    let { lesson, courseId, isFavorited, type } = $props();
+    let { lesson, isFavorited, type, parent_id } = $props();
 
     const dispatch = createEventDispatcher();
 
@@ -16,16 +16,17 @@
                 },
                 body: JSON.stringify({
                     lesson_id: lesson.id,
-                    type: "lesson",
                     parent_type: type,
-                    parent_id: courseId
+                    parent_id: parent_id
                 })
             });
 
             if (response.ok) {
                 dispatch("favorited", { lessonId: lesson.id, status: !isFavorited });
+                console.log("Successfully " + parent_id + " " + lesson.id)
             } else {
                 console.error("Failed to toggle favorite status");
+                console.log("Failed " + parent_id )
             }
         } catch (error) {
             console.error("Error toggling favorite status:", error);
