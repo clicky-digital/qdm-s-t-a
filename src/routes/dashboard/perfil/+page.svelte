@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { User } from "lucide-svelte";
+    import { User, MessageSquare, Mail, CreditCard } from "lucide-svelte";
     import { Button } from "@/components/ui/button/index.js";
     import { Input } from "@/components/ui/input/index.js";
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public';
@@ -55,15 +55,13 @@
                     <hr/>
                     <Button class="w-full cursor-pointer {view === 'sell' ? 'bg-yellow-300' : 'bg-transparent'} text-black hover:bg-slate-900/10 font-bold" onclick={()=>{view = "sell"}}>Informações de Compras</Button>
                     <hr/>
-                    <Button class="w-full cursor-pointer {view === 'one' ? 'bg-yellow-300' : 'bg-transparent'} text-black hover:bg-slate-900/10 font-bold" onclick={()=>{view = "one"}}>One</Button>
-                    <hr/>
-                    <Button class="w-full cursor-pointer {view === 'two' ? 'bg-yellow-300' : 'bg-transparent'} text-black hover:bg-slate-900/10 font-bold" onclick={()=>{view = "two"}}>Two</Button>
+                    <Button class="w-full cursor-pointer {view === 'need-help' ? 'bg-yellow-300' : 'bg-transparent'} text-black hover:bg-slate-900/10 font-bold" onclick={()=>{view = "need-help"}}>Precisa de ajuda?</Button>
                 </div>
                 <Button onclick={() => logout()} class="bg-slate-900/10 text-red-500 cursor-pointer hover:text-white hover:bg-red-500">Sair</Button>
             </div>
             <div class="w-9/12">
-                <form class="w-full h-full" method="POST" onsubmit={()=>handleSubmit(event.submitter.value)}>
-                    <div class="{view !== 'profile' ? 'hidden' : ''} w-full h-full flex flex-col items-center bg-slate-900/10 rounded-2xl">
+                <form class="w-full h-full {view !== 'profile' ? 'hidden' : ''}" method="POST" onsubmit={()=>handleSubmit(event.submitter.value)}>
+                <div class="{view !== 'profile' ? 'hidden' : ''} w-full h-full flex flex-col items-center bg-slate-900/10 rounded-2xl">
                         <div class="flex w-full h-1/2">
                             <div class="w-1/2 flex flex-col items-center justify-center">
                                 <Input name="avatar" placeholder="Foto de Perfil" type="file" class="w-9/12 bg-white"></Input>
@@ -142,11 +140,31 @@
                 <div class="{view !== 'sell' ? 'hidden' : ''} w-full h-full">
                     Informações de Compras
                 </div>
-                <div class="{view !== 'one' ? 'hidden' : ''} w-full h-full">
-                    One
-                </div>
-                <div class="{view !== 'two' ? 'hidden' : ''} w-full h-full">
-                    Two
+                <div class="{view !== 'need-help' ? 'hidden' : ''} w-full h-full bg-slate-900/10 rounded-2xl p-8 flex flex-col items-center">
+                    <h2 class="text-2xl font-bold mb-8 text-gray-800">Como podemos te ajudar?</h2>
+                    <div class="w-full max-w-md flex flex-col gap-5">
+                        <a href="https://wa.me/5527999999999" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
+                            <MessageSquare class="size-8 text-green-500" />
+                            <div>
+                                <p class="font-semibold text-lg text-gray-800">Precisa de ajuda?</p>
+                                <p class="text-gray-600">Fale conosco pelo WhatsApp</p>
+                            </div>
+                        </a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contato@quimicadomonstro.com.br" target="_blank" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
+                            <Mail class="size-8 text-blue-500" />
+                            <div>
+                                <p class="font-semibold text-lg text-gray-800">Prefere E-mail?</p>
+                                <p class="text-gray-600">Envie sua dúvida para nosso suporte</p>
+                            </div>
+                        </a>
+                        <a href="https://consumer.hotmart.com/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
+                            <CreditCard class="size-8 text-red-500" />
+                            <div>
+                                <p class="font-semibold text-lg text-gray-800">Gerencie sua assinatura</p>
+                                <p class="text-gray-600">Acesse a Hotmart para alterar dados</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
