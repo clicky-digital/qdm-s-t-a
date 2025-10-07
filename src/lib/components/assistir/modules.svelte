@@ -16,9 +16,6 @@
     let lessonKey = $state("");
     let lesson = $state({});
     let metadata = $state({});
-    let is_favorite = $state(false);
-
-
     onMount(async () => {
         if (isEmptyObject(lesson)) {
             lesson = activeLesson || modules[0].lessons[0];
@@ -26,7 +23,6 @@
         setLesson(lesson, 0);
         let lessonData = await getLesson(lesson);
         metadata = lessonData.metadata;
-        is_favorite = lessonData.is_favorite;
     });
 
     async function getLesson(lesson) {
@@ -41,9 +37,8 @@
                 }).then(res => res.json());
                 let response = await promise;
                 metadata = response.metadata;
-                is_favorite = response.is_favorite;
 
-                return { metadata: response.metadata, is_favorite: response.is_favorite };
+                return { metadata: response.metadata };
             } catch (error) {
                 console.error("Failed to get student usage:", error);
             }
@@ -81,7 +76,7 @@
             favorites = favorites.filter(id => id !== lessonId);
         }
     }
-  
+
     function findNextLesson() {
         let currentModuleIndex = -1;
         let currentLessonIndex = -1;
@@ -132,7 +127,7 @@
                     const courseSlug = $page.params.slug_course;
 
                     const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
-                    
+
                     await goto(newUrl);
                 } else {
                     console.log("No next lesson found.");
@@ -183,7 +178,7 @@
                                             {#each module.lessons as lessonCard, key}
                                                 <div class="flex items-end border-b border-gray-300">
                                                     <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}
-                                                            is_favorite={favorites.includes(lessonCard.id)} />
+                                                            is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited} />
                                                     <button class="cursor-pointer pb-3">
                                                         {#if lesson.description}
                                                             <RotateCw class="w-4 h-4" />
@@ -204,7 +199,7 @@
                                 </div>
                             </div>
 
-                            <Complements lesson={lesson} courseId={id} isFavorited={favorites.includes(lesson.id)}
+                            <Complements lesson={lesson} courseId={id} type={type} isFavorited={favorites.includes(lesson.id)}
                                          on:favorited={handleFavorited} />
 
 

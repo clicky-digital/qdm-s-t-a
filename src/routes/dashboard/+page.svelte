@@ -23,8 +23,8 @@
                             <img class="max-h-120 rounded-2xl" src="/images/imagem_curso.png" alt="Imagem padrão do curso">
                         {/if}
                         <div class="flex absolute w-full self-end p-2 justify-between">
-                            <h2 class="text-white font-bold text-xl self-center mx-3">{profile.keep_watching.name}</h2>
-                            <button class="min-w-55 flex m-2 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => { 
+                            <h2 class="text-white font-bold text-xl self-center mx-3 mb-4">{profile.keep_watching.name}</h2>
+                            <button class="min-w-55 flex mb-10 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => {
                                 const type = profile.keep_watching.parent.type === 'course' ? 'cursos' : 'trilhas';
                                 goto('/dashboard/' + type + '/' + profile.keep_watching.parent.slug + '/' + profile.keep_watching.slug);
                             }}>

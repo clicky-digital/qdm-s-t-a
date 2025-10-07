@@ -68,7 +68,7 @@
 <!--                            </div>-->
 <!--                        </Button>-->
 
-                        <Button variant="link" class="text-gray-50" onclick={() => goto('/dashboard/favoritos')}>
+                        <Button variant="link" class="text-gray-50 cursor-pointer" onclick={() => goto('/dashboard/favoritos')}>
                             <Heart />
                         </Button>
 
