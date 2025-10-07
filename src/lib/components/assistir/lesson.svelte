@@ -7,6 +7,9 @@
     let total_time = $state("0");
 
     function formatTime(seconds: number) {
+        if(!seconds){
+            return null;
+        }
         const date = new Date(seconds * 1000);
         const hh = date.getUTCHours();
         const mm = date.getUTCMinutes();
@@ -14,6 +17,8 @@
         if (hh > 0) {
             return `${hh.toString().padStart(2, "0")}:${mm.toString().padStart(2, "0")}:${ss}`;
         }
+        if(mm){console.log(mm)}
+        if(ss){console.log(ss)}
         return `${mm.toString().padStart(2, "0")}:${ss}`;
     }
 
@@ -42,7 +47,9 @@
             {lesson.name}
         </div>
         <div class="flex gap-2">
-            <span class="bg-slate-600 rounded p-1 text-xs">{total_time} min</span>
+            {#if total_time}
+                <span class="bg-slate-600 rounded p-1 text-xs">{total_time}</span>
+            {/if}
             <span>
                 <Heart class="w-4 h-4 {is_favorite ? 'text-red-500' : ''}" />
             </span>
