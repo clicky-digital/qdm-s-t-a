@@ -1,12 +1,13 @@
 import { URL_BASE_API } from '$env/static/private';
 
 export async function POST({ request, cookies }) {
-    const { lesson_id, type } = await request.json();
+    const { lesson_id, parent_type, parent_id } = await request.json();
 
     try {
         const backendPayload = {
-            favoritable_id: lesson_id,
-            favoritable_type: type
+            lesson_id: lesson_id,
+            parent_type: parent_type,
+            parent_id: parent_id
         };
 
         let response = await fetch(URL_BASE_API + "/api/v1/favorites/toggle", {

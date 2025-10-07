@@ -199,7 +199,7 @@
                                 </div>
                             </div>
 
-                            <Complements lesson={lesson} courseId={id} type={type} isFavorited={favorites.includes(lesson.id)}
+                            <Complements lesson={lesson} courseId={id} type={type} parent_id={id} isFavorited={favorites.includes(lesson.id)}
                                          on:favorited={handleFavorited} />
 
 
