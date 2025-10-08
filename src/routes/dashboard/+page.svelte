@@ -67,7 +67,7 @@
                                         <Play class="w-8 h-8 absolute text-white" />
                                     </div>
                                     <div class="flex flex-col text-left">
-                                        <p class="text-md text-gray-700 font-bold">Nome: {lesson.name}</p>
+                                        <p class="text-md text-gray-700 font-bold">{lesson.name}</p>
                                         <p class="text-sm text-gray-500">Assistido por ultimo em:
                                             {lesson.parent.type === 'course' ?
                                             "Cursos - " + lesson.parent.name :
