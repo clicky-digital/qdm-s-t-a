@@ -51,7 +51,7 @@
                 <span class="bg-slate-600 rounded p-1 text-xs">{total_time}</span>
             {/if}
             <span>
-                <Heart class="w-4 h-4 {is_favorite ? 'text-red-500' : ''}" />
+                <Heart class="w-4 h-4{is_favorite ? 'text-red-500' : ''}" />
             </span>
         </div>
     </div>

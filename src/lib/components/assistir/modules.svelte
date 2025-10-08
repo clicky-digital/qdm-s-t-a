@@ -234,7 +234,7 @@
 
                             <div class="flex justify-between items-center w-full h-full">
                                 <div>
-                                    <Button variant="default" class={metadata?.completed ? 'bg-green-500 hover:bg-green-600' : ''} onclick={markComplete}>
+                                    <Button variant="default" class={"cursor-pointer " + (metadata?.completed ? 'bg-green-500 hover:bg-green-600' : '')} onclick={markComplete}>
                                         <CircleCheck class="w-4 h-4" />
                                         {#if metadata?.completed}
                                             Aula Concluída
@@ -245,7 +245,7 @@
                                 </div>
 
                                 <div>
-                                    <Button variant="secondary" class="cursor-pointer" onclick={handleNextLesson}>
+                                    <Button variant="secondary" class="cursor-pointer hover:text-slate-600" onclick={handleNextLesson}>
                                         Próxima Aula
                                         <ChevronsRightIcon class="w-4 h-4" />
                                     </Button>

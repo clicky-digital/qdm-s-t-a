@@ -21,7 +21,7 @@
             {@render children?.()}
         </div>
         <hr />
-        <button class="bg-yellow-300 p-2 rounded-xl cursor-pointer" onclick={() => dialog.close()}>Fechar Termos e condições</button>
+        <button class="bg-yellow-300 p-2 rounded-xl cursor-pointer" onclick={() => dialog.close()}>Fechar Termos de Uso</button>
     </div>
 </dialog>
 

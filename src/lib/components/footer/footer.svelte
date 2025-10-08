@@ -96,19 +96,19 @@
         </div>
         <div class="relative flex justify-center items-center w-full">
             {#await links}
-                <p>Buscando termos e condições</p>
+                <p>Buscando Termos de Uso</p>
             {:then links }
-                {#if (links['terms_and_conditions'])}
-                    <button class="text-blue-500 underline cursor-pointer" onclick={() => (showModal = true)}> Termos e condições </button>
+                {#if (links['terms_of_use'])}
+                    <button class="text-blue-500 underline cursor-pointer" onclick={() => (showModal = true)}> Termos de Uso </button>
                     <div class="flex justify-center items-center">
                         <Modal bind:showModal>
                             {#snippet header()}
                                 <h2 class="text-center font-bold text-xl p-2">
-                                    Termos e Condições
+                                    Termos de Uso
                                 </h2>
                             {/snippet}
 
-                            <p class="overflow-y-auto">{links['terms_and_conditions']}</p>
+                            <p class="overflow-y-auto">{links['terms_of_use']}</p>
                         </Modal>
                     </div>
                 {/if}

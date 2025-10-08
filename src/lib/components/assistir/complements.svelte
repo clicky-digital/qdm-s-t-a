@@ -35,37 +35,37 @@
 </script>
 
 <div class="flex gap-2 w-full font-normal text-2xl">
-    <Button variant="ghost" onclick={toggleFavorite}>
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost" onclick={toggleFavorite}>
         <Heart fill={isFavorited ? 'red' : 'none'} />
         {isFavorited ? 'Remover dos Favoritos' : 'Favoritar'}
     </Button>
 
-    <Button variant="ghost">
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
         <BookCheck />
-        Apostilas
+        Apostila
     </Button>
 
-    <Button variant="ghost">
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
         <Brain />
         Mapa Mental
     </Button>
 
-    <Button variant="ghost">
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
         <Megaphone />
         Podcast
     </Button>
 
-    <Button variant="ghost">
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
         <Computer />
         Monitoria
     </Button>
 
-    <Button variant="ghost">
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
         <Puzzle />
         Simulado
     </Button>
 
-    <Button variant="ghost">
+    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
         <Download />
         Exercícios Resolvidos
     </Button>

@@ -72,7 +72,7 @@
                             <Heart />
                         </Button>
 
-                        <Button variant="link" class="text-gray-50">
+                        <Button variant="link" class="text-gray-50 cursor-pointer">
                             <Bell />
                         </Button>
                         </div>

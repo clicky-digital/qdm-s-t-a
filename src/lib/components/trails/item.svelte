@@ -69,21 +69,21 @@
 <!--                <Megaphone />-->
 <!--            </Button>-->
 
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Computer />
             </Button>
   
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Puzzle />
             </Button>
 
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Download />
             </Button>
         </div>
     </div>
 
-    <div class="absolute top-0 right-0 p-4">
+    <div class="absolute top-0 right-0 p-4 hover:text-slate-600 cursor-pointer">
         <Pin class="w-4 h-4" />
     </div>
 </div>
