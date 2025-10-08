@@ -16,13 +16,20 @@
     let lessonKey = $state("");
     let lesson = $state({});
     let metadata = $state({});
-    onMount(async () => {
-        if (isEmptyObject(lesson)) {
-            lesson = activeLesson || modules[0].lessons[0];
+    
+    $effect(() => {
+        if (activeLesson) {
+            (async () => {
+                lesson = activeLesson;
+                metadata = await getLesson(lesson);
+
+                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lesson => lesson.id === lesson.id));
+                if (moduleOfCurrentLesson) {
+                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lesson => lesson.id === lesson.id);
+                    setLesson(lesson, currentLessonIndex);
+                }
+            })();
         }
-        setLesson(lesson, 0);
-        let lessonData = await getLesson(lesson);
-        metadata = lessonData.metadata;
     });
 
     async function getLesson(lesson) {
@@ -137,6 +144,28 @@
             }
         }
     }
+
+    async function handleNextLesson() {
+        if (lesson && lesson.id) {
+            try {
+                await setLesson(lesson, lessonKey);
+
+                const nextLesson = findNextLesson();
+
+                if (nextLesson && nextLesson.slug) {
+                    const courseSlug = $page.params.slug_course;
+
+                    const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+
+                    await goto(newUrl);
+                } else {
+                    console.log("No next lesson found.");
+                }
+            } catch (error) {
+                console.error('Failed to find next lesson:', error);
+            }
+        }
+    }
 </script>
 
 {#if modules.length === 0}
@@ -216,8 +245,8 @@
                                 </div>
 
                                 <div>
-                                    <Button variant="secondary">
-                                        Proxima Aula
+                                    <Button variant="secondary" class="cursor-pointer" onclick={handleNextLesson}>
+                                        Próxima Aula
                                         <ChevronsRightIcon class="w-4 h-4" />
                                     </Button>
                                 </div>
