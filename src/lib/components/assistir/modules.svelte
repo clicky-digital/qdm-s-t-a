@@ -23,7 +23,6 @@
         setLesson(lesson, 0);
         let lessonData = await getLesson(lesson);
         metadata = lessonData.metadata;
-        console.log(frente);
     });
 
     async function getLesson(lesson) {
@@ -140,6 +139,18 @@
     }
 
     let initialTab = modules.find(m => m.slug === frente)?.id ?? modules[0]?.id;
+
+    function getCurrentLessonIndex(module, lesson) {
+        return module.lessons.findIndex(l => l.id === lesson.id);
+    }
+
+    function getLessonNumber(modules, moduleIndex, lessonIndex) {
+        let count = 0;
+        for (let i = 0; i < moduleIndex; i++) {
+            count += modules[i].lessons.length;
+        }
+        return count + lessonIndex + 1;
+    }
 </script>
 
 {#if modules.length === 0}
@@ -155,7 +166,7 @@
                     value={module.id}>{module.name}</Tabs.Trigger>
             {/each}
         </Tabs.List>
-        {#each modules as module}
+        {#each modules as module, moduleIndex}
             <Tabs.Content value={module.id}>
                 {#if module.lessons.length > 0}
                     {#if lesson}
@@ -164,7 +175,7 @@
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="font-bold text-lg mb-2">
                                     <span
-                                        class="bg-slate-800 text-white p-2 rounded">{lesson.code ?? module.lessons[0].code}</span>
+                                        class="bg-slate-800 text-white p-2 rounded">{getLessonNumber(modules, moduleIndex, getCurrentLessonIndex(module, lesson))}</span>
                                     {lesson.name ?? module.lessons[0].name}
                                 </div>
 
@@ -178,19 +189,21 @@
 
                                     <div class="col-span-1 p-4 grid" style="grid-template-rows: 1fr 20px;">
                                         <div class="">
-                                            {#each module.lessons as lessonCard, key}
-                                                <div class="flex items-end border-b border-gray-300">
-                                                    <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}
-                                                            is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited} />
-                                                    <button class="cursor-pointer pb-3">
-                                                        {#if lesson.description}
-                                                            <RotateCw class="w-4 h-4" />
-                                                        {:else}
-                                                            <Play class="w-4 h-4"
-                                                                  onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
-                                                        {/if}
-                                                    </button>
-                                                </div>
+                                            {#each modules as module, moduleIndex}
+                                                {#each module.lessons as lessonCard, key}
+                                                    <div class="flex items-end border-b border-gray-300">
+                                                        <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)} codeLesson={getLessonNumber(modules, moduleIndex, key)}
+                                                                is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited} />
+                                                        <button class="cursor-pointer pb-3">
+                                                            {#if lesson.description}
+                                                                <RotateCw class="w-4 h-4" />
+                                                            {:else}
+                                                                <Play class="w-4 h-4"
+                                                                      onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
+                                                            {/if}
+                                                        </button>
+                                                    </div>
+                                                {/each}
                                             {/each}
                                         </div>
 

@@ -2,7 +2,7 @@
     import { CircleCheck, Heart, Play, RotateCw } from "lucide-svelte";
     import { onMount } from "svelte";
 
-    let { lesson, metadata = $bindable(), is_favorite = $bindable() } = $props();
+    let { lesson, metadata = $bindable(), is_favorite = $bindable(), codeLesson } = $props();
     let metadataObj = $state({});
     let total_time = $state("0");
 
@@ -36,7 +36,7 @@
         <div
             class={"bg-slate-600 rounded h-full font-bold flex flex-col items-center justify-center gap-1 w-full"}
         >
-            <div class="text-xl">{lesson.code}</div>
+            <div class="text-xl">{codeLesson}</div>
             <CircleCheck
                 class="w-4 h-4 {metadataObj?.completed ? 'text-green-500' : ''}"
             />
