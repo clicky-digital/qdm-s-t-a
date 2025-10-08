@@ -21,9 +21,13 @@
     <div class="container">
         <div class="flex justify-between">
             <div class="flex items-center">
-                <a href="/dashboard" class="text-yellow-300 text-xl font-bold">
+                <a class="text-yellow-300 text-xl font-bold">
                     <img src="/images/logo.png" alt="logo" class="h-10" />
                 </a>
+
+                <button class="cursor-pointer" onclick={()=>{goto('/dashboard')}}>
+                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Início</div>
+                </button>
 
                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/cursos')}}>
                     <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Cursos</div>
