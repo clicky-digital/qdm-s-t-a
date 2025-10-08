@@ -21,5 +21,6 @@ export const load = async ({ cookies, params }) => {
         course_modules: courseData.course_modules,
         active_lesson: courseData.active_lesson,
         favorite_lessons_ids: courseData.favorite_lessons_ids,
+        frente: courseData.active_lesson.frente,
     };
 }

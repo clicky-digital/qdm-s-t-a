@@ -11,7 +11,7 @@
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
 
-    let { modules, type, id, activeLesson = null, favorites } = $props();
+    let { modules, type, id, activeLesson = null, favorites, frente } = $props();
 
     let lessonKey = $state("");
     let lesson = $state({});
@@ -23,6 +23,7 @@
         setLesson(lesson, 0);
         let lessonData = await getLesson(lesson);
         metadata = lessonData.metadata;
+        console.log(frente);
     });
 
     async function getLesson(lesson) {
@@ -137,6 +138,8 @@
             }
         }
     }
+
+    let initialTab = modules.find(m => m.slug === frente)?.id ?? modules[0]?.id;
 </script>
 
 {#if modules.length === 0}
@@ -144,7 +147,7 @@
         <div class="text-gray-500 text-xl">Nenhuma aula disponível</div>
     </div>
 {:else}
-    <Tabs.Root value={modules[0].id} class="w-full">
+    <Tabs.Root value={initialTab} class="w-full">
         <Tabs.List>
             {#each modules as module}
                 <Tabs.Trigger

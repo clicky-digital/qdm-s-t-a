@@ -2,8 +2,9 @@
     import { CornerUpLeft } from "lucide-svelte";
     import Module from "@/components/assistir/modules.svelte";
     import { goto } from "$app/navigation";
-    let { data } = $props();
 
+    let { data } = $props();
+    let { course, course_modules, active_lesson, favorite_lessons_ids, frente } = data;
 </script>
 
 <div class="container mx-auto flex flex-col my-4">
@@ -13,10 +14,17 @@
     </div>
 
     <div class="flex flex-col gap-4 my-4">
-        <div class="title">{data['course']['name']}</div>
+        <div class="title">{course.name}</div>
         <div class="text-gray-400 text-sm">Prof. Marcus Ennes</div>
         <div class="flex flex-col gap-4 my-4">
-            <Module modules={data['course_modules']} activeLesson={data['active_lesson']} type="course" id={data['course']['id']} favorites={data['favorite_lessons_ids']}/>
+            <Module
+                modules={course_modules}
+                activeLesson={active_lesson}
+                type="course"
+                id={course.id}
+                favorites={favorite_lessons_ids}
+                frente={frente}
+            />
         </div>
     </div>
 </div>

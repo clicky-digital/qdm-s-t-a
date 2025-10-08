@@ -4,7 +4,7 @@
     import { goto } from "$app/navigation";
 
     let { data } = $props();
-
+    let { trail, trail_modules, active_lesson, favorite_lessons_ids, frente } = data;
 </script>
 
 <div class="container mx-auto flex flex-col my-4">
@@ -14,16 +14,17 @@
     </div>
 
     <div class="flex flex-col gap-4 my-4">
-        {#await data['trail']}
-            <p>Carregando trilhas...</p>
-        {:then trail}
-            <div class="title">{trail['trail']['name']}</div>
-            <div class="text-gray-400 text-sm">Prof. Marcus Ennes</div>
-            <div class="flex flex-col gap-4 my-4">
-                <Module modules={trail['trail_modules']} activeLesson={trail['active_lesson']} type="trail" id={trail['trail']['id']} favorites={trail['favorite_lessons_ids']}/>
-            </div>
-        {:catch error}
-            <p>Algo deu errado: {error.message}</p>
-        {/await}
+        <div class="title">{trail.name}</div>
+        <div class="text-gray-400 text-sm">Prof. Marcus Ennes</div>
+        <div class="flex flex-col gap-4 my-4">
+            <Module
+                modules={trail_modules}
+                activeLesson={active_lesson}
+                type="trail"
+                id={trail.id}
+                favorites={favorite_lessons_ids}
+                frente={frente}
+            />
+        </div>
     </div>
 </div>
