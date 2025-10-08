@@ -6,8 +6,6 @@
     import Complements from "$lib/components/assistir/complements.svelte";
     import Button from "../ui/button/button.svelte";
     import { ChevronsRightIcon, CircleCheck, Play, RotateCw } from "lucide-svelte";
-    import { onMount } from "svelte";
-    import { isEmptyObject } from "tailwind-variants/dist/utils";
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
 
@@ -16,16 +14,28 @@
     let lessonKey = $state("");
     let lesson = $state({});
     let metadata = $state({});
-    
+    let lessonsMetadata = $state({});
+
     $effect(() => {
         if (activeLesson) {
             (async () => {
                 lesson = activeLesson;
-                metadata = await getLesson(lesson);
 
-                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lesson => lesson.id === lesson.id));
+                const allLessons = modules.flatMap(module => module.lessons);
+                const metadataPromises = allLessons.map(lessonMetadata => getLesson(lessonMetadata));
+                const metadataResults = await Promise.all(metadataPromises);
+
+                const newLessonsMetadata = {};
+                for (let i = 0; i < allLessons.length; i++) {
+                    newLessonsMetadata[allLessons[i].id] = metadataResults[i]?.metadata;
+                }
+                lessonsMetadata = newLessonsMetadata;
+
+                metadata = lessonsMetadata[lesson.id];
+
+                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lessonMetadata => lessonMetadata.id === lesson.id));
                 if (moduleOfCurrentLesson) {
-                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lesson => lesson.id === lesson.id);
+                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lessonMetadata => lessonMetadata.id === lesson.id);
                     setLesson(lesson, currentLessonIndex);
                 }
             })();
@@ -89,7 +99,7 @@
         let currentLessonIndex = -1;
 
         for (let i = 0; i < modules.length; i++) {
-            const lessonIndex = modules[i].lessons.findIndex(l => l.id === lesson.id);
+            const lessonIndex = modules[i].lessons.findIndex(lessonFind => lessonFind.id === lesson.id);
             if (lessonIndex !== -1) {
                 currentModuleIndex = i;
                 currentLessonIndex = lessonIndex;
@@ -125,6 +135,7 @@
                 finalMetadata.time = finalMetadata.total_time;
 
                 metadata = finalMetadata;
+                lessonsMetadata[lesson.id] = finalMetadata;
 
                 await setLesson(lesson, lessonKey, finalMetadata);
 
@@ -158,8 +169,6 @@
                     const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
 
                     await goto(newUrl);
-                } else {
-                    console.log("No next lesson found.");
                 }
             } catch (error) {
                 console.error('Failed to find next lesson:', error);
@@ -206,7 +215,7 @@
                                         <div class="">
                                             {#each module.lessons as lessonCard, key}
                                                 <div class="flex items-end border-b border-gray-300">
-                                                    <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)}
+                                                    <Lesson lesson={lessonCard} metadata={lessonsMetadata[lessonCard.id]}
                                                             is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited} />
                                                     <button class="cursor-pointer pb-3">
                                                         {#if lesson.description}
@@ -222,7 +231,7 @@
 
                                         <div
                                             class="text-sm pt-[7px] font-bold text-white text-end border-t border-slate-600">
-                                            Aulas assistidas 0/{module.lessons.length}
+                                            Aulas assistidas {module.lessons.filter((lesson) => lessonsMetadata[lesson.id]?.completed).length}/{module.lessons.length}
                                         </div>
                                     </div>
                                 </div>

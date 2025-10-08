@@ -1,10 +1,7 @@
 <script lang="ts">
     import { CircleCheck, Heart, Play, RotateCw } from "lucide-svelte";
-    import { onMount } from "svelte";
 
-    let { lesson, metadata = $bindable(), is_favorite = $bindable() } = $props();
-    let metadataObj = $state({});
-    let total_time = $state("0");
+    let { lesson, metadata = {}, is_favorite = false } = $props();
 
     function formatTime(seconds: number) {
         if(!seconds){
@@ -21,11 +18,7 @@
         if(ss){console.log(ss)}
         return `${mm.toString().padStart(2, "0")}:${ss}`;
     }
-
-    onMount(async () => {
-        metadataObj = await metadata;
-        total_time = formatTime(metadataObj.total_time);
-    });
+    let total_time = $derived(formatTime(metadata?.total_time));
 </script>
 
 <div
@@ -38,7 +31,7 @@
         >
             <div class="text-xl">{lesson.code}</div>
             <CircleCheck
-                class="w-4 h-4 {metadataObj?.completed ? 'text-green-500' : ''}"
+                class="w-4 h-4 {metadata?.completed ? "text-green-500" : ""}"
             />
         </div>
     </div>
