@@ -20,22 +20,22 @@
         if (activeLesson) {
             (async () => {
                 lesson = activeLesson;
-
+                
                 const allLessons = modules.flatMap(module => module.lessons);
-                const metadataPromises = allLessons.map(lessonMetadata => getLesson(lessonMetadata));
+                const metadataPromises = allLessons.map(lesson => getLesson(lesson));
                 const metadataResults = await Promise.all(metadataPromises);
-
+                
                 const newLessonsMetadata = {};
                 for (let i = 0; i < allLessons.length; i++) {
                     newLessonsMetadata[allLessons[i].id] = metadataResults[i]?.metadata;
                 }
                 lessonsMetadata = newLessonsMetadata;
-
+                
                 metadata = lessonsMetadata[lesson.id];
 
-                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lessonMetadata => lessonMetadata.id === lesson.id));
+                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lesson => lesson.id === lesson.id));
                 if (moduleOfCurrentLesson) {
-                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lessonMetadata => lessonMetadata.id === lesson.id);
+                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lesson => lesson.id === lesson.id);
                     setLesson(lesson, currentLessonIndex);
                 }
             })();
@@ -143,10 +143,18 @@
 
                 if (nextLesson && nextLesson.slug) {
                     const courseSlug = $page.params.slug_course;
-
-                    const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
-
-                    await goto(newUrl);
+                    const trailSlug = $page.params.slug_trail;
+                    
+                    if($page.params.slug_course){
+                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
+                    if($page.params.slug_trail){
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
                 } else {
                     console.log("No next lesson found.");
                 }
@@ -165,10 +173,20 @@
 
                 if (nextLesson && nextLesson.slug) {
                     const courseSlug = $page.params.slug_course;
+                    const trailSlug = $page.params.slug_trail;
 
-                    const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
-
-                    await goto(newUrl);
+                    if($page.params.slug_course){
+                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
+                    if($page.params.slug_trail){
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
+                } else {
+                    console.log("No next lesson found.");
                 }
             } catch (error) {
                 console.error('Failed to find next lesson:', error);
@@ -216,7 +234,9 @@
                                             {#each module.lessons as lessonCard, key}
                                                 <div class="flex items-end border-b border-gray-300">
                                                     <Lesson lesson={lessonCard} metadata={lessonsMetadata[lessonCard.id]}
-                                                            is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited} />
+                                                            is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited}
+                                                            type={type} parent_id={id} />
+                                                    
                                                     <button class="cursor-pointer pb-3">
                                                         {#if lesson.description}
                                                             <RotateCw class="w-4 h-4" />
