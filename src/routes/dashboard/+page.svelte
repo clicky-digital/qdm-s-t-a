@@ -6,8 +6,8 @@
     import Autoplay from "embla-carousel-autoplay";
     import CarouselNext from '@/components/ui/carousel/carousel-next.svelte';
     import CarouselPrevious from '@/components/ui/carousel/carousel-previous.svelte';
-    
-    let { data } = $props();
+
+    let { data, thumbnails } = $props();
     let lastWatched  = $state(true);
 </script>
 
@@ -131,25 +131,46 @@
         </div>
     </div>
     <div class="flex gap-4">
-<Carousel.Root 
-plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
-opts={{
-    align: "start",
-    loop: true,
-    skipSnaps: true,
-  }}
->
-<CarouselPrevious class="cursor-pointer" />
- <Carousel.Content class="h-60">
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://eucontador.com.br/wp-content/uploads/2019/10/Cursos-Online-2.png" alt=""></Carousel.Item>
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
-  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
-</Carousel.Content>
-<CarouselNext class="cursor-pointer" />
-</Carousel.Root>
+{#await data.carrousels}
+    <div class="h-60 w-full flex justify-center items-center">
+        <p>Carregando carrossel...</p>
+    </div>
+{:then carrousels}
+    {#if carrousels && carrousels.length > 0}
+        <Carousel.Root 
+            plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+            opts={{
+                align: "start",
+                loop: true,
+                skipSnaps: true,
+            }}
+            class="w-full"
+        >
+            <Carousel.Content class="h-60">
+                {#each carrousels as carrousel}
+                    <Carousel.Item class="md:basis-1/2 lg:basis-1/3">
+                        <a href="{carrousel.link}" target="_blank">
+                            <img 
+                                class="h-full w-full object-rescale"
+                                src="{PUBLIC_URL_BASE_STORAGE + '/' + carrousel.thumbnails.path}"
+                                alt="{carrousel.name}"
+                            >
+                        </a>
+                    </Carousel.Item>
+                {/each}
+            </Carousel.Content>
+            <CarouselPrevious class="cursor-pointer" />
+            <CarouselNext class="cursor-pointer" />
+        </Carousel.Root>
+    {:else}
+        <div class="h-60 w-full flex justify-center items-center">
+            <p>Nenhum item de carrossel encontrado.</p>
+        </div>
+    {/if}
+{:catch error}
+    <div class="h-60 w-full flex justify-center items-center bg-red-100 text-red-700 p-4 rounded-lg">
+        <p>Ocorreu um erro ao carregar o carrossel: {error.message}</p>
+    </div>
+{/await}
     </div>
 </div>
