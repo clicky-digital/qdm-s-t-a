@@ -61,8 +61,7 @@
                                 goto('/dashboard/' + type + '/' + lesson.parent.slug + '/' + lesson.slug);
                             }}>
                                 <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">
-                                    <div class="relative flex justify-center items-center">
-
+                                    <div class="relative flex justify-center items-center w-1/3">
                                         {#if lesson.thumbnails}
                                             <img class="max-h-16" src="{PUBLIC_URL_BASE_STORAGE + '/' + lesson.thumbnails.path}" alt="">
                                         {:else}
@@ -71,8 +70,8 @@
 
                                         <Play class="w-8 h-8 absolute text-white" />
                                     </div>
-                                    <div class="flex flex-col text-left">
-                                        <p class="text-md text-gray-700 font-bold">Nome: {lesson.name}</p>
+                                    <div class="flex flex-col text-left w-2/3">
+                                        <p class="text-md text-gray-700 font-bold">{lesson.name}</p>
                                         <p class="text-sm text-gray-500">Assistido por ultimo em:
                                             {lesson.parent.type === 'course' ?
                                             "Cursos - " + lesson.parent.name :
