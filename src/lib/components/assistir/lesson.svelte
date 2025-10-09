@@ -62,9 +62,7 @@
     <div class="flex items-center justify-center w-full">
         <div class={"bg-slate-600 rounded h-full font-bold flex flex-col items-center justify-center gap-1 w-full"}>
             <div class="text-xl">{lesson.code}</div>
-            <CircleCheck
-                class="w-4 h-4 {metadata?.completed ? 'text-green-500' : ''}"
-            />
+            <CircleCheck class="w-4 h-4 {metadata?.completed ? 'text-green-500' : ''}" />
         </div>
     </div>
     <div>

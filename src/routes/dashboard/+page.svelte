@@ -2,12 +2,17 @@
     import { Play } from 'lucide-svelte';
     import { goto } from "$app/navigation";
     import { PUBLIC_URL_BASE_STORAGE } from "$env/static/public";
+    import * as Carousel from "$lib/components/ui/carousel/index.js";
+    import Autoplay from "embla-carousel-autoplay";
+    import CarouselNext from '@/components/ui/carousel/carousel-next.svelte';
+    import CarouselPrevious from '@/components/ui/carousel/carousel-previous.svelte';
+    
     let { data } = $props();
     let lastWatched  = $state(true);
 </script>
 
 <div class="container mx-auto flex flex-col gap-6 my-4">
-    <div class="title">Continuar Assistindo</div>
+    <div class="text-2xl font-bold">Continuar Assistindo</div>
 	
     <div class="grid grid-cols-3 gap-4">
 
@@ -90,7 +95,7 @@
         </div>
     </div>
 
-    <div class="title">Dashboard</div>
+    <div class="text-2xl font-bold text-slate-900">Dashboard</div>
     <div class="flex gap-4">
         <div class="h-60 w-full flex justify-center rounded-2xl">
             <img class="border-gray-400 rounded-2xl border-2" src="/images/dashboard-1.png"  alt="Dashboard">
@@ -116,7 +121,7 @@
                     /></svg
                 >
             </div>
-            <span class="text-gray-50">VEJAS AS</span>
+            <span class="text-gray-50">VEJA AS</span>
             LIVES MAIS RECENTES
         </div>
 
@@ -125,5 +130,27 @@
             <div class="h-60 w-full bg-gray-100"></div>
             <div class="h-60 w-full bg-gray-100"></div>
         </div>
+    </div>
+    <div class="flex gap-4">
+<Carousel.Root 
+plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+opts={{
+    align: "start",
+    loop: true,
+    skipSnaps: true,
+  }}
+>
+<CarouselPrevious class="cursor-pointer" />
+ <Carousel.Content class="h-60">
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://eucontador.com.br/wp-content/uploads/2019/10/Cursos-Online-2.png" alt=""></Carousel.Item>
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
+  <Carousel.Item class="md:basis-1/2 lg:basis-1/3"><img class="h-full w-full object-resize" src="https://blog.even3.com.br/wp-content/uploads/2022/07/33-imagens-de-destaque_guestpost-cursos-superiores.png" alt=""></Carousel.Item>
+</Carousel.Content>
+<CarouselNext class="cursor-pointer" />
+</Carousel.Root>
     </div>
 </div>

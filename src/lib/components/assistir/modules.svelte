@@ -144,7 +144,7 @@
                 if (nextLesson && nextLesson.slug) {
                     const courseSlug = $page.params.slug_course;
                     const trailSlug = $page.params.slug_trail;
-                    
+
                     if($page.params.slug_course){
                         const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
                         await goto(newUrl);
@@ -274,10 +274,12 @@
                                 </div>
 
                                 <div>
+                                    {#if findNextLesson()}
                                     <Button variant="secondary" class="cursor-pointer hover:text-slate-600" onclick={handleNextLesson}>
                                         Próxima Aula
                                         <ChevronsRightIcon class="w-4 h-4" />
                                     </Button>
+                                    {/if}
                                 </div>
 
                                 <div></div>

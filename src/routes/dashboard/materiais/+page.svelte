@@ -1,4 +1,5 @@
 <script lang="ts">
+    import InputIcon from '@/components/ui/input-icon/input-icon.svelte';
     import { FileText, BrainCircuit, Mic } from 'lucide-svelte';
 
     export let data;
@@ -41,7 +42,10 @@
 
     {#if data.courses && data.courses.length > 0}
         <div class="mb-12">
-            <h2 class="text-xl md:text-2xl font-semibold mb-4 border-b pb-2">Cursos</h2>
+            <div class="flex justify-between items-center mb-6 border-b">
+                <h2 class="text-xl md:text-2xl font-semibold pb-2">Cursos</h2>
+                <InputIcon class="bg-none w-80 mb-4 border-gray-400 border-1" placeholder="Pesquisar aula" />
+            </div>
             {#each data.courses as course}
                 <div class="mb-8">
                     <h3 class="text-lg md:text-xl font-bold mb-3 text-gray-700">{course.name}</h3>
