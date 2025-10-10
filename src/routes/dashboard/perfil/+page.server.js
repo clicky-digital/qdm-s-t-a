@@ -1,4 +1,6 @@
 import { URL_BASE_API } from '$env/static/private';
+import { fail } from '@sveltejs/kit';
+
 export function load({ cookies }) {
 
     let promise = fetch(URL_BASE_API + "/api/v1/profile", {
@@ -34,8 +36,8 @@ export const actions = {
             method: "POST",
             body: JSON.stringify({
                 'student_id': cookies.get('student_id'),
-                'avatar': avatar,
                 'name': name,
+                'avatar': avatar,
                 'email': email,
                 'phone': phone,
                 'zip_code': zip_code,
@@ -47,7 +49,6 @@ export const actions = {
                 'complement': complement,
             }),
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
             },
         }).then((res) => res.json());
@@ -82,5 +83,6 @@ export const actions = {
         let message = await promise;
 
         return { message: message};
-    }
+    },
+
 };

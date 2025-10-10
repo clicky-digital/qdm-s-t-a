@@ -13,6 +13,8 @@
     let passwordsMatch = $state(true);
     let minimumPasswordLength = $state(false);
 
+    let selectedFile = $state<Base64URLString | null>(null);
+
     function handleSubmit(submitter?: string) {
         if(submitter == "updatePassword") {
             validatePassword();
@@ -33,6 +35,7 @@
     function logout(){
         //TODO Make logout function
     }
+
 </script>
 
 <div class="w-full flex p-5 justify-center items-center">
@@ -44,10 +47,21 @@
         <div class="w-9/12 h-full flex gap-2">
             <div class="flex flex-col w-3/12 p-2 bg-slate-900/10 rounded-2xl">
                 <div class="w-full flex flex-col gap-5 justify-center items-center h-2/5">
-                    {#if (profile?.student?.avatar)}
-                        <img class="size-48 border-2 rounded-full" src="{PUBLIC_URL_BASE_STORAGE + '/' + profile?.student?.avatar}" alt="User Avatar">
+                    
+                    {#if (profile?.student?.avatar && !selectedFile)}
+                    <img class="size-48 border-2 rounded-full" src="{PUBLIC_URL_BASE_STORAGE + '/' + profile?.student?.avatar}" alt="User Avatar">
                     {:else}
-                        <User class="size-48 p-5 border-2 rounded-full" />
+                    {#if selectedFile}
+                        <img
+                            class="size-48 p-5 rounded-full"
+                            src={URL.createObjectURL(selectedFile)}
+                            alt="Imagem selecionada"
+                            style="max-width: 300px; max-height: 300px;" />
+                    {:else}
+                        <div class="justify-center items-center flex flex-col">
+                            <User class="size-48 p-5 rounded-full" />
+                        </div>
+                    {/if}
                     {/if}
                 </div>
                 <div class="h-3/5 flex flex-col pt-10">
@@ -60,11 +74,21 @@
                 <Button onclick={() => logout()} class="bg-slate-900/10 text-red-500 cursor-pointer hover:text-white hover:bg-red-500">Sair</Button>
             </div>
             <div class="w-9/12">
-                <form class="w-full h-full {view !== 'profile' ? 'hidden' : ''}" method="POST" onsubmit={()=>handleSubmit(event.submitter.value)}>
+                <form class="w-full h-full {view !== 'profile' ? 'hidden' : ''}" method="POST" enctype="multipart/form-data" onsubmit={()=>handleSubmit(event.submitter.value)}>
                 <div class="{view !== 'profile' ? 'hidden' : ''} w-full h-full flex flex-col items-center bg-slate-900/10 rounded-2xl">
                         <div class="flex w-full h-1/2">
                             <div class="w-1/2 flex flex-col items-center justify-center">
-                                <Input name="avatar" placeholder="Foto de Perfil" type="file" class="w-9/12 bg-white"></Input>
+                                <div class="w-9/12">
+                                    <p>
+                                        {#if (selectedFile)}
+                                            <pre>
+                                                {JSON.stringify({ name: selectedFile.name, uri: selectedFile.uri, size: selectedFile.size, type: selectedFile.type, lastModified: selectedFile.lastModified }, null, 2)}
+                                            </pre>
+                                        {/if}
+                                    </p>
+                                    <label for="avatar">Foto de Perfil:</label>
+                                    <Input id="avatar" name="avatar" placeholder="Foto de Perfil" accept="image/*" type="file" class="w-full bg-white" onchange={(e) => selectedFile = e.target.files[0]}></Input>
+                                </div>
                                 <div class="w-9/12">
                                     <label for="name">Nome:</label>
                                     <Input id="name" name="name" placeholder="Nome" class="w-full" value={profile?.student?.name}></Input>

@@ -12,7 +12,7 @@
 </script>
 
 <div class="container mx-auto flex flex-col gap-6 my-4">
-    <div class="text-2xl font-bold">Continuar Assistindo</div>
+    <div class="text-2xl font-bold text-slate-900">Continuar Assistindo</div>
 	
     <div class="grid grid-cols-3 gap-4">
 
