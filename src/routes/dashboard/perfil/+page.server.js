@@ -32,22 +32,23 @@ export const actions = {
         const number = data.get('number');
         const complement = data.get('complement');
 
+        const formData = new FormData();
+        formData.append('student_id', cookies.get('student_id'));
+        formData.append('avatar', avatar);
+        formData.append('name', name);
+        formData.append('email', email);
+        formData.append('phone', phone);
+        formData.append('zip_code', zip_code);
+        formData.append('district', district);
+        formData.append('uf', uf);
+        formData.append('city', city);
+        formData.append('address', address);
+        formData.append('number', number);
+        formData.append('complement', complement);
+
         let promise = fetch(URL_BASE_API + "/api/v1/profile/update", {
             method: "POST",
-            body: JSON.stringify({
-                'student_id': cookies.get('student_id'),
-                'name': name,
-                'avatar': avatar,
-                'email': email,
-                'phone': phone,
-                'zip_code': zip_code,
-                'district': district,
-                'uf': uf,
-                'city': city,
-                'address': address,
-                'number': number,
-                'complement': complement,
-            }),
+            body: formData,
             headers: {
                 "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
             },

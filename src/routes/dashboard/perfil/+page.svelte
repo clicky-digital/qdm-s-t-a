@@ -13,7 +13,7 @@
     let passwordsMatch = $state(true);
     let minimumPasswordLength = $state(false);
 
-    let selectedFile = $state<Base64URLString | null>(null);
+    let selectedFile = $state<File | null>(null);
 
     function handleSubmit(submitter?: string) {
         if(submitter == "updatePassword") {
@@ -79,15 +79,12 @@
                         <div class="flex w-full h-1/2">
                             <div class="w-1/2 flex flex-col items-center justify-center">
                                 <div class="w-9/12">
-                                    <p>
-                                        {#if (selectedFile)}
-                                            <pre>
-                                                {JSON.stringify({ name: selectedFile.name, uri: selectedFile.uri, size: selectedFile.size, type: selectedFile.type, lastModified: selectedFile.lastModified }, null, 2)}
-                                            </pre>
-                                        {/if}
-                                    </p>
-                                    <label for="avatar">Foto de Perfil:</label>
-                                    <Input id="avatar" name="avatar" placeholder="Foto de Perfil" accept="image/*" type="file" class="w-full bg-white" onchange={(e) => selectedFile = e.target.files[0]}></Input>
+                                    {#if profile?.student?.avatar}
+                                        <label for="avatar">Alterar foto de perfil:</label>
+                                    {:else}
+                                        <label for="avatar">Foto de Perfil:</label>
+                                    {/if}
+                                        <Input id="avatar" name="avatar" accept="image/*" type="file" class="w-full bg-white" onchange={(e) => selectedFile = e.target.files[0]}></Input>
                                 </div>
                                 <div class="w-9/12">
                                     <label for="name">Nome:</label>
