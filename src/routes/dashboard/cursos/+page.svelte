@@ -19,7 +19,7 @@
         <button class="cursor-pointer" onclick={()=>{goto('./')}}>Voltar ao Início</button>
     </div>
 
-    <div class="title">Cursos</div>
+    <div class="text-2xl font-bold text-slate-900">Cursos</div>
     <div class="flex flex-col gap-4 my-4">
         {#await data['courses']}
             <p>Carregando cursos...</p>

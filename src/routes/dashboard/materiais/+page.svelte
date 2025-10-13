@@ -1,7 +1,30 @@
 <script lang="ts">
+    import InputIcon from '@/components/ui/input-icon/input-icon.svelte';
     import { FileText, BrainCircuit, Mic } from 'lucide-svelte';
 
     export let data;
+
+    let searchTerm = '';
+
+	$: filteredCourses =
+		data.courses
+			?.map((course) => ({
+				...course,
+				lessons: course.lessons.filter((lesson) =>
+					lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
+				)
+			}))
+			.filter((course) => course.lessons.length > 0) || [];
+
+	$: filteredTrails =
+		data.trails
+			?.map((trail) => ({
+				...trail,
+				lessons: trail.lessons.filter((lesson) =>
+					lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
+				)
+			}))
+			.filter((trail) => trail.lessons.length > 0) || [];
 
     async function downloadFile(sourceFilename: string, downloadFilename: string) {
         try {
@@ -39,10 +62,20 @@
 <div class="p-4 md:p-8 w-full">
     <h1 class="text-2xl md:text-3xl font-bold mb-8">Materiais de Apoio</h1>
 
-    {#if data.courses && data.courses.length > 0}
+    
+	<div class="mb-8">
+		<InputIcon
+			bind:value={searchTerm}
+			class="bg-none w-60 md:w-1/2 lg:w-1/4 border-gray-400 border-1"
+			placeholder="Pesquisar aula..."
+		/>
+	</div>
+    {#if filteredCourses.length > 0}
         <div class="mb-12">
-            <h2 class="text-xl md:text-2xl font-semibold mb-4 border-b pb-2">Cursos</h2>
-            {#each data.courses as course}
+            <div class="flex justify-between items-center mb-6 border-b">
+                <h2 class="text-xl md:text-2xl font-semibold pb-2">Cursos</h2>
+            </div>
+            {#each filteredCourses as course}
                 <div class="mb-8">
                     <h3 class="text-lg md:text-xl font-bold mb-3 text-gray-700">{course.name}</h3>
                     <div class="overflow-x-auto bg-white rounded-lg shadow-md">
@@ -96,10 +129,12 @@
         </div>
     {/if}
 
-    {#if data.trails && data.trails.length > 0}
+    {#if filteredTrails.length > 0}
         <div class="mb-12">
-            <h2 class="text-xl md:text-2xl font-semibold mb-4 border-b pb-2">Trilhas</h2>
-            {#each data.trails as trail}
+			<div class="flex justify-between items-center mb-6 border-b">
+				<h2 class="text-xl md:text-2xl font-semibold pb-2">Trilhas</h2>
+			</div>
+            {#each filteredTrails as trail}
                 <div class="mb-8">
                     <h3 class="text-lg md:text-xl font-bold mb-3 text-gray-700">{trail.name}</h3>
                     <div class="overflow-x-auto bg-white rounded-lg shadow-md">
@@ -153,9 +188,15 @@
         </div>
     {/if}
 
-    {#if (!data.courses || data.courses.length === 0) && (!data.trails || data.trails.length === 0)}
+    {#if filteredCourses.length === 0 && filteredTrails.length === 0}
         <div class="flex justify-center items-center h-64">
-            <p class="text-gray-500 text-lg">Nenhum material de apoio encontrado.</p>
+            <p class="text-gray-500 text-lg">
+                {#if searchTerm.length > 0}
+                    Nenhum material encontrado para "{searchTerm}".
+                {:else}
+                    Nenhum material de apoio disponível.
+                {/if}
+            </p>
         </div>
     {/if}
 </div>

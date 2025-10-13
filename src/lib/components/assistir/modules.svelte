@@ -20,6 +20,7 @@
     let showEvaluationModal = $state(false);
     let userRatings = $state([]);
     let average_rating = $state("");
+    let lessonsMetadata = $state({});
 
     async function fetchUserRatings() {
         try {
@@ -61,6 +62,32 @@
 
         await fetchUserRatings();
         await fecthAverageRating();
+    });
+
+    $effect(() => {
+        if (activeLesson) {
+            (async () => {
+                lesson = activeLesson;
+                
+                const allLessons = modules.flatMap(module => module.lessons);
+                const metadataPromises = allLessons.map(lesson => getLesson(lesson));
+                const metadataResults = await Promise.all(metadataPromises);
+                
+                const newLessonsMetadata = {};
+                for (let i = 0; i < allLessons.length; i++) {
+                    newLessonsMetadata[allLessons[i].id] = metadataResults[i]?.metadata;
+                }
+                lessonsMetadata = newLessonsMetadata;
+                
+                metadata = lessonsMetadata[lesson.id];
+
+                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lesson => lesson.id === lesson.id));
+                if (moduleOfCurrentLesson) {
+                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lesson => lesson.id === lesson.id);
+                    setLesson(lesson, currentLessonIndex);
+                }
+            })();
+        }
     });
 
     let currentLessonRating = $derived(userRatings.find(r => r.lesson_id === lesson.id));
@@ -139,7 +166,7 @@
         let currentLessonIndex = -1;
 
         for (let i = 0; i < modules.length; i++) {
-            const lessonIndex = modules[i].lessons.findIndex(l => l.id === lesson.id);
+            const lessonIndex = modules[i].lessons.findIndex(lessonFind => lessonFind.id === lesson.id);
             if (lessonIndex !== -1) {
                 currentModuleIndex = i;
                 currentLessonIndex = lessonIndex;
@@ -175,6 +202,7 @@
                 finalMetadata.time = finalMetadata.total_time;
 
                 metadata = finalMetadata;
+                lessonsMetadata[lesson.id] = finalMetadata;
 
                 await setLesson(lesson, lessonKey, finalMetadata);
 
@@ -182,15 +210,52 @@
 
                 if (nextLesson && nextLesson.slug) {
                     const courseSlug = $page.params.slug_course;
+                    const trailSlug = $page.params.slug_trail;
 
-                    const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
-
-                    await goto(newUrl);
+                    if($page.params.slug_course){
+                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
+                    if($page.params.slug_trail){
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
                 } else {
                     console.log("No next lesson found.");
                 }
             } catch (error) {
-                console.error("Failed to mark lesson as complete:", error);
+                console.error('Failed to mark lesson as complete:', error);
+            }
+        }
+    }
+
+    async function handleNextLesson() {
+        if (lesson && lesson.id) {
+            try {
+                await setLesson(lesson, lessonKey);
+
+                const nextLesson = findNextLesson();
+
+                if (nextLesson && nextLesson.slug) {
+                    const courseSlug = $page.params.slug_course;
+                    const trailSlug = $page.params.slug_trail;
+
+                    if($page.params.slug_course){
+                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
+                    if($page.params.slug_trail){
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextLesson.slug}`;
+                        await goto(newUrl);
+                        return;
+                    }
+                } else {
+                    console.log("No next lesson found.");
+                }
+            } catch (error) {
             }
         }
     }
@@ -253,27 +318,27 @@
 
                                     <div class="col-span-1 p-4 grid" style="grid-template-rows: 1fr 20px;">
                                         <div class="">
-                                            {#each modules as module, moduleIndex}
-                                                {#each module.lessons as lessonCard, key}
-                                                    <div class="flex items-end border-b border-gray-300">
-                                                        <Lesson lesson={lessonCard} metadata={getLesson(lessonCard)} codeLesson={getLessonNumber(modules, moduleIndex, key)}
-                                                                is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited} />
-                                                        <button class="cursor-pointer pb-3">
-                                                            {#if lesson.description}
-                                                                <RotateCw class="w-4 h-4" />
-                                                            {:else}
-                                                                <Play class="w-4 h-4"
-                                                                      onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
-                                                            {/if}
-                                                        </button>
-                                                    </div>
-                                                {/each}
+                                            {#each module.lessons as lessonCard, key}
+                                                <div class="flex items-end border-b border-gray-300">
+                                                    <Lesson lesson={lessonCard} metadata={lessonsMetadata[lessonCard.id]}
+                                                            is_favorite={favorites.includes(lessonCard.id)} on:favorited={handleFavorited}
+                                                            type={type} parent_id={id} />
+                                                    
+                                                    <button class="cursor-pointer pb-3">
+                                                        {#if lesson.description}
+                                                            <RotateCw class="w-4 h-4" />
+                                                        {:else}
+                                                            <Play class="w-4 h-4"
+                                                                  onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
+                                                        {/if}
+                                                    </button>
+                                                </div>
                                             {/each}
                                         </div>
 
                                         <div
                                             class="text-sm pt-[7px] font-bold text-white text-end border-t border-slate-600">
-                                            Aulas assistidas 0/{module.lessons.length}
+                                            Aulas assistidas {module.lessons.filter((lesson) => lessonsMetadata[lesson.id]?.completed).length}/{module.lessons.length}
                                         </div>
                                     </div>
                                 </div>
@@ -285,7 +350,7 @@
 
                             <div class="flex justify-between items-center w-full h-full">
                                 <div>
-                                    <Button variant="default" class={metadata?.completed ? 'bg-green-500 hover:bg-green-600' : ''} onclick={markComplete}>
+                                    <Button variant="default" class={"cursor-pointer " + (metadata?.completed ? 'bg-green-500 hover:bg-green-600' : '')} onclick={markComplete}>
                                         <CircleCheck class="w-4 h-4" />
                                         {#if metadata?.completed}
                                             Aula Concluída
@@ -316,10 +381,12 @@
                                     {/if}
                                 </div>
                                 <div>
-                                    <Button variant="secondary">
-                                        Proxima Aula
+                                    {#if findNextLesson()}
+                                    <Button variant="secondary" class="cursor-pointer hover:text-slate-600" onclick={handleNextLesson}>
+                                        Próxima Aula
                                         <ChevronsRightIcon class="w-4 h-4" />
                                     </Button>
+                                    {/if}
                                 </div>
                             </div>
                             <Notes />
