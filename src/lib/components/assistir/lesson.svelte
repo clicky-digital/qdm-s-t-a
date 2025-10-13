@@ -2,13 +2,10 @@
     import { CircleCheck, Heart, Play, RotateCw, Star } from "lucide-svelte";
     import { onMount, createEventDispatcher } from "svelte";
 
-    let { lesson, metadata = $bindable(), is_favorite = $bindable() } = $props();
+    let { lesson, metadata = $bindable(), is_favorite = $bindable(), type, parent_id } = $props();
     let metadataObj = $state({});
     let total_time = $state("0");
     let average_rating = $state("");
-
-
-    let { lesson, metadata = {}, is_favorite = false, type, parent_id } = $props();
     
     const dispatch = createEventDispatcher();
 
