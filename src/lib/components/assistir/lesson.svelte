@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { CircleCheck, Heart, Play, RotateCw } from "lucide-svelte";
+    import { CircleCheck, Heart, Play, RotateCw, Star } from "lucide-svelte";
     import { onMount } from "svelte";
 
     let { lesson, metadata = $bindable(), is_favorite = $bindable(), codeLesson } = $props();
     let metadataObj = $state({});
     let total_time = $state("0");
+    let average_rating = $state("");
 
     function formatTime(seconds: number) {
         if(!seconds){
@@ -25,7 +26,24 @@
     onMount(async () => {
         metadataObj = await metadata;
         total_time = formatTime(metadataObj.total_time);
+        await fecthAverageRating();
     });
+
+    async function fecthAverageRating() {
+        try {
+            let promisse = await fetch(`/api/lessons/${lesson.id}/average`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            let response = await promisse.json();
+            average_rating = response.average_rating;
+            console.log(response.average_rating);
+        } catch (error) {
+            console.error("Failed to GET average rating:", error);
+        }
+    }
 </script>
 
 <div
@@ -43,8 +61,16 @@
         </div>
     </div>
     <div>
-        <div class="min-h-12">
-            {lesson.name}
+        <div class="flex justify-between items-center">
+            <div class="min-h-12">
+                {lesson.name}
+            </div>
+            {#if average_rating > 0}
+                <div class="flex items-center text-md">
+                    {average_rating}
+                    <Star class="w-4 h-4 ml-1 text-yellow-400 fill-yellow-400" />
+                </div>
+            {/if}
         </div>
         <div class="flex gap-2">
             {#if total_time}

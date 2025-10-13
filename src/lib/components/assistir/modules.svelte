@@ -5,17 +5,52 @@
     import Notes from "$lib/components/assistir/notes.svelte";
     import Complements from "$lib/components/assistir/complements.svelte";
     import Button from "../ui/button/button.svelte";
-    import { ChevronsRightIcon, CircleCheck, Play, RotateCw } from "lucide-svelte";
+    import { ChevronsRightIcon, CircleCheck, Play, RotateCw, Star } from "lucide-svelte";
     import { onMount } from "svelte";
     import { isEmptyObject } from "tailwind-variants/dist/utils";
     import { goto } from "$app/navigation";
     import { page } from "$app/stores";
+    import EvaluationModal from "$lib/components/assistir/evaluation-modal.svelte";
 
     let { modules, type, id, activeLesson = null, favorites, frente } = $props();
 
     let lessonKey = $state("");
     let lesson = $state({});
     let metadata = $state({});
+    let showEvaluationModal = $state(false);
+    let userRatings = $state([]);
+    let average_rating = $state("");
+
+    async function fetchUserRatings() {
+        try {
+            let promisse = await fetch(`/api/lessons/all/evaluation`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            let response = await promisse.json();
+            userRatings = response.ratings;
+        } catch (error) {
+            console.error("Failed to GET ratings:", error);
+        }
+    }
+
+    async function fecthAverageRating() {
+        try {
+            let promisse = await fetch(`/api/lessons/${lesson.id}/average`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            let response = await promisse.json();
+            average_rating = response.average_rating;
+        } catch (error) {
+            console.error("Failed to GET average rating:", error);
+        }
+    }
+
     onMount(async () => {
         if (isEmptyObject(lesson)) {
             lesson = activeLesson || modules[0].lessons[0];
@@ -23,7 +58,12 @@
         setLesson(lesson, 0);
         let lessonData = await getLesson(lesson);
         metadata = lessonData.metadata;
+
+        await fetchUserRatings();
+        await fecthAverageRating();
     });
+
+    let currentLessonRating = $derived(userRatings.find(r => r.lesson_id === lesson.id));
 
     async function getLesson(lesson) {
         if (lesson) {
@@ -77,6 +117,23 @@
         }
     }
 
+    async function handleSaveEvaluation(event) {
+        const { lesson_id, rating, comment, parent_type, parent_id } = event.detail;
+        try {
+            await fetch(`/api/lessons/${lesson_id}/evaluation`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ rating, comment, parent_type, parent_id })
+            });
+            showEvaluationModal = false;
+            await fetchUserRatings();
+            await fecthAverageRating();
+        } catch (error) {
+            console.error("Failed to save evaluation:", error);
+        }
+    }
     function findNextLesson() {
         let currentModuleIndex = -1;
         let currentLessonIndex = -1;
@@ -133,7 +190,7 @@
                     console.log("No next lesson found.");
                 }
             } catch (error) {
-                console.error('Failed to mark lesson as complete:', error);
+                console.error("Failed to mark lesson as complete:", error);
             }
         }
     }
@@ -173,10 +230,17 @@
 
                         <div class="flex flex-col gap-2 w-full p-8 bg-gray-100 rounded-sm">
                             <div class="flex flex-col gap-2 w-full">
-                                <div class="font-bold text-lg mb-2">
-                                    <span
-                                        class="bg-slate-800 text-white p-2 rounded">{getLessonNumber(modules, moduleIndex, getCurrentLessonIndex(module, lesson))}</span>
-                                    {lesson.name ?? module.lessons[0].name}
+                                <div class="flex justify-between items-center font-bold text-lg mb-2">
+                                    <div>
+                                        <span class="bg-slate-800 text-white p-2 rounded">{getLessonNumber(modules, moduleIndex, getCurrentLessonIndex(module, lesson))}</span>
+                                        {lesson.name ?? module.lessons[0].name}
+                                    </div>
+                                    {#if average_rating}
+                                        <div class="flex items-center text-md">
+                                            Avaliação da aula: {average_rating}
+                                            <Star class="w-4 h-4 ml-1 text-yellow-400 fill-yellow-400" />
+                                        </div>
+                                    {/if}
                                 </div>
 
                                 <div
@@ -230,17 +294,34 @@
                                         {/if}
                                     </Button>
                                 </div>
-
+                                <div>
+                                    {#if currentLessonRating}
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold text-sm">Sua Avaliação:</span>
+                                            <div class="flex">
+                                                {#each { length: 5 } as _, i}
+                                                    {#if i < currentLessonRating.rating}
+                                                        <Star class="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                                                    {:else}
+                                                        <Star class="w-5 h-5 text-gray-300" />
+                                                    {/if}
+                                                {/each}
+                                            </div>
+                                        </div>
+                                    {:else}
+                                        <Button variant="secondary" onclick={() => showEvaluationModal = true}>
+                                            <Star class="w-4 h-4" />
+                                            Avaliar Aula
+                                        </Button>
+                                    {/if}
+                                </div>
                                 <div>
                                     <Button variant="secondary">
                                         Proxima Aula
                                         <ChevronsRightIcon class="w-4 h-4" />
                                     </Button>
                                 </div>
-
-                                <div></div>
                             </div>
-
                             <Notes />
                         </div>
                     {/if}
@@ -254,4 +335,5 @@
             </Tabs.Content>
         {/each}
     </Tabs.Root>
+    <EvaluationModal bind:showModal={showEvaluationModal} lesson={lesson} type={type} id={id} onSave={handleSaveEvaluation} />
 {/if}
