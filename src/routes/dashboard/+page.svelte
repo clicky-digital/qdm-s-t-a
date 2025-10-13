@@ -2,12 +2,17 @@
     import { Play } from 'lucide-svelte';
     import { goto } from "$app/navigation";
     import { PUBLIC_URL_BASE_STORAGE } from "$env/static/public";
-    let { data } = $props();
+    import * as Carousel from "$lib/components/ui/carousel/index.js";
+    import Autoplay from "embla-carousel-autoplay";
+    import CarouselNext from '@/components/ui/carousel/carousel-next.svelte';
+    import CarouselPrevious from '@/components/ui/carousel/carousel-previous.svelte';
+
+    let { data, thumbnails } = $props();
     let lastWatched  = $state(true);
 </script>
 
 <div class="container mx-auto flex flex-col gap-6 my-4">
-    <div class="title">Continuar Assistindo</div>
+    <div class="text-2xl font-bold text-slate-900">Continuar Assistindo</div>
 	
     <div class="grid grid-cols-3 gap-4">
 
@@ -24,7 +29,7 @@
                         {/if}
                         <div class="flex absolute w-full self-end p-2 justify-between">
                             <h2 class="text-white font-bold text-xl self-center mx-3 mb-4">{profile.keep_watching.name}</h2>
-                            <button class="min-w-55 flex mb-10 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => {
+                            <button class="hover:text-slate-600 min-w-55 flex mb-10 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => {
                                 const type = profile.keep_watching.parent.type === 'course' ? 'cursos' : 'trilhas';
                                 goto('/dashboard/' + type + '/' + profile.keep_watching.parent.slug + '/' + profile.keep_watching.slug);
                             }}>
@@ -89,7 +94,7 @@
         </div>
     </div>
 
-    <div class="title">Dashboard</div>
+    <div class="text-2xl font-bold text-slate-900">Dashboard</div>
     <div class="flex gap-4">
         <div class="h-60 w-full flex justify-center rounded-2xl">
             <img class="border-gray-400 rounded-2xl border-2" src="/images/dashboard-1.png"  alt="Dashboard">
@@ -115,7 +120,7 @@
                     /></svg
                 >
             </div>
-            <span class="text-gray-50">VEJAS AS</span>
+            <span class="text-gray-50">VEJA AS</span>
             LIVES MAIS RECENTES
         </div>
 
@@ -124,5 +129,48 @@
             <div class="h-60 w-full bg-gray-100"></div>
             <div class="h-60 w-full bg-gray-100"></div>
         </div>
+    </div>
+    <div class="flex gap-4">
+{#await data.carrousels}
+    <div class="h-60 w-full flex justify-center items-center">
+        <p>Carregando carrossel...</p>
+    </div>
+{:then carrousels}
+    {#if carrousels && carrousels.length > 0}
+        <Carousel.Root 
+            plugins={[Autoplay({ delay: 4000, stopOnInteraction: false })]}
+            opts={{
+                align: "start",
+                loop: true,
+                skipSnaps: true,
+            }}
+            class="w-full"
+        >
+            <Carousel.Content class="h-60">
+                {#each carrousels as carrousel}
+                    <Carousel.Item class="md:basis-1/2 lg:basis-1/3">
+                        <a href="{carrousel.link}" target="_blank">
+                            <img 
+                                class="h-full w-full object-rescale"
+                                src="{PUBLIC_URL_BASE_STORAGE + '/' + carrousel.thumbnails.path}"
+                                alt="{carrousel.name}"
+                            >
+                        </a>
+                    </Carousel.Item>
+                {/each}
+            </Carousel.Content>
+            <CarouselPrevious class="cursor-pointer" />
+            <CarouselNext class="cursor-pointer" />
+        </Carousel.Root>
+    {:else}
+        <div class="h-60 w-full flex justify-center items-center">
+            <p>Nenhum item de carrossel encontrado.</p>
+        </div>
+    {/if}
+{:catch error}
+    <div class="h-60 w-full flex justify-center items-center bg-red-100 text-red-700 p-4 rounded-lg">
+        <p>Ocorreu um erro ao carregar o carrossel: {error.message}</p>
+    </div>
+{/await}
     </div>
 </div>

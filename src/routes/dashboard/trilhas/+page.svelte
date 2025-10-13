@@ -30,6 +30,7 @@
                     thumbnail={loadThumbnail(trail)}
                     trailName={trail['name']}
                     slug={trail['slug']}
+                    has_existing_lesson={trail['has_existing_lesson']}
                 />
             {/each}
         {:catch error}

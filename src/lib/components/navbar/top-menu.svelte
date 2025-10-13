@@ -21,7 +21,7 @@
     <div class="container">
         <div class="flex justify-between">
             <div class="flex items-center">
-                <a href="/dashboard" class="text-yellow-300 text-xl font-bold">
+                <a class="text-yellow-300 text-xl font-bold">
                     <img src="/images/logo.png" alt="logo" class="h-10" />
                 </a>
 
@@ -80,7 +80,7 @@
                             <Heart />
                         </Button>
 
-                        <Button variant="link" class="text-gray-50">
+                        <Button variant="link" class="text-gray-50 cursor-pointer">
                             <Bell />
                         </Button>
                         </div>

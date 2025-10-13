@@ -8,13 +8,21 @@ export const load = async ({ cookies, params }) => {
         url += `/${slug_lesson}`;
     }
 
-    let promise = fetch(url, {
+    let response = await fetch(url, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
         },
-    }).then((res) => res.json());
+    });
 
-    return { trail: promise };
+    const trailData = await response.json();
+
+    return {
+        trail: trailData.trail,
+        trail_modules: trailData.trail_modules,
+        active_lesson: trailData.active_lesson,
+        favorite_lessons_ids: trailData.favorite_lessons_ids,
+        frente: trailData.active_lesson.frente,
+    }
 }

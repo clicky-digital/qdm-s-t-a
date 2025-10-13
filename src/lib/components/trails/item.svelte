@@ -4,7 +4,7 @@
     import { goto } from '$app/navigation';
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
 
-    let { trailName, professor, slug, thumbnail, trailId, isFavorited } = $props();
+    let { trailName, professor, slug, thumbnail, trailId, isFavorited, has_existing_lesson } = $props();
 
     function toggleFavorite() {
         fetch("/api/student-usage/favorite", {
@@ -51,15 +51,17 @@
         </div>
 
         <div>
-            <Button onclick={() => goto(`/dashboard/trilhas/${slug}`)} variant="default" class="cursor-pointer">
-                <Play class="w-4 h-4" />
-                Continuar
-            </Button>
+            {#if has_existing_lesson}
+                <Button onclick={() => goto(`/dashboard/trilhas/${slug}`)} variant="default" class="cursor-pointer">
+                    <Play class="w-4 h-4" />
+                    Continuar
+                </Button>
 
-            <Button onclick={() => goto(`/dashboard/trilhas/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
-                <LogIn class="w-4 h-4" />
-                Acessar 
-            </Button>
+                <Button onclick={() => goto(`/dashboard/trilhas/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
+                    <LogIn class="w-4 h-4" />
+                    Acessar
+                </Button>
+            {/if}
             
 <!--            <Button variant="ghost">-->
 <!--                <Brain />-->
@@ -69,21 +71,21 @@
 <!--                <Megaphone />-->
 <!--            </Button>-->
 
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Computer />
             </Button>
   
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Puzzle />
             </Button>
 
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Download />
             </Button>
         </div>
     </div>
 
-    <div class="absolute top-0 right-0 p-4">
+    <div class="absolute top-0 right-0 p-4 hover:text-slate-600 cursor-pointer">
         <Pin class="w-4 h-4" />
     </div>
 </div>

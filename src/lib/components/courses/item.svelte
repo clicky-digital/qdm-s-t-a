@@ -4,7 +4,7 @@
     import { goto } from '$app/navigation';
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
 
-    let { courseName, professor, slug, data, thumbnail, isFavorited, courseId } = $props();
+    let { courseName, professor, slug, data, thumbnail, isFavorited, courseId, has_existing_lesson } = $props();
 
     function toggleFavorite() {
         fetch("/api/student-usage/favorite", {
@@ -27,15 +27,15 @@
 <div class="h-60 w-full bg-gray-100 rounded relative flex gap-6 items-center p-4">
     <div class="w-72 h-full bg-gray-600 rounded-lg">
        {#if thumbnail}
-            <img 
-                class="w-full h-full object-cover" 
+            <img
+                class="w-full h-full object-cover"
                 src={`${PUBLIC_URL_BASE_STORAGE}/${thumbnail}`}
                 alt={courseName}
             />
         {:else}
-            <img 
-                class="w-full h-full object-cover" 
-                src="/images/imagem_curso.png" 
+            <img
+                class="w-full h-full object-cover"
+                src="/images/imagem_curso.png"
                 alt="Imagem padrão do curso"
             />
         {/if}
@@ -51,16 +51,18 @@
         </div>
 
         <div>
-            <Button onclick={() => goto(`/dashboard/cursos/${slug}`)} variant="default" class="cursor-pointer">
-                <Play class="w-4 h-4" />
-                Continuar
-            </Button>
+            {#if has_existing_lesson}
+                <Button onclick={() => goto(`/dashboard/cursos/${slug}`)} variant="default" class="cursor-pointer">
+                    <Play class="w-4 h-4" />
+                    Continuar
+                </Button>
 
-            <Button onclick={() => goto(`/dashboard/cursos/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
-                <LogIn class="w-4 h-4" />
-                Acessar
-            </Button>
-            
+                <Button onclick={() => goto(`/dashboard/cursos/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
+                    <LogIn class="w-4 h-4" />
+                    Acessar
+                </Button>
+            {/if}
+
 <!--            <Button variant="ghost">-->
 <!--                <Brain />-->
 <!--            </Button>-->
@@ -69,21 +71,21 @@
 <!--                <Megaphone />-->
 <!--            </Button>-->
 
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Computer />
             </Button>
-  
-            <Button variant="ghost">
+
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Puzzle />
             </Button>
 
-            <Button variant="ghost">
+            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
                 <Download />
             </Button>
         </div>
     </div>
 
     <div class="absolute top-0 right-0 p-4">
-        <Pin class="w-4 h-4" />
+        <Pin class="w-4 h-4 hover:text-slate-600 cursor-pointer" />
     </div>
 </div>
