@@ -98,7 +98,7 @@
             {#await links}
                 <p>Buscando Termos de Uso</p>
             {:then links }
-                {#if (links['terms_of_use'])}
+                {#if (links['terms_and_conditions'])}
                     <button class="text-blue-500 underline cursor-pointer" onclick={() => (showModal = true)}> Termos de Uso </button>
                     <div class="flex justify-center items-center">
                         <Modal bind:showModal>
@@ -108,7 +108,7 @@
                                 </h2>
                             {/snippet}
 
-                            <p class="overflow-y-auto">{links['terms_of_use']}</p>
+                            <p class="overflow-y-auto">{links['terms_and_conditions']}</p>
                         </Modal>
                     </div>
                 {/if}

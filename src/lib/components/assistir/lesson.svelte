@@ -4,7 +4,7 @@
 
     let { lesson, metadata = $bindable(), is_favorite = $bindable(), type, parent_id } = $props();
     let metadataObj = $state({});
-    let total_time = $state("0");
+    let total_time = $derived(formatTime(metadata?.total_time));
     let average_rating = $state("");
     
     const dispatch = createEventDispatcher();
@@ -76,7 +76,6 @@
             console.error("Failed to GET average rating:", error);
         }
     }
-    let total_time = $derived(formatTime(metadata?.total_time));
 </script>
 
 <div
