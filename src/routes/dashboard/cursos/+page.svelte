@@ -30,6 +30,7 @@
                     courseName={course['name']}
                     slug={course['slug']}
                     has_existing_lesson={course['has_existing_lesson']}
+                    data={course}
                 />
             {/each}
         {:catch error}

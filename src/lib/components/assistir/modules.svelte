@@ -320,9 +320,7 @@
                                     {/if}
                                 </div>
 
-                                <div
-                                    class="grid grid-cols-3 bg-slate-800 text-white rounded h-[500px]"
-                                >
+                                <div class="grid grid-cols-3 bg-slate-800 text-white rounded h-[500px]">
                                     <div class="col-span-2 bg-gray-900 rounded-l">
                                         <Video bind:metadata={metadata} bind:lesson={lesson} bind:type={type}
                                                bind:id={id} url={lesson.link ?? module.lessons[0].link} />
