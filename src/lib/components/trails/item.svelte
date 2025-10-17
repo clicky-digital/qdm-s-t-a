@@ -3,6 +3,7 @@
     import { Brain, Computer, Download, Heart, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
     import { goto } from '$app/navigation';
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
+    import * as Dialog from "$lib/components/ui/dialog/index.js";
 
     let { trailName, professor, slug, thumbnail, trailId, isFavorited, has_existing_lesson } = $props();
 
@@ -57,10 +58,22 @@
                     Continuar
                 </Button>
 
-                <Button onclick={() => goto(`/dashboard/trilhas/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
-                    <LogIn class="w-4 h-4" />
-                    Acessar
-                </Button>
+                <Dialog.Root>
+                    <Dialog.Trigger>
+                        <Button variant="default" class="cursor-pointer bg-yellow-500 hover:bg-yellow-600">
+                            <LogIn class="w-4 h-4" />
+                            Acessar
+                        </Button>
+                    </Dialog.Trigger>
+                    <Dialog.Content class="sm:max-w-[425px]">
+                        <Dialog.Header>
+                            <Dialog.Title>Qual frente deseja acessar?</Dialog.Title>
+                            <Dialog.Description>
+                                <!-- lembrar de implementar escolha de frente -->
+                            </Dialog.Description>
+                        </Dialog.Header>
+                    </Dialog.Content>
+                </Dialog.Root>
             {/if}
             
 <!--            <Button variant="ghost">-->
