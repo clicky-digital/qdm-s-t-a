@@ -5,7 +5,7 @@
     import Notes from "$lib/components/assistir/notes.svelte";
     import Complements from "$lib/components/assistir/complements.svelte";
     import Button from "../ui/button/button.svelte";
-    import { ChevronsRightIcon, CircleCheck, Play, RotateCw, Star } from "lucide-svelte";
+    import { ChevronsRightIcon, CircleCheck, CircleMinus, Play, RotateCw, Star } from "lucide-svelte";
     import { onMount } from "svelte";
     import { isEmptyObject } from "tailwind-variants/dist/utils";
     import { goto } from "$app/navigation";
@@ -198,6 +198,18 @@
         if (lesson && lesson.id) {
             try {
                 const finalMetadata = { ...metadata };
+
+                if (finalMetadata.completed) {
+                    finalMetadata.completed = false;
+                    finalMetadata.time = finalMetadata.time;
+
+                    metadata = finalMetadata;
+                    lessonsMetadata[lesson.id] = finalMetadata;
+
+                    await setLesson(lesson, lessonKey, finalMetadata);
+                    return;
+                }
+
                 finalMetadata.completed = true;
                 finalMetadata.time = finalMetadata.total_time;
 
@@ -350,12 +362,13 @@
 
                             <div class="flex justify-between items-center w-full h-full">
                                 <div>
-                                    <Button variant="default" class={"cursor-pointer " + (metadata?.completed ? 'bg-green-500 hover:bg-green-600' : '')} onclick={markComplete}>
+                                    <Button variant="default" class={"cursor-pointer " + (!metadata?.completed ? 'bg-green-500 hover:bg-green-600' : 'bg-red-600 hover:bg-red-500')} onclick={markComplete}>
+                                        {#if !metadata?.completed}
                                         <CircleCheck class="w-4 h-4" />
-                                        {#if metadata?.completed}
-                                            Aula Concluída
-                                        {:else}
                                             Concluir Aula
+                                        {:else}
+                                        <CircleMinus class="w-4 h-4" />
+                                            Remover Conclusão
                                         {/if}
                                     </Button>
                                 </div>
