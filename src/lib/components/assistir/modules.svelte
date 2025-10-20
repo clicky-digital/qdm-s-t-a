@@ -62,8 +62,6 @@
 
         await fetchUserRatings();
         await fecthAverageRating();
-
-        console.log(lesson);
     });
 
     $effect(() => {

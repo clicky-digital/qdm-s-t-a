@@ -25,10 +25,8 @@
 
             if (response.ok) {
                 dispatch("favorited", { lessonId: lesson.id, status: !is_favorite });
-                console.log("Successfully " + parent_id + " " + lesson.id)
             } else {
                 console.error("Failed to toggle favorite status");
-                console.log("Failed " + parent_id )
             }
         } catch (error) {
             console.error("Error toggling favorite status:", error);
@@ -71,7 +69,6 @@
             });
             let response = await promisse.json();
             average_rating = response.average_rating;
-            console.log(response.average_rating);
         } catch (error) {
             console.error("Failed to GET average rating:", error);
         }
