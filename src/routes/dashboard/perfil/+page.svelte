@@ -3,6 +3,7 @@
     import { Button } from "@/components/ui/button/index.js";
     import { Input } from "@/components/ui/input/index.js";
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public';
+    import { Whatsapp } from 'svelte-bootstrap-icons';
 
     let { data, form } = $props();
 
@@ -80,9 +81,9 @@
                             <div class="w-1/2 flex flex-col items-center justify-center">
                                 <div class="w-9/12">
                                     {#if profile?.student?.avatar}
-                                        <label for="avatar">Alterar foto de perfil:</label>
+                                        <label for="avatar">Alterar foto de perfil (jpg/png/jpeg):</label>
                                     {:else}
-                                        <label for="avatar">Foto de Perfil:</label>
+                                        <label for="avatar">Foto de Perfil (jpg/png/jpeg):</label>
                                     {/if}
                                         <Input id="avatar" name="avatar" accept="image/*" type="file" class="w-full bg-white" onchange={(e) => selectedFile = e.target.files[0]}></Input>
                                 </div>
@@ -165,7 +166,7 @@
                     <h2 class="text-2xl font-bold mb-8 text-gray-800">Como podemos te ajudar?</h2>
                     <div class="w-full max-w-md flex flex-col gap-5">
                         <a href="https://wa.me/559293627950" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
-                            <MessageSquare class="size-8 text-green-500" />
+                            <Whatsapp class="size-8 text-green-500" />
                             <div>
                                 <p class="font-semibold text-lg text-gray-800">Precisa de ajuda?</p>
                                 <p class="text-gray-600">Fale conosco pelo WhatsApp</p>
@@ -179,7 +180,7 @@
                             </div>
                         </a>
                         <a href="https://consumer.hotmart.com/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
-                            <CreditCard class="size-8 text-red-500" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" color="red" viewBox="0 0 48 48"><title>Hotmart SVG Icon</title><circle cx="23.925" cy="29.825" r="5.74" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M33.97 15.22s.76 1.014.17 2.027c-.591 1.013-2.027-.507-2.027-.507s.17-4.896-3.207-6.584c0 0 .169 2.532-1.182 3.377s-4.22-4.39-2.195-9.033c0 0-6.078.929-8.61 12.24c0 0-2.195.17-1.013-3.292c-3.546 5.74-5.994 11.565-5.572 17.39c.507 7.09 6.416 12.662 13.676 12.662s13.253-5.656 13.76-12.747c0 0 1.097-11.227-3.8-15.532"/></svg>
                             <div>
                                 <p class="font-semibold text-lg text-gray-800">Gerencie sua assinatura</p>
                                 <p class="text-gray-600">Acesse a Hotmart para alterar dados</p>
