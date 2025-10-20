@@ -20,7 +20,7 @@
     let interval: NodeJS.Timer;
 
     onMount(async () => {
-        if (player) {
+        if (player && metadata && lesson && type && id) {
             interval = setInterval(async () => {
                 if (!player.paused) {
                     const currentTime = player.currentTime;
@@ -64,7 +64,7 @@
     });
 </script>
 
-{#key metadata}
+{#key url}
     <media-player
         bind:this={player}
         viewType="video"
@@ -73,7 +73,7 @@
         crossOrigin
         src={url}
         class="h-full"
-        current-time={metadata.time}
+        current-time={metadata?.time}
     >
         <media-provider>
             <media-poster class="vds-poster"></media-poster>

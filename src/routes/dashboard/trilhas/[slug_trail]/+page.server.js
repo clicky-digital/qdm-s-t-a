@@ -7,16 +7,20 @@ export const load = async ({ params, url, parent, cookies }) => {
 
     const startFirst = url.searchParams.get('start') === 'first';
 
-
-    if (!startFirst && profile?.keep_watching?.parent?.type === 'trail' && profile?.keep_watching?.parent?.slug === slug_trail) {
-
+    const isKeepWatchingForThisTrail =
+        profile?.keep_watching?.parent?.type === 'trail' &&
+        profile?.keep_watching?.parent?.slug === slug_trail;
+        
+    if (!startFirst && isKeepWatchingForThisTrail) {
         const continueLessonSlug = profile.keep_watching.slug;
+
         if (continueLessonSlug) {
             throw redirect(307, `/dashboard/trilhas/${slug_trail}/${continueLessonSlug}`);
         }
     }
 
-    const response = await fetch(`${URL_BASE_API}/api/v1/get-trails/${slug_trail}`, {
+    const response = await fetch(`${URL_BASE_API}/api/v1/get-trails/${slug_trail}`,
+        {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -30,7 +34,7 @@ export const load = async ({ params, url, parent, cookies }) => {
 
     const data = await response.json();
 
-    const firstLessonSlug = data.trail?.trail_modules?.[0]?.trail_lessons?.[0]?.slug;
+    let firstLessonSlug = null;
 
     if (firstLessonSlug) {
         throw redirect(307, `/dashboard/trilhas/${slug_trail}/${firstLessonSlug}`);

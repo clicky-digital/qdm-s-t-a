@@ -31,6 +31,8 @@
                     trailName={trail['name']}
                     slug={trail['slug']}
                     has_existing_lesson={trail['has_existing_lesson']}
+                    trail_modules={trail['trail_modules']}
+                    trail_lessons={trail['trail_lessons']}
                 />
             {/each}
         {:catch error}

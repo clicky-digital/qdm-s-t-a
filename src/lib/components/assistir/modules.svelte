@@ -62,6 +62,7 @@
 
         await fetchUserRatings();
         await fecthAverageRating();
+
     });
 
     $effect(() => {
@@ -296,6 +297,7 @@
         <Tabs.List>
             {#each modules as module}
                 <Tabs.Trigger
+                    class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
                     onclick={() => {lessonKey = null; lesson=module.lessons[0]; getLesson(module.lessons[0]); setLesson(module.lessons[0], 0)}}
                     value={module.id}>{module.name}</Tabs.Trigger>
             {/each}
@@ -385,7 +387,7 @@
                                             </div>
                                         </div>
                                     {:else}
-                                        <Button variant="secondary" onclick={() => showEvaluationModal = true}>
+                                        <Button variant="secondary" class="cursor-pointer" onclick={() => showEvaluationModal = true}>
                                             <Star class="w-4 h-4" />
                                             Avaliar Aula
                                         </Button>
