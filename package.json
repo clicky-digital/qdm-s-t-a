@@ -38,6 +38,7 @@
 	"dependencies": {
 		"embla-carousel-autoplay": "^8.6.0",
 		"lucide-svelte": "^0.525.0",
+		"svelte-bootstrap-icons": "^3.3.0",
 		"vidstack": "^1.12.13"
 	}
 }

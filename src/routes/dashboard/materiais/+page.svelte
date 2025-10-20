@@ -73,7 +73,7 @@
     {#if filteredCourses.length > 0}
         <div class="mb-12">
             <div class="flex justify-between items-center mb-6 border-b">
-                <h2 class="text-xl md:text-2xl font-semibold pb-2">Cursos</h2>
+                <h2 class="text-xl md:text-2xl font-semibold pb-2">Semanas</h2>
             </div>
             {#each filteredCourses as course}
                 <div class="mb-8">
@@ -82,7 +82,7 @@
                         <table class="min-w-full text-sm text-left">
                             <thead class="bg-slate-800 text-white">
                                 <tr>
-                                    <th class="p-3 font-semibold">Aula</th>
+                                    <th class="p-3 font-semibold">Aulas</th>
                                     <th class="p-3 font-semibold text-center w-36">Apostila</th>
                                     <th class="p-3 font-semibold text-center w-36">Mapa Mental</th>
                                     <th class="p-3 font-semibold text-center w-36">Podcast</th>
@@ -132,7 +132,7 @@
     {#if filteredTrails.length > 0}
         <div class="mb-12">
 			<div class="flex justify-between items-center mb-6 border-b">
-				<h2 class="text-xl md:text-2xl font-semibold pb-2">Trilhas</h2>
+				<h2 class="text-xl md:text-2xl font-semibold pb-2">Frentes</h2>
 			</div>
             {#each filteredTrails as trail}
                 <div class="mb-8">
@@ -141,7 +141,7 @@
                         <table class="min-w-full text-sm text-left">
                             <thead class="bg-slate-800 text-white">
                                 <tr>
-                                    <th class="p-3 font-semibold">Aula</th>
+                                    <th class="p-3 font-semibold">Aulas</th>
                                     <th class="p-3 font-semibold text-center w-36">Apostila</th>
                                     <th class="p-3 font-semibold text-center w-36">Mapa Mental</th>
                                     <th class="p-3 font-semibold text-center w-36">Podcast</th>
