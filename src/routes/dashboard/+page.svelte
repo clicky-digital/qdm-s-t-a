@@ -7,8 +7,7 @@
     import CarouselNext from '@/components/ui/carousel/carousel-next.svelte';
     import CarouselPrevious from '@/components/ui/carousel/carousel-previous.svelte';
 
-    let { data, thumbnails } = $props();
-    let lastWatched  = $state(true);
+    let { data } = $props();
 </script>
 
 <div class="container mx-auto flex flex-col gap-6 my-4">
@@ -31,7 +30,7 @@
                             <h2 class="text-white font-bold text-xl self-center mx-3 mb-4">{profile.keep_watching.name}</h2>
                             <button class="hover:text-slate-600 min-w-55 flex mb-10 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => {
                                 const type = profile.keep_watching.parent.type === 'course' ? 'cursos' : 'trilhas';
-                                goto('/dashboard/' + type + '/' + profile.keep_watching.parent.slug + '/' + profile.keep_watching.slug);
+                                goto('/dashboard/' + type + '/' + profile.keep_watching.parent.slug);
                             }}>
                                 <Play class="w-6 h-6" />
                                 Continuar Assistindo
@@ -58,6 +57,9 @@
                         {#each profile.last_lessons as lesson}
                              <button onclick={() => { 
                                 const type = lesson.parent.type === 'course' ? "cursos" : "trilhas";
+                                if (type === 'trilhas')
+                                    goto('/dashboard/' + type + '/' + lesson.parent.slug + '/' + lesson.module_slug + '/' + lesson.slug);
+                                else
                                 goto('/dashboard/' + type + '/' + lesson.parent.slug + '/' + lesson.slug);
                             }}>
                                 <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">

@@ -5,22 +5,11 @@ export const load = async ({ params, url, parent, cookies }) => {
     const parentData = await parent();
     const profile = await parentData.profile;
 
-    const startFirst = url.searchParams.get('start') === 'first';
-
-
-    if (!startFirst && profile?.keep_watching?.parent?.type === 'trail' && profile?.keep_watching?.parent?.slug === slug_trail) {
-
-        const continueLessonSlug = profile.keep_watching.slug;
-        if (continueLessonSlug) {
-            throw redirect(307, `/dashboard/trilhas/${slug_trail}/${continueLessonSlug}`);
-        }
-    }
-
     const response = await fetch(`${URL_BASE_API}/api/v1/get-trails/${slug_trail}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
+            'Content-Type': 'application/json',
+            Authorization: `${cookies.get('token_type')} ${cookies.get('access_token')}`,
         },
     });
 
@@ -29,12 +18,47 @@ export const load = async ({ params, url, parent, cookies }) => {
     }
 
     const data = await response.json();
+    const { trail } = data;
 
-    const firstLessonSlug = data.trail?.trail_modules?.[0]?.trail_lessons?.[0]?.slug;
-
-    if (firstLessonSlug) {
-        throw redirect(307, `/dashboard/trilhas/${slug_trail}/${firstLessonSlug}`);
-    } else {
+    if (!trail) {
         throw redirect(302, '/dashboard/trilhas');
     }
+
+    const startFirst = url.searchParams.get('start') === 'first';
+
+    const isKeepWatchingForThisTrail =
+        profile?.keep_watching?.parent?.type === 'trail' &&
+        profile?.keep_watching?.parent?.slug === slug_trail;
+
+    if (!startFirst && isKeepWatchingForThisTrail) {
+            const continueLessonSlug = profile.keep_watching.slug;
+            let moduleSlug;
+            for (const module of trail.trail_modules) {
+                if (module.trail_lessons) {
+                    const lesson = module.trail_lessons.find(l => l.slug === continueLessonSlug);
+                    if (lesson) {
+                        moduleSlug = module.slug;
+                        break;
+                    }
+                }
+            }
+
+            if (moduleSlug) {
+                throw redirect(307, `/dashboard/trilhas/${slug_trail}/${moduleSlug}/${continueLessonSlug}`);
+            }
+    }
+
+    let firstLessonSlug = null;
+
+    if (trail.trail_modules) {
+        for (const module of trail.trail_modules) {
+            if (module.trail_lessons && module.trail_lessons.length > 0) {
+                firstLessonSlug = module.trail_lessons[0].slug;
+                const moduleSlug = module.slug;
+                throw redirect(307, `/dashboard/trilhas/${slug_trail}/${moduleSlug}/${firstLessonSlug}`);
+            }
+        }
+    }
+
+    throw redirect(302, '/dashboard/trilhas'); 
 };

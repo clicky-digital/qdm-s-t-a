@@ -29,7 +29,6 @@
                     const metadataToSend = { time: currentTime };
 
                     if (!metadata.completed && totalTime > 0 && currentTime >= totalTime - 20) {
-                        console.log("Marking lesson as completed.");
                         metadataToSend.completed = true;
                     }
 

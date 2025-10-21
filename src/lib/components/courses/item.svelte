@@ -1,10 +1,10 @@
 <script lang="ts">
     import Button from "@/components/ui/button/button.svelte";
-    import { Brain, Computer, Download, Heart, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
+    import { LogIn, Pin, Play } from "lucide-svelte";
     import { goto } from '$app/navigation';
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
 
-    let { courseName, professor, slug, data, thumbnail, isFavorited, courseId, has_existing_lesson } = $props();
+    let { courseName, professor, slug, thumbnail, isFavorited, courseId, has_existing_lesson } = $props();
 
     function toggleFavorite() {
         fetch("/api/student-usage/favorite", {
@@ -62,26 +62,6 @@
                     Acessar
                 </Button>
             {/if}
-
-<!--            <Button variant="ghost">-->
-<!--                <Brain />-->
-<!--            </Button>-->
-<!--            -->
-<!--            <Button variant="ghost">-->
-<!--                <Megaphone />-->
-<!--            </Button>-->
-
-            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
-                <Computer />
-            </Button>
-
-            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
-                <Puzzle />
-            </Button>
-
-            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
-                <Download />
-            </Button>
         </div>
     </div>
 

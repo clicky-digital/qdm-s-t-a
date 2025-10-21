@@ -55,8 +55,8 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(link.href);
         } catch (error) {
-            console.error("O download falhou:", error);
-            alert("O download falhou. Verifique o console para mais detalhes.");
+            console.error("Error downloading file:", error);
+            alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
         }
     }
 
@@ -76,8 +76,8 @@
             const fileUrl = URL.createObjectURL(blob);
             window.open(fileUrl, "_blank");
         } catch (error) {
-            console.error("Falha ao abrir o arquivo:", error);
-            alert("Falha ao abrir o arquivo. Verifique o console para mais detalhes.");
+            console.error("Error opening file in new tab:", error);
+            alert('Erro ao abrir o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
         }
     }
 
@@ -86,8 +86,6 @@
         const extension = sourceUrl.split(".").pop()?.toLowerCase() || "file";
         return `${materialType}_${cleanName}.${extension}`;
     }
-
-    console.log(lesson);
 </script>
 
 <div class="flex gap-2 w-full font-normal text-2xl">

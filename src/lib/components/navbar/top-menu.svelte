@@ -42,7 +42,7 @@
                 </button>
 
                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
-                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Trilhas</div>
+                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Trilhas (Aulas)</div>
                 </button>
             </div>
 
@@ -71,7 +71,7 @@
                                 </button>
                                 <hr class="mx-2">
                                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
-                                    <div class="hover:bg-slate-800 w-full p-5 rounded-b-2xl">Trilhas</div>
+                                    <div class="hover:bg-slate-800 w-full p-5 rounded-b-2xl">Trilhas (Aulas)</div>
                                 </button>
                             </div>
                         </Button>

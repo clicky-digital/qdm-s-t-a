@@ -2,8 +2,12 @@ import { URL_BASE_API } from '$env/static/private';
 export const load = async ({ cookies, params }) => {
     const slug_trail = params.slug_trail; 
     const slug_lesson = params.slug_lesson;
+    const slug_module = params.slug_module;
 
     let url = `${URL_BASE_API}/api/v1/get-trails/${slug_trail}`;
+    if (slug_module) {
+        url += `/${slug_module}`;
+    }
     if (slug_lesson) { 
         url += `/${slug_lesson}`;
     }
