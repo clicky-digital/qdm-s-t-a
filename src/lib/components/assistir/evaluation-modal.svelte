@@ -33,7 +33,7 @@
             <h2 class="text-xl font-bold mb-4">Avalie esta aula</h2>
             <div class="flex justify-center mb-4">
                 {#each { length: 5 } as _, i}
-                    <button onclick={() => setRating(i + 1)}>
+                    <button class="cursor-pointer" onclick={() => setRating(i + 1)}>
                         <Star class={i < rating ? "text-yellow-400" : "text-gray-300"} />
                     </button>
                 {/each}
@@ -45,8 +45,8 @@
                 bind:value={comment}
             ></textarea>
             <div class="flex justify-end mt-4">
-                <Button variant="secondary" onclick={() => showModal = false}>Cancelar</Button>
-                <Button onclick={handleSubmit} disabled={rating === 0}>Enviar Avaliação</Button>
+                <Button class="cursor-pointer mr-2" variant="ghost" onclick={() => showModal = false}>Cancelar</Button>
+                <Button class="cursor-pointer" onclick={handleSubmit} disabled={rating === 0}>Enviar Avaliação</Button>
             </div>
         </div>
     </div>

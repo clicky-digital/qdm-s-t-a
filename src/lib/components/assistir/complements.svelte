@@ -89,10 +89,6 @@
 </script>
 
 <div class="flex gap-2 w-full font-normal text-2xl">
-    <Button class="cursor-pointer hover:text-slate-600" variant="ghost" on:click={toggleFavorite}>
-        <Heart fill={isFavorited ? 'red' : 'none'} />
-        {isFavorited ? 'Remover dos Favoritos' : 'Favoritar'}
-    </Button>
 
     {#if lesson.handout_url}
         <Button class="cursor-pointer hover:text-slate-600" variant="ghost"

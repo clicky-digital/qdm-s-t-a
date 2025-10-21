@@ -53,7 +53,7 @@
                         <Dialog.Header>
                             <Dialog.Title>Qual frente deseja acessar?</Dialog.Title>
                         </Dialog.Header>
-                        <Dialog.Description>
+                        <Dialog.Description class="flex flex-col gap-3">
                             {#each [trail_modules] as trail_module}
                             {#each trail_module as mod}
                                 {#each [trail_lessons] as lesson}

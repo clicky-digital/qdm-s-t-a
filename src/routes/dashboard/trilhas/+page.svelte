@@ -20,7 +20,7 @@
         <button class="cursor-pointer" onclick={()=>{goto('./')}}>Voltar ao Início</button>
     </div>
 
-    <div class="title">Trilhas</div>
+    <div class="text-2xl font-bold text-slate-900">Trilhas</div>
     <div class="flex flex-col gap-4 my-4">
         {#await data['trails']}
             <p>Carregando trilhas...</p>
