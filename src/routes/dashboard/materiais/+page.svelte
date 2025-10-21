@@ -47,8 +47,8 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(link.href);
         } catch (error) {
-            console.error('O download falhou:', error);
-            alert('O download falhou. Verifique o console para mais detalhes.');
+            console.error('Error downloading file:', error);
+            alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
         }
     }
 
