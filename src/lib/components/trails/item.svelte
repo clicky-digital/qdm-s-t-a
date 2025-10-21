@@ -55,21 +55,23 @@
                         </Dialog.Header>
                         <Dialog.Description class="flex flex-col gap-3">
                             {#each [trail_modules] as trail_module}
-                            {#each trail_module as mod}
-                                {#each [trail_lessons] as lesson}
-                                    {@const trail_module_id = mod.id}
+                                {#each trail_module as mod}
+                                    {#each [trail_lessons] as lesson}
+                                        {@const trail_module_id = mod.id}
 
-                                    {@const trail_lessons = lesson.filter(l => l.trail_module_id === trail_module_id)}
+                                        {@const trail_lessons = lesson.filter(l => l.trail_module_id === trail_module_id)}
 
-                                    {@const firstLessonSlug = trail_lessons ? trail_lessons[0]?.slug : null}
-                                    
-                                    {@const url = firstLessonSlug
-                                       ? `/dashboard/trilhas/${slug}/${mod.slug}/${firstLessonSlug}`
-                                       : `/dashboard/trilhas/${slug}/${mod.slug}`}
-                                    
-                                    <Button onclick={() => goto(url)} variant="default" class="cursor-pointer">{mod.name}</Button>
+                                        {@const firstLessonSlug = trail_lessons ? trail_lessons[0]?.slug : null}
+
+                                        {#if firstLessonSlug}
+                                            {@const url = firstLessonSlug
+                                               ? `/dashboard/trilhas/${slug}/${mod.slug}/${firstLessonSlug}`
+                                               : `/dashboard/trilhas/${slug}/${mod.slug}`}
+
+                                            <Button onclick={() => goto(url)} variant="default" class="cursor-pointer">{mod.name}</Button>
+                                        {/if}
+                                    {/each}
                                 {/each}
-                            {/each}
                             {/each}
                         </Dialog.Description>
                     </Dialog.Content>

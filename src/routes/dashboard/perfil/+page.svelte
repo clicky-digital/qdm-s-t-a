@@ -165,14 +165,14 @@
                 <div class="{view !== 'need-help' ? 'hidden' : ''} w-full h-full bg-slate-900/10 rounded-2xl p-8 flex flex-col items-center">
                     <h2 class="text-2xl font-bold mb-8 text-gray-800">Como podemos te ajudar?</h2>
                     <div class="w-full max-w-md flex flex-col gap-5">
-                        <a href="https://wa.me/559293627950" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
+                        <a href="https://wa.me/{profile.need_help?.need_help_phone}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
                             <Whatsapp class="size-8 text-green-500" />
                             <div>
                                 <p class="font-semibold text-lg text-gray-800">Precisa de ajuda?</p>
                                 <p class="text-gray-600">Fale conosco pelo WhatsApp</p>
                             </div>
                         </a>
-                        <a href="mailto:contato@quimicadomonstro.com.br" target="_blank" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
+                        <a href="mailto:{profile.need_help?.need_help_email}" target="_blank" class="flex items-center gap-4 p-4 bg-white rounded-lg shadow-md transition-transform hover:scale-105 duration-300">
                             <Mail class="size-8 text-blue-500" />
                             <div>
                                 <p class="font-semibold text-lg text-gray-800">Prefere E-mail?</p>

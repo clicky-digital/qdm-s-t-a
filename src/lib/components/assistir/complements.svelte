@@ -2,13 +2,30 @@
     import { goto } from "$app/navigation";
     import { BookCheck, Brain, Computer, Download, Heart, Megaphone, Puzzle } from "lucide-svelte";
     import Button from "../ui/button/button.svelte";
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import * as Dialog from "$lib/components/ui/dialog/index.js";
 
     let { lesson, isFavorited, type, parent_id } = $props();
+    let monitor_phone = $state({});
 
     const dispatch = createEventDispatcher();
 
+    onMount(async () => {
+        try {
+            let promise = await fetch("/api/configuration/monitor_phone", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                }),
+            }).then((res) => res.json());
+
+            monitor_phone = await promise;
+        } catch (error) {
+            console.error("Failed to retrieve configuration:", error);
+        }
+    });
     async function toggleFavorite() {
         try {
             const response = await fetch("/api/student-usage/favorite", {
@@ -38,14 +55,19 @@
         try {
             const base64_filename = btoa(sourceFilename);
 
-            const apiUrl = `http://localhost/api/v1/download/${base64_filename}`;
-
-            const response = await fetch(apiUrl);
+            const response = await fetch(`/api/files`, {
+                method: "POST",
+                body: JSON.stringify({
+                    filename: base64_filename,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
 
             if (!response.ok) {
                 throw new Error(`Error request: ${response.statusText}`);
             }
-
             const blob = await response.blob();
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -64,9 +86,15 @@
         try {
             const base64_filename = btoa(sourceFilename);
 
-            const apiUrl = `http://localhost/api/v1/download/${base64_filename}`;
-
-            const response = await fetch(apiUrl);
+            const response = await fetch(`/api/files`, {
+                method: "POST",
+                body: JSON.stringify({
+                    filename: base64_filename,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
 
             if (!response.ok) {
                 throw new Error(`Error request: ${response.statusText}`);
@@ -114,15 +142,24 @@
         </Button>
     {/if}
 
-    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
-        <Computer />
-        Monitoria
-    </Button>
+    {#await monitor_phone}
+        <Button class="hover:text-slate-600" variant="ghost">
+            <Computer />
+            Monitoria
+        </Button>
+    {:then obj}
+        <a href="https://wa.me/{obj.monitor_phone}" target="_blank">
+            <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
+                <Computer />
+                Monitoria
+            </Button>
+        </a>
+    {/await}
 
-    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">
-        <Puzzle />
-        Simulado
-    </Button>
+<!--    <Button class="cursor-pointer hover:text-slate-600" variant="ghost">-->
+<!--        <Puzzle />-->
+<!--        Simulado-->
+<!--    </Button>-->
 
     {#if lesson.link_resolutions && lesson.link_resolutions.length > 0}
         <Dialog.Root>

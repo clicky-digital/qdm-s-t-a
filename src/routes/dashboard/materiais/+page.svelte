@@ -30,9 +30,15 @@
         try {
             const base64_filename = btoa(sourceFilename);
 
-            const apiUrl = `http://localhost/api/v1/download/${base64_filename}`;
-
-            const response = await fetch(apiUrl);
+            const response = await fetch(`/api/files`, {
+                method: "POST",
+                body: JSON.stringify({
+                    filename: base64_filename,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
 
             if (!response.ok) {
                 throw new Error(`Error request: ${response.statusText}`);

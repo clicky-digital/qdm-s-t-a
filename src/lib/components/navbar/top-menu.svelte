@@ -37,9 +37,9 @@
                     <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Materiais</div>
                 </button>
 
-                <button class="cursor-pointer" onclick={()=>{goto('/dashboard/simulados')}}>
-                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Simulados</div>
-                </button>
+<!--                <button class="cursor-pointer" onclick={()=>{goto('/dashboard/simulados')}}>-->
+<!--                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Simulados</div>-->
+<!--                </button>-->
 
                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
                     <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Trilhas (Aulas)</div>
@@ -80,9 +80,9 @@
                             <Heart />
                         </Button>
 
-                        <Button variant="link" class="text-gray-50 cursor-pointer">
-                            <Bell />
-                        </Button>
+<!--                        <Button variant="link" class="text-gray-50 cursor-pointer">-->
+<!--                            <Bell />-->
+<!--                        </Button>-->
                         </div>
 
                         <Avatar.Root class="cursor-pointer" onclick={()=>{goto('/dashboard/perfil')}}>
