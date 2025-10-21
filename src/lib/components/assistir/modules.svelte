@@ -62,6 +62,7 @@
 
         await fetchUserRatings();
         await fecthAverageRating();
+
     });
 
     $effect(() => {
@@ -222,6 +223,7 @@
 
                 if (nextLesson && nextLesson.slug) {
                     const courseSlug = $page.params.slug_course;
+                    const moduleSlug = $page.params.slug_module;
                     const trailSlug = $page.params.slug_trail;
 
                     if($page.params.slug_course){
@@ -230,7 +232,7 @@
                         return;
                     }
                     if($page.params.slug_trail){
-                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextLesson.slug}`;
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${moduleSlug}/${nextLesson.slug}`;
                         await goto(newUrl);
                         return;
                     }
@@ -252,6 +254,7 @@
 
                 if (nextLesson && nextLesson.slug) {
                     const courseSlug = $page.params.slug_course;
+                    const moduleSlug = $page.params.slug_module;
                     const trailSlug = $page.params.slug_trail;
 
                     if($page.params.slug_course){
@@ -260,7 +263,7 @@
                         return;
                     }
                     if($page.params.slug_trail){
-                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextLesson.slug}`;
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${moduleSlug}/${nextLesson.slug}`;
                         await goto(newUrl);
                         return;
                     }

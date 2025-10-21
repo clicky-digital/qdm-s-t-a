@@ -4,7 +4,6 @@
     import Button from "../ui/button/button.svelte";
     import { createEventDispatcher } from "svelte";
     import * as Dialog from "$lib/components/ui/dialog/index.js";
-    import * as Alert from "$lib/components/ui/alert/index.js";
 
     let { lesson, isFavorited, type, parent_id } = $props();
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import Button from "@/components/ui/button/button.svelte";
-    import { Brain, Computer, Download, Heart, LogIn, Megaphone, Pin, Play, Puzzle } from "lucide-svelte";
+    import { LogIn, Pin, Play } from "lucide-svelte";
     import { goto } from '$app/navigation';
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
     import * as Dialog from "$lib/components/ui/dialog/index.js";
@@ -37,7 +37,7 @@
 
         <div>
             {#if has_existing_lesson}
-                <Button onclick={() => goto(`/dashboard/trilhas/${slug}/${trail_modules[0].slug}/${trail_lessons[0].slug}`)} variant="default" class="cursor-pointer">
+                <Button onclick={() => goto(`/dashboard/trilhas/${slug}`)} variant="default" class="cursor-pointer">
                     <Play class="w-4 h-4" />
                     Continuar
                 </Button>
@@ -58,9 +58,14 @@
                             {#each trail_module as mod}
                                 {#each [trail_lessons] as lesson}
                                     {@const trail_module_id = mod.id}
+
                                     {@const trail_lessons = lesson.filter(l => l.trail_module_id === trail_module_id)}
+
                                     {@const firstLessonSlug = trail_lessons ? trail_lessons[0]?.slug : null}
-                                    {@const url = firstLessonSlug ? `/dashboard/trilhas/${slug}/${mod.slug}/${firstLessonSlug}` : `/dashboard/trilhas/${slug}/${mod.slug}`}
+                                    
+                                    {@const url = firstLessonSlug
+                                       ? `/dashboard/trilhas/${slug}/${mod.slug}/${firstLessonSlug}`
+                                       : `/dashboard/trilhas/${slug}/${mod.slug}`}
                                     
                                     <Button onclick={() => goto(url)} variant="default" class="cursor-pointer">{mod.name}</Button>
                                 {/each}
@@ -70,26 +75,6 @@
                     </Dialog.Content>
                 </Dialog.Root>
             {/if}
-            
-<!--            <Button variant="ghost">-->
-<!--                <Brain />-->
-<!--            </Button>-->
-<!--            -->
-<!--            <Button variant="ghost">-->
-<!--                <Megaphone />-->
-<!--            </Button>-->
-
-            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
-                <Computer />
-            </Button>
-  
-            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
-                <Puzzle />
-            </Button>
-
-            <Button class="hover:text-slate-600 cursor-pointer" variant="ghost">
-                <Download />
-            </Button>
         </div>
     </div>
 
