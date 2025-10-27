@@ -14,7 +14,18 @@ export function load({ cookies }) {
         },
     }).then((res) => res.json());
 
-    return {profile: promise};
+    let plans_promise = fetch(URL_BASE_API + "/api/v1/get-student-plans", {
+        method: "POST",
+        body: JSON.stringify({
+            student_id: cookies.get('student_id')
+        }),
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
+        },
+    }).then((res) => res.json());
+
+    return {profile: promise, plans_promise: plans_promise};
 }
 
 export const actions = {

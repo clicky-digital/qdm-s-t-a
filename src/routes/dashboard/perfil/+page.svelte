@@ -4,10 +4,13 @@
     import { Input } from "@/components/ui/input/index.js";
     import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public';
     import { Whatsapp } from 'svelte-bootstrap-icons';
+    import { Time } from "vidstack";
+    import { goto } from "$app/navigation";
 
     let { data, form } = $props();
 
-    let view = $state('profile');
+    let view = $state('sell');
+    // let view = $state('profile');
 
     let password = $state('');
     let confirmPassword = $state('');
@@ -33,8 +36,10 @@
         passwordsMatch = password === confirmPassword;
         minimumPasswordLength = password.length >= 6
     }
-    function logout(){
+    async function logout(){
         //TODO Make logout function
+        let promise = await fetch('/api/logout', {method: 'POST'});
+        goto('/login')
     }
 
 </script>
@@ -159,8 +164,40 @@
                         </div>
                     </div>
                 </form>
-                <div class="{view !== 'sell' ? 'hidden' : ''} w-full h-full">
-                    Informações de Compras
+                <div class="{view !== 'sell' ? 'hidden' : ''} w-full h-full bg-slate-900/10 rounded-2xl p-8 flex flex-col items-center">
+                    {#await data.plans_promise}
+                        <p>Carregando Informações de Compra...</p>
+                    {:then plans_promise}
+                        <div class="w-full h-full">
+                            {#if plans_promise.length > 0}
+                                <table class="text-center w-full">
+                                    <thead class="w-full bg-yellow-300">
+                                        <tr>
+                                            <th class="p-2 rounded-tl-2xl" >Nome do Plano</th>
+                                            <th class="p-2" >Descrição</th>
+                                            <th class="p-2" >Preço</th>
+                                            <th class="p-2 rounded-tr-2xl" >Próxima Cobrança</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {#each plans_promise as p}
+                                            {@const date = p.date_next_charge ? new Date(p.date_next_charge) : null}
+                                            <tr>
+                                                <td class="p-2" >{p.plan.name}</td>
+                                                <td class="p-2" >{p.plan.description ?? "Sem descrição"}</td>
+                                                <td class="p-2" >R${p.plan.price}</td>
+                                                <td class="p-2" >{date ? `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}` : "Sem informações"}</td>
+                                            </tr>
+                                        {/each}
+                                    </tbody>
+                                </table>
+                            {:else}
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <h2 class="font-bold text-xl">Nenhuma informação disponível</h2>
+                                </div>
+                            {/if}
+                        </div>
+                    {/await}
                 </div>
                 <div class="{view !== 'need-help' ? 'hidden' : ''} w-full h-full bg-slate-900/10 rounded-2xl p-8 flex flex-col items-center">
                     <h2 class="text-2xl font-bold mb-8 text-gray-800">Como podemos te ajudar?</h2>
