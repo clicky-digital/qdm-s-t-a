@@ -2,10 +2,9 @@
     import Button from "@/components/ui/button/button.svelte";
     import { LogIn, Pin, Play } from "lucide-svelte";
     import { goto } from '$app/navigation';
-    import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public'
-    import * as Dialog from "$lib/components/ui/dialog/index.js";
+    import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public';
 
-    let { trailName, professor, slug, thumbnail, has_existing_lesson, trail_modules, trail_lessons } = $props();
+    let { trailName, professor, slug, thumbnail, has_existing_lesson } = $props();
 
 </script>
 
@@ -37,7 +36,7 @@
 
         <div>
             {#if has_existing_lesson}
-                <Button onclick={() => goto(`/dashboard/trilhas/${slug}`)} variant="default" class="cursor-pointer">
+                <Button onclick={() => goto(`/dashboard/trilhas/${slug}?action=continue`)} variant="default" class="cursor-pointer">
                     <Play class="w-4 h-4" />
                     Continuar
                 </Button>

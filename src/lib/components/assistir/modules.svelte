@@ -280,14 +280,6 @@
     function getCurrentLessonIndex(module, lesson) {
         return module.lessons.findIndex(l => l.id === lesson.id);
     }
-
-    function getLessonNumber(modules, moduleIndex, lessonIndex) {
-        let count = 0;
-        for (let i = 0; i < moduleIndex; i++) {
-            count += modules[i].lessons.length;
-        }
-        return count + lessonIndex + 1;
-    }
 </script>
 
 {#if modules.length === 0}
@@ -313,7 +305,9 @@
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="flex justify-between items-center font-bold text-lg mb-2">
                                     <div>
-                                        <span class="bg-slate-800 text-white p-2 rounded">{getLessonNumber(modules, moduleIndex, getCurrentLessonIndex(module, lesson))}</span>
+                                        <span class="bg-slate-800 text-white p-2 rounded">
+                                            {activeLesson.code}
+                                        </span>
                                         {lesson.name ?? module.lessons[0].name}
                                     </div>
                                     {#if average_rating}
