@@ -9,8 +9,7 @@
 
     let { data, form } = $props();
 
-    let view = $state('sell');
-    // let view = $state('profile');
+    let view = $state('profile');
 
     let password = $state('');
     let confirmPassword = $state('');
