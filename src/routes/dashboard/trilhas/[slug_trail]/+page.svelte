@@ -46,7 +46,7 @@
                                             <div class="text-gray-500 ">
                                                 {lesson.lesson.name}
                                             </div>
-                                            <Button on:click={() => goto(`/dashboard/trilhas/${trail.slug}/${module.slug}/${lesson.lesson.slug}`)} variant="link" class="text-blue-500 underline text-sm cursor-pointer">
+                                            <Button onclick={() => goto(`/dashboard/trilhas/${trail.slug}/${module.slug}/${lesson.lesson.slug}`)} variant="link" class="text-blue-500 underline text-sm cursor-pointer">
                                                 Assistir Aula
                                             </Button>
                                         </div>
