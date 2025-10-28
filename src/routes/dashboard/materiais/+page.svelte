@@ -6,16 +6,6 @@
 
     let searchTerm = '';
 
-	$: filteredCourses =
-		data.courses
-			?.map((course) => ({
-				...course,
-				lessons: course.lessons.filter((lesson) =>
-					lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
-				)
-			}))
-			.filter((course) => course.lessons.length > 0) || [];
-
 	$: filteredTrails =
 		data.trails
 			?.map((trail) => ({
@@ -76,64 +66,6 @@
 			placeholder="Pesquisar aula..."
 		/>
 	</div>
-    {#if filteredCourses.length > 0}
-        <div class="mb-12">
-            <div class="flex justify-between items-center mb-6 border-b">
-                <h2 class="text-xl md:text-2xl font-semibold pb-2">Semanas</h2>
-            </div>
-            {#each filteredCourses as course}
-                <div class="mb-8">
-                    <h3 class="text-lg md:text-xl font-bold mb-3 text-gray-700">{course.name}</h3>
-                    <div class="overflow-x-auto bg-white rounded-lg shadow-md">
-                        <table class="min-w-full text-sm text-left">
-                            <thead class="bg-slate-800 text-white">
-                                <tr>
-                                    <th class="p-3 font-semibold">Aulas</th>
-                                    <th class="p-3 font-semibold text-center w-36">Apostila</th>
-                                    <th class="p-3 font-semibold text-center w-36">Mapa Mental</th>
-                                    <th class="p-3 font-semibold text-center w-36">Podcast</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {#each course.lessons as lesson}
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="p-3 font-medium text-gray-800">{lesson.name}</td>
-                                        <td class="p-3 text-center">
-                                            {#if lesson.apostila_url}
-                                                <button on:click={() => downloadFile(lesson.apostila_url, getFilename(lesson.name, 'Apostila', lesson.apostila_url))} title="Baixar Apostila" class="cursor-pointer inline-flex items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors">
-                                                    <FileText class="w-5 h-5" />
-                                                </button>
-                                            {:else}
-                                                <span class="text-gray-400 text-xs">Não disponível</span>
-                                            {/if}
-                                        </td>
-                                        <td class="p-3 text-center">
-                                            {#if lesson.mapa_mental_url}
-                                                <button on:click={() => downloadFile(lesson.mapa_mental_url, getFilename(lesson.name, 'Mapa_Mental', lesson.mapa_mental_url))} title="Baixar Mapa Mental" class="cursor-pointer inline-flex items-center justify-center p-2 bg-purple-100 text-purple-600 rounded-full hover:bg-purple-200 transition-colors">
-                                                    <BrainCircuit class="w-5 h-5" />
-                                                </button>
-                                            {:else}
-                                                <span class="text-gray-400 text-xs">Não disponível</span>
-                                            {/if}
-                                        </td>
-                                        <td class="p-3 text-center">
-                                            {#if lesson.podcast_url}
-                                                <button on:click={() => downloadFile(lesson.podcast_url, getFilename(lesson.name, 'Podcast', lesson.podcast_url))} title="Baixar Podcast" class="cursor-pointer inline-flex items-center justify-center p-2 bg-orange-100 text-orange-600 rounded-full hover:bg-orange-200 transition-colors">
-                                                    <Mic class="w-5 h-5" />
-                                                </button>
-                                            {:else}
-                                                <span class="text-gray-400 text-xs">Não disponível</span>
-                                            {/if}
-                                        </td>
-                                    </tr>
-                                {/each}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            {/each}
-        </div>
-    {/if}
 
     {#if filteredTrails.length > 0}
         <div class="mb-12">
@@ -194,7 +126,7 @@
         </div>
     {/if}
 
-    {#if filteredCourses.length === 0 && filteredTrails.length === 0}
+    {#if filteredTrails.length === 0}
         <div class="flex justify-center items-center h-64">
             <p class="text-gray-500 text-lg">
                 {#if searchTerm.length > 0}
