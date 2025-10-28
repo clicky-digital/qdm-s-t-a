@@ -12,7 +12,7 @@
 
 <div class="container mx-auto flex flex-col gap-6 my-4">
     <div class="text-2xl font-bold text-slate-900">Continuar Assistindo</div>
-	
+
     <div class="grid grid-cols-3 gap-4">
 
         {#await data['profile']}
@@ -30,7 +30,14 @@
                             <h2 class="text-white font-bold text-xl self-center mx-3 mb-4">{profile.keep_watching.name}</h2>
                             <button class="hover:text-slate-600 min-w-55 flex mb-10 items-center gap-2 rounded-full self-end cursor-pointer bg-yellow-300 px-5 py-2" onclick={() => {
                                 const type = profile.keep_watching.parent.type === 'course' ? 'cursos' : 'trilhas';
-                                goto('/dashboard/' + type + '/' + profile.keep_watching.parent.slug);
+                                const parentSlug = profile.keep_watching.parent.slug;
+                                const lessonSlug = profile.keep_watching.slug;
+                                const moduleSlug = profile.keep_watching.module_slug;
+                                goto(
+                                    type === 'cursos' ?
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}` :
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}?action=continue`
+                                    );
                             }}>
                                 <Play class="w-6 h-6" />
                                 Continuar Assistindo
@@ -55,12 +62,16 @@
                 <div class="h-full overflow-y-auto rounded-b-2xl flex flex-col gap-2 p-2">
                     {#if (profile.last_lessons)}
                         {#each profile.last_lessons as lesson}
-                             <button onclick={() => { 
+                             <button onclick={() => {
                                 const type = lesson.parent.type === 'course' ? "cursos" : "trilhas";
-                                if (type === 'trilhas')
-                                    goto('/dashboard/' + type + '/' + lesson.parent.slug + '/' + lesson.module_slug + '/' + lesson.slug);
-                                else
-                                goto('/dashboard/' + type + '/' + lesson.parent.slug + '/' + lesson.slug);
+                                const parentSlug = lesson.parent.slug;
+                                const lessonSlug = lesson.slug;
+                                const moduleSlug = lesson.module_slug;
+                                goto(
+                                    type === 'cursos' ?
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}` :
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}?action=continue`
+                                    );
                             }}>
                                 <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">
                                     <div class="relative flex justify-center items-center w-1/3">

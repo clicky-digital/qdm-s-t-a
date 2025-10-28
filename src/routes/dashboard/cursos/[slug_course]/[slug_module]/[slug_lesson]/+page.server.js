@@ -1,9 +1,15 @@
 import { URL_BASE_API } from '$env/static/private';
 export const load = async ({ cookies, params}) => {
-    const slug_course = params.slug_course; 
+    const slug_course = params.slug_course;
     const slug_lesson = params.slug_lesson;
+    const slug_module = params.slug_module;
+
     let url = `${URL_BASE_API}/api/v1/get-courses/${slug_course}`;
-    if (slug_lesson) { 
+
+    if (slug_module) {
+        url += `/${slug_module}`;
+    }
+    if (slug_lesson) {
         url += `/${slug_lesson}`;
     }
 
@@ -58,7 +64,7 @@ export const load = async ({ cookies, params}) => {
         ...(materialsMap.get(courseData.active_lesson.id) || {}),
     };
 
-    return { 
+    return {
         course: courseData.course,
         course_modules: enrichedModules,
         active_lesson: enrichedActiveLesson,

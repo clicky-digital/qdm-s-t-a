@@ -69,22 +69,23 @@
         if (activeLesson) {
             (async () => {
                 lesson = activeLesson;
-                
+
                 const allLessons = modules.flatMap(module => module.lessons);
                 const metadataPromises = allLessons.map(lesson => getLesson(lesson));
                 const metadataResults = await Promise.all(metadataPromises);
-                
+
                 const newLessonsMetadata = {};
                 for (let i = 0; i < allLessons.length; i++) {
                     newLessonsMetadata[allLessons[i].id] = metadataResults[i]?.metadata;
                 }
                 lessonsMetadata = newLessonsMetadata;
-                
+
                 metadata = lessonsMetadata[lesson.id];
 
-                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(lesson => lesson.id === lesson.id));
+                const moduleOfCurrentLesson = modules.find(module => module.lessons.some(l => l.id === lesson.id));
                 if (moduleOfCurrentLesson) {
-                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(lesson => lesson.id === lesson.id);
+                    currentActiveTabId = moduleOfCurrentLesson.id;
+                    const currentLessonIndex = moduleOfCurrentLesson.lessons.findIndex(l => l.id === lesson.id);
                     setLesson(lesson, currentLessonIndex);
                 }
             })();
@@ -222,17 +223,17 @@
                 const nextLesson = findNextLesson();
 
                 if (nextLesson && nextLesson.slug) {
+                    const nextModule = modules.find(m => m.lessons.some(l => l.id === nextLesson.id));
                     const courseSlug = $page.params.slug_course;
-                    const moduleSlug = $page.params.slug_module;
                     const trailSlug = $page.params.slug_trail;
 
                     if($page.params.slug_course){
-                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextModule.slug}/${nextLesson.slug}`;
                         await goto(newUrl);
                         return;
                     }
                     if($page.params.slug_trail){
-                        const newUrl = `/dashboard/trilhas/${trailSlug}/${moduleSlug}/${nextLesson.slug}`;
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextModule.slug}/${nextLesson.slug}`;
                         await goto(newUrl);
                         return;
                     }
@@ -253,17 +254,17 @@
                 const nextLesson = findNextLesson();
 
                 if (nextLesson && nextLesson.slug) {
+                    const nextModule = modules.find(m => m.lessons.some(l => l.id === nextLesson.id));
                     const courseSlug = $page.params.slug_course;
-                    const moduleSlug = $page.params.slug_module;
                     const trailSlug = $page.params.slug_trail;
 
                     if($page.params.slug_course){
-                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextLesson.slug}`;
+                        const newUrl = `/dashboard/cursos/${courseSlug}/${nextModule.slug}/${nextLesson.slug}`;
                         await goto(newUrl);
                         return;
                     }
                     if($page.params.slug_trail){
-                        const newUrl = `/dashboard/trilhas/${trailSlug}/${moduleSlug}/${nextLesson.slug}`;
+                        const newUrl = `/dashboard/trilhas/${trailSlug}/${nextModule.slug}/${nextLesson.slug}`;
                         await goto(newUrl);
                         return;
                     }
@@ -275,18 +276,11 @@
         }
     }
 
-    let initialTab = modules.find(m => m.slug === frente)?.id ?? modules[0]?.id;
+    let initialTab = $derived(modules.find(m => m.slug === frente)?.id ?? modules[0]?.id);
+    let currentActiveTabId = $state(initialTab);
 
     function getCurrentLessonIndex(module, lesson) {
         return module.lessons.findIndex(l => l.id === lesson.id);
-    }
-
-    function getLessonNumber(modules, moduleIndex, lessonIndex) {
-        let count = 0;
-        for (let i = 0; i < moduleIndex; i++) {
-            count += modules[i].lessons.length;
-        }
-        return count + lessonIndex + 1;
     }
 </script>
 
@@ -295,12 +289,23 @@
         <div class="text-gray-500 text-xl">Nenhuma aula disponível</div>
     </div>
 {:else}
-    <Tabs.Root value={initialTab} class="w-full">
+    <Tabs.Root value={currentActiveTabId} class="w-full">
         <Tabs.List>
             {#each modules as module}
                 <Tabs.Trigger
                     class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
-                    onclick={() => {lessonKey = null; lesson=module.lessons[0]; getLesson(module.lessons[0]); setLesson(module.lessons[0], 0)}}
+                    onclick={() => {
+                        lessonKey = null;
+                        const firstLesson = module.lessons[0];
+                        lesson = firstLesson;
+                        getLesson(firstLesson);
+                        setLesson(firstLesson, 0);
+
+                        const type = $page.params.slug_course ? 'cursos' : 'trilhas';
+                        const parentSlug = $page.params.slug_course || $page.params.slug_trail;
+                        const newUrl = `/dashboard/${type}/${parentSlug}/${module.slug}/${firstLesson.slug}`;
+                        goto(newUrl);
+                    }}
                     value={module.id}>{module.name}</Tabs.Trigger>
             {/each}
         </Tabs.List>
@@ -313,7 +318,9 @@
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="flex justify-between items-center font-bold text-lg mb-2">
                                     <div>
-                                        <span class="bg-slate-800 text-white p-2 rounded">{getLessonNumber(modules, moduleIndex, getCurrentLessonIndex(module, lesson))}</span>
+                                        <span class="bg-slate-800 text-white p-2 rounded">
+                                            {activeLesson.code}
+                                        </span>
                                         {lesson.name ?? module.lessons[0].name}
                                     </div>
                                     {#if average_rating}
@@ -343,7 +350,16 @@
                                                             <RotateCw class="w-4 h-4" />
                                                         {:else}
                                                             <Play class="w-4 h-4"
-                                                                  onclick={() => {getLesson(lessonCard);setLesson(lessonCard, key); lesson=lessonCard}} />
+                                                                  onclick={() => {
+                                                                      getLesson(lessonCard);
+                                                                      setLesson(lessonCard, key);
+                                                                      lesson = lessonCard;
+
+                                                                      const type = $page.params.slug_course ? 'cursos' : 'trilhas';
+                                                                      const parentSlug = $page.params.slug_course || $page.params.slug_trail;
+                                                                      const newUrl = `/dashboard/${type}/${parentSlug}/${module.slug}/${lessonCard.slug}`;
+                                                                      goto(newUrl);
+                                                                  }} />
                                                         {/if}
                                                     </button>
                                                 </div>
