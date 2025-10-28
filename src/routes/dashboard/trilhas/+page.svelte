@@ -1,7 +1,6 @@
 <script>
     import { CornerUpLeft } from "lucide-svelte";
     import TrailItem from "$lib/components/trails/item.svelte"
-    import CourseItem from "@/components/courses/item.svelte";
     import { goto } from "$app/navigation";
 
     let { data } = $props();
@@ -17,7 +16,12 @@
 <div class="container mx-auto flex flex-col my-4">
     <div class="flex items-center text-gray-500">
         <CornerUpLeft class="w-4 h-4" />
-        <button class="cursor-pointer" onclick={()=>{goto('./')}}>Voltar ao Início</button>
+        <button
+            class="cursor-pointer"
+            onclick={()=>{goto('./')}}
+        >
+            Voltar ao Início
+        </button>
     </div>
 
     <div class="text-2xl font-bold text-slate-900">Trilhas</div>
