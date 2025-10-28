@@ -33,7 +33,11 @@
                                 const parentSlug = profile.keep_watching.parent.slug;
                                 const lessonSlug = profile.keep_watching.slug;
                                 const moduleSlug = profile.keep_watching.module_slug;
-                                goto(`/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}`);
+                                goto(
+                                    type === 'cursos' ?
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}` :
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}?action=continue`
+                                    );
                             }}>
                                 <Play class="w-6 h-6" />
                                 Continuar Assistindo
@@ -63,7 +67,11 @@
                                 const parentSlug = lesson.parent.slug;
                                 const lessonSlug = lesson.slug;
                                 const moduleSlug = lesson.module_slug;
-                                goto(`/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}`);
+                                goto(
+                                    type === 'cursos' ?
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}` :
+                                    `/dashboard/${type}/${parentSlug}/${moduleSlug}/${lessonSlug}?action=continue`
+                                    );
                             }}>
                                 <div class="flex items-center gap-2 cursor-pointer hover:bg-gray-200">
                                     <div class="relative flex justify-center items-center w-1/3">

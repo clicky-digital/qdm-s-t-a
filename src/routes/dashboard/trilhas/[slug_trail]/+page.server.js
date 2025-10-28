@@ -36,7 +36,10 @@ export const load = async ({ params, url, parent, cookies }) => {
                 let moduleSlug;
                 for (const module of trail.trail_modules) {
                     if (module.trail_lessons) {
-                        const lesson = module.trail_lessons.find(l => l.slug === continueLessonSlug);
+                        const lesson = module.trail_lessons.find(
+                            (/** @type {{ slug: any; }} */ l) =>
+                                l.slug === continueLessonSlug,
+                        );
                         if (lesson) {
                             moduleSlug = module.slug;
                             break;

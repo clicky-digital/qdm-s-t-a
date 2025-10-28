@@ -18,7 +18,7 @@
         {#each modules as module}
             <div class="bg-white shadow-lg rounded-lg p-6">
                 <div class="w-full h-50 bg-gray-600 rounded-lg mb-4">
-                    {#if module.thumbnails.path}
+                    {#if module.thumbnails && module.thumbnails.path}
                         <img
                             class="w-full h-full object-cover"
                             src={`${PUBLIC_URL_BASE_STORAGE}/${module.thumbnails.path}`}
