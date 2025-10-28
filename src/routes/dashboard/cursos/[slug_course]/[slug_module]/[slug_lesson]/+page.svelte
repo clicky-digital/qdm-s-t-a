@@ -12,7 +12,7 @@
 <div class="container mx-auto flex flex-col my-4">
     <div class="flex items-center text-gray-500">
         <CornerUpLeft class="w-4 h-4" />
-        <button class="cursor-pointer" onclick={()=>{goto('../')}}>Voltar ao Início</button>
+        <button class="cursor-pointer" onclick={()=>{goto('/dashboard/cursos')}}>Voltar ao Início</button>
     </div>
 
     <div class="flex flex-col gap-4 my-4">

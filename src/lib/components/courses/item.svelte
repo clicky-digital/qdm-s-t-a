@@ -26,7 +26,7 @@
 
 <div class="h-60 w-full bg-gray-100 rounded relative flex gap-6 items-center p-4">
     <div class="w-72 h-full bg-gray-600 rounded-lg">
-       {#if thumbnail}
+        {#if thumbnail}
             <img
                 class="w-full h-full object-cover"
                 src={`${PUBLIC_URL_BASE_STORAGE}/${thumbnail}`}

@@ -55,6 +55,11 @@
                     }
                 }
             }, 5000);
+            player.addEventListener('durationchange', () => {
+                if (Number.isFinite(player.duration) && player.duration > 0) {
+                    metadata.total_time = player.duration;
+                }
+            });
         }
     });
 

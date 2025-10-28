@@ -1,7 +1,10 @@
 import { URL_BASE_API } from '$env/static/private';
-export function load({ cookies }) {
 
-    let promise = fetch(URL_BASE_API + "/api/v1/get-courses", {
+export async function load({ cookies, parent }) {
+    const parentData = await parent();
+    const profile = await parentData.profile;
+
+    let response = await fetch(URL_BASE_API + "/api/v1/get-courses", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -9,5 +12,8 @@ export function load({ cookies }) {
         },
     }).then((res) => res.json());
 
-    return {courses: promise};
+    return {
+        courses: response,
+        keep_watching: profile?.keep_watching
+    };
 }

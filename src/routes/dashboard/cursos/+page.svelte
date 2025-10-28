@@ -30,6 +30,8 @@
                     courseName={course['name']}
                     slug={course['slug']}
                     has_existing_lesson={course['has_existing_lesson']}
+                    course_modules={course.course_modules}
+                    course_lessons={course.course_lessons}
                     data={course}
                 />
             {/each}
