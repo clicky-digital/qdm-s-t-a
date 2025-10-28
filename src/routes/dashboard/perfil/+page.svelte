@@ -9,8 +9,7 @@
 
     let { data, form } = $props();
 
-    let view = $state('sell');
-    // let view = $state('profile');
+    let view = $state('profile');
 
     let password = $state('');
     let confirmPassword = $state('');
@@ -85,12 +84,17 @@
                         <div class="flex w-full h-1/2">
                             <div class="w-1/2 flex flex-col items-center justify-center">
                                 <div class="w-9/12">
-                                    {#if profile?.student?.avatar}
-                                        <label for="avatar">Alterar foto de perfil (jpg/png/jpeg):</label>
-                                    {:else}
-                                        <label for="avatar">Foto de Perfil (jpg/png/jpeg):</label>
-                                    {/if}
-                                        <Input id="avatar" name="avatar" accept="image/*" type="file" class="w-full bg-white" onchange={(e) => selectedFile = e.target.files[0]}></Input>
+                                    <label for="avatar">
+                                        {#if profile?.student?.avatar}
+                                            Alterar foto de perfil (jpg/png/jpeg):
+                                        {:else}
+                                            Foto de Perfil (jpg/png/jpeg):
+                                        {/if}
+                                        <div class="flex text-sm p-2 bg-white rounded-sm">
+                                            Clique aqui para &nbsp;<b>{#if selectedFile}alterar{:else}escolher{/if}</b>.
+                                        </div>
+                                    </label>
+                                    <Input id="avatar" name="avatar" accept="image/*" type="file" class="w-full hidden" onchange={(e) => selectedFile = e.target.files[0]}></Input>
                                 </div>
                                 <div class="w-9/12">
                                     <label for="name">Nome:</label>
