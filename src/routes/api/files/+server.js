@@ -1,4 +1,6 @@
 import { json } from '@sveltejs/kit';
+import { read } from '$app/server';
+import a from "/images/logo.png"
 import { URL_BASE_API } from '$env/static/private';
 
 export async function POST({ cookies, request, params }) {
@@ -10,23 +12,31 @@ export async function POST({ cookies, request, params }) {
     }
 
     const body = await request.json();
-
-    const apiResponse = await fetch(URL_BASE_API + `/api/v1/download/${body.filename}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-
-    const responseText = await apiResponse.text();
-
-    if (!apiResponse.ok) {
-        return json({ error: 'API request failed', details: responseText }, { status: apiResponse.status });
-    }
+    // const apiResponse = await fetch(URL_BASE_API + `/api/v1/download/${body.filename}`, {
+    //     method: "GET",
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    // });
+    //
+    // const response = await apiResponse.json();
+    //
+    // if (!apiResponse.ok) {
+    //     return json({ error: 'API request failed', details: response }, { status: apiResponse.status });
+    // }
 
     try {
-        return json(JSON.parse(responseText));
+        // const data = read(response);
+        //
+        // const responseText = await data.text();
+        //
+
+        console.log(a);
+        const assetContent = read(a);
+        // console.log(assetContent);
+        // return assetContent;
+        return new Response('response');
     } catch (e) {
-        return new Response(responseText);
+        // return new Response(response);
     }
 }

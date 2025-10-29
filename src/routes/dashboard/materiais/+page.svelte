@@ -1,6 +1,7 @@
 <script lang="ts">
     import InputIcon from '@/components/ui/input-icon/input-icon.svelte';
     import { FileText, BrainCircuit, Mic } from 'lucide-svelte';
+    import { PUBLIC_URL_BASE_STORAGE } from "$env/static/public";
 
     export let data;
 
@@ -24,24 +25,27 @@
                 method: "POST",
                 body: JSON.stringify({
                     filename: base64_filename,
+                    url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
                 }),
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
 
-            if (!response.ok) {
-                throw new Error(`Error request: ${response.statusText}`);
-            }
+            // if (!response.ok) {
+            //     throw new Error(`Error request: ${response.statusText}`);
+            // }
 
-            const blob = await response.blob();
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = downloadFilename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
+            // console.log(response);
+
+            // const blob = await response.blob();
+            // const link = document.createElement('a');
+            // link.href = URL.createObjectURL(blob);
+            // link.download = downloadFilename;
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+            // URL.revokeObjectURL(link.href);
         } catch (error) {
             console.error('Error downloading file:', error);
             alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
