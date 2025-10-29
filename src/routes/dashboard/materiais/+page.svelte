@@ -19,12 +19,9 @@
 
     async function downloadFile(sourceFilename: string, downloadFilename: string) {
         try {
-            const base64_filename = btoa(sourceFilename);
-
             const response = await fetch(`/api/files`, {
                 method: "POST",
                 body: JSON.stringify({
-                    filename: base64_filename,
                     url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
                 }),
                 headers: {
@@ -32,20 +29,18 @@
                 }
             });
 
-            // if (!response.ok) {
-            //     throw new Error(`Error request: ${response.statusText}`);
-            // }
+            if (!response.ok) {
+                throw new Error(`Error request: ${response.statusText}`);
+            }
 
-            // console.log(response);
-
-            // const blob = await response.blob();
-            // const link = document.createElement('a');
-            // link.href = URL.createObjectURL(blob);
-            // link.download = downloadFilename;
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
-            // URL.revokeObjectURL(link.href);
+            const blob = await response.blob();
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = downloadFilename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
         } catch (error) {
             console.error('Error downloading file:', error);
             alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
