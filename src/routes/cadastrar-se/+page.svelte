@@ -75,7 +75,7 @@
                     <div>
                         <button
                             type="submit"
-                            class="w-full flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-full"
+                            class="w-full cursor-pointer flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-full"
                         >
                             Registrar
                         </button>

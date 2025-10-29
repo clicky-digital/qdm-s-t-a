@@ -4,6 +4,7 @@
     import Button from "../ui/button/button.svelte";
     import { createEventDispatcher, onMount } from "svelte";
     import * as Dialog from "$lib/components/ui/dialog/index.js";
+    import { PUBLIC_URL_BASE_STORAGE } from "$env/static/public";
 
     let { lesson, isFavorited, type, parent_id } = $props();
     let monitor_phone = $state({});
@@ -51,14 +52,11 @@
     }
 
     async function downloadFile(sourceFilename: string, downloadFilename: string) {
-
         try {
-            const base64_filename = btoa(sourceFilename);
-
             const response = await fetch(`/api/files`, {
                 method: "POST",
                 body: JSON.stringify({
-                    filename: base64_filename,
+                    url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
                 }),
                 headers: {
                     "Content-Type": "application/json"
@@ -68,8 +66,9 @@
             if (!response.ok) {
                 throw new Error(`Error request: ${response.statusText}`);
             }
+
             const blob = await response.blob();
-            const link = document.createElement("a");
+            const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             link.download = downloadFilename;
             document.body.appendChild(link);
@@ -84,12 +83,10 @@
 
     async function openFileInNewTab(sourceFilename: string) {
         try {
-            const base64_filename = btoa(sourceFilename);
-
             const response = await fetch(`/api/files`, {
                 method: "POST",
                 body: JSON.stringify({
-                    filename: base64_filename,
+                    url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename,
                 }),
                 headers: {
                     "Content-Type": "application/json"
@@ -136,7 +133,7 @@
 
     {#if lesson.podcast_url}
         <Button class="cursor-pointer hover:text-slate-600" variant="ghost"
-                onclick={() => downloadFile(lesson.podcast_url, getFilename(lesson.name, 'Podcast', lesson.podcast_url))}>
+                onclick={() => openFileInNewTab(lesson.podcast_url)}>
             <Megaphone />
             Podcast
         </Button>

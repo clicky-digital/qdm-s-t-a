@@ -45,10 +45,10 @@
             return `${hh.toString().padStart(2, "0")}:${mm.toString().padStart(2, "0")}:${ss}`;
         }
         if (mm) {
-            console.log(mm);
+            // console.log(mm);
         }
         if (ss) {
-            console.log(ss);
+            // console.log(ss);
         }
         return `${mm.toString().padStart(2, "0")}:${ss}`;
     }

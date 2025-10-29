@@ -36,7 +36,6 @@
         minimumPasswordLength = password.length >= 6
     }
     async function logout(){
-        //TODO Make logout function
         let promise = await fetch('/api/logout', {method: 'POST'});
         goto('/login')
     }
@@ -90,7 +89,7 @@
                                         {:else}
                                             Foto de Perfil (jpg/png/jpeg):
                                         {/if}
-                                        <div class="flex text-sm p-2 bg-white rounded-sm">
+                                        <div class="flex text-sm p-2 bg-white rounded-sm cursor-pointer">
                                             Clique aqui para &nbsp;<b>{#if selectedFile}alterar{:else}escolher{/if}</b>.
                                         </div>
                                     </label>
