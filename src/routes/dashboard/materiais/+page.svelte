@@ -96,6 +96,7 @@
                                                     download
                                                     title="Baixar Apostila"
                                                     class="inline-flex cursor-pointer items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors"
+                                                    target="_blank"
                                                 >
                                                     <FileText class="w-5 h-5" />
                                                 </a>
@@ -115,6 +116,7 @@
                                                     download
                                                     title="Baixar Mapa Mental"
                                                     class="inline-flex cursor-pointer items-center justify-center p-2 bg-purple-100 text-purple-600 rounded-full hover:bg-purple-200 transition-colors"
+                                                    target="_blank"
                                                 >
                                                     <BrainCircuit class="w-5 h-5" />
                                                 </a>
@@ -134,6 +136,7 @@
                                                     download
                                                     title="Baixar Podcast"
                                                     class="inline-flex cursor-pointer items-center justify-center p-2 bg-orange-100 text-orange-600 rounded-full hover:bg-orange-200 transition-colors"
+                                                    target="_blank"
                                                 >
                                                     <Mic class="w-5 h-5" />
                                                 </a>
