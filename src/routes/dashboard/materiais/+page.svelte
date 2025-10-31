@@ -7,44 +7,45 @@
 
     let searchTerm = '';
 
-	$: filteredTrails =
-		data.trails
-			?.map((trail) => ({
-				...trail,
-				lessons: trail.lessons.filter((lesson) =>
-					lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
-				)
-			}))
-			.filter((trail) => trail.lessons.length > 0) || [];
+    $: filteredTrails =
+        data.trails
+            ?.map((trail) => ({
+                ...trail,
+                lessons: trail.lessons.filter((lesson) =>
+                    lesson.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            }))
+            .filter((trail) => trail.lessons.length > 0) || [];
 
     async function downloadFile(sourceFilename: string, downloadFilename: string) {
-        try {
-            const response = await fetch(`/api/files`, {
-                method: "POST",
-                body: JSON.stringify({
-                    url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error request: ${response.statusText}`);
-            }
-
-            const blob = await response.blob();
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = downloadFilename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-        } catch (error) {
-            console.error('Error downloading file:', error);
-            alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
-        }
+        window.open(`${PUBLIC_URL_BASE_STORAGE}/${sourceFilename}`, '_blank');
+        // try {
+        //     const response = await fetch(`/api/files`, {
+        //         method: "POST",
+        //         body: JSON.stringify({
+        //             url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
+        //         }),
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         }
+        //     });
+        //
+        //     if (!response.ok) {
+        //         throw new Error(`Error request: ${response.statusText}`);
+        //     }
+        //
+        //     const blob = await response.blob();
+        //     const link = document.createElement('a');
+        //     link.href = URL.createObjectURL(blob);
+        //     link.download = downloadFilename;
+        //     document.body.appendChild(link);
+        //     link.click();
+        //     document.body.removeChild(link);
+        //     URL.revokeObjectURL(link.href);
+        // } catch (error) {
+        //     console.error('Error downloading file:', error);
+        //     alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
+        // }
     }
 
     function getFilename(lessonName: string, materialType: string, sourceUrl: string): string {
