@@ -91,6 +91,9 @@
                                         <td class="p-3 font-medium text-gray-800">{lesson.name}</td>
                                         <td class="p-3 text-center">
                                             {#if lesson.apostila_url}
+                                                <a href={`${PUBLIC_URL_BASE_STORAGE}/${lesson.apostila_url}`} title="Baixar Apostila" class="inline-flex cursor-pointer items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors" download="file.pdf">
+                                                    <FileText class="w-5 h-5 mr-2" />
+                                                </a>
                                                 <button on:click={() => downloadFile(lesson.apostila_url, getFilename(lesson.name, 'Apostila', lesson.apostila_url))} title="Baixar Apostila" class="inline-flex cursor-pointer items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors">
                                                     <FileText class="w-5 h-5" />
                                                 </button>
