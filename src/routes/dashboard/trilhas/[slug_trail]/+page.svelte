@@ -32,8 +32,15 @@
                         />
                     {/if}
                 </div>
-                <h2 class="text-xl font-semibold mb-2">{module.name}</h2>
+
                 {#if module.trail_lessons && module.trail_lessons.length > 0}
+                <Button
+                    onclick={() => goto(`/dashboard/trilhas/${trail.slug}/${module.slug}/${module.trail_lessons[0].slug}`)}
+                    variant="link"
+                    class="text-xl font-semibold mb-2 cursor-pointer"
+                >
+                    {module.name}
+                </Button>
                 <Accordion.Root type="single" class="w-full">
                     <Accordion.Item>
                         <Accordion.Trigger class="text-md cursor-pointer">
@@ -43,7 +50,7 @@
                                 {#each module.trail_lessons as lesson}
                                     {#if lesson.lesson}
                                         <div class="flex justify-between text-md items-center p-2 border-b">
-                                            <div class="text-gray-500 ">
+                                            <div class="text-gray-500">
                                                 {lesson.lesson.name}
                                             </div>
                                             <Button
@@ -60,6 +67,7 @@
                     </Accordion.Item>
                 </Accordion.Root>
                 {:else}
+                <h2 class="text-xl font-semibold mb-2">{module.name}</h2>
                 <div class="flex flex-col p-4 text-balance w-full h-full justify-center items-center">
                     <div class="text-gray-500">Nenhuma aula disponível.</div>
                 </div>
