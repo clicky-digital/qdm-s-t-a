@@ -91,30 +91,57 @@
                                         <td class="p-3 font-medium text-gray-800">{lesson.name}</td>
                                         <td class="p-3 text-center">
                                             {#if lesson.apostila_url}
-                                                <a href={`${PUBLIC_URL_BASE_STORAGE}/${lesson.apostila_url}`} title="Baixar Apostila" class="inline-flex cursor-pointer items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors" download="file.pdf">
-                                                    <FileText class="w-5 h-5 mr-2" />
+                                                <a
+                                                    href={`${PUBLIC_URL_BASE_STORAGE}/${lesson.apostila_url}`}
+                                                    download
+                                                    title="Baixar Apostila"
+                                                    class="inline-flex cursor-pointer items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors"
+                                                >
+                                                    <FileText class="w-5 h-5" />
                                                 </a>
+                                                <!--
                                                 <button on:click={() => downloadFile(lesson.apostila_url, getFilename(lesson.name, 'Apostila', lesson.apostila_url))} title="Baixar Apostila" class="inline-flex cursor-pointer items-center justify-center p-2 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors">
                                                     <FileText class="w-5 h-5" />
                                                 </button>
+                                                -->
                                             {:else}
                                                 <span class="text-gray-400 text-xs">Não disponível</span>
                                             {/if}
                                         </td>
                                         <td class="p-3 text-center">
                                             {#if lesson.mapa_mental_url}
+                                                <a
+                                                    href={`${PUBLIC_URL_BASE_STORAGE}/${lesson.mapa_mental_url}`}
+                                                    download
+                                                    title="Baixar Mapa Mental"
+                                                    class="inline-flex cursor-pointer items-center justify-center p-2 bg-purple-100 text-purple-600 rounded-full hover:bg-purple-200 transition-colors"
+                                                >
+                                                    <BrainCircuit class="w-5 h-5" />
+                                                </a>
+                                                <!--
                                                 <button on:click={() => downloadFile(lesson.mapa_mental_url, getFilename(lesson.name, 'Mapa_Mental', lesson.mapa_mental_url))} title="Baixar Mapa Mental" class="inline-flex cursor-pointer items-center justify-center p-2 bg-purple-100 text-purple-600 rounded-full hover:bg-purple-200 transition-colors">
                                                     <BrainCircuit class="w-5 h-5" />
                                                 </button>
+                                                -->
                                             {:else}
                                                 <span class="text-gray-400 text-xs">Não disponível</span>
                                             {/if}
                                         </td>
                                         <td class="p-3 text-center">
                                             {#if lesson.podcast_url}
+                                                <a
+                                                    href={`${PUBLIC_URL_BASE_STORAGE}/${lesson.podcast_url}`}
+                                                    download
+                                                    title="Baixar Podcast"
+                                                    class="inline-flex cursor-pointer items-center justify-center p-2 bg-orange-100 text-orange-600 rounded-full hover:bg-orange-200 transition-colors"
+                                                >
+                                                    <Mic class="w-5 h-5" />
+                                                </a>
+                                                <!--
                                                 <button on:click={() => downloadFile(lesson.podcast_url, getFilename(lesson.name, 'Podcast', lesson.podcast_url))} title="Baixar Podcast" class="inline-flex cursor-pointer items-center justify-center p-2 bg-orange-100 text-orange-600 rounded-full hover:bg-orange-200 transition-colors">
                                                     <Mic class="w-5 h-5" />
                                                 </button>
+                                                -->
                                             {:else}
                                                 <span class="text-gray-400 text-xs">Não disponível</span>
                                             {/if}
