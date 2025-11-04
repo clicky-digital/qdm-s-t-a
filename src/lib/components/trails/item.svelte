@@ -9,18 +9,18 @@
 </script>
 
 <div class="h-60 w-full bg-gray-100 rounded relative flex gap-6 items-center p-4">
-    <div class="w-72 h-full bg-gray-600 rounded-lg">
+    <div class="w-80 h-full rounded-lg flex items-center aspect-16/9">
         {#if thumbnail}
             <img 
-                class="w-full h-full object-cover" 
+                class="object-cover rounded-2xl"
                 src={`${PUBLIC_URL_BASE_STORAGE}/${thumbnail}`}
                 alt={trailName}
             />
         {:else}
             <img 
-                class="w-full h-full object-cover" 
+                class="object-cover rounded-2xl"
                 src="/images/imagem_curso.png" 
-                alt="Imagem padrão do curso"
+                alt="Imagem padrão da trilha"
             />
         {/if}
     </div>
