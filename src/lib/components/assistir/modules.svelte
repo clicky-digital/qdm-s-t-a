@@ -289,31 +289,32 @@
         <div class="text-gray-500 text-xl">Nenhuma aula disponível</div>
     </div>
 {:else}
-    <Tabs.Root value={currentActiveTabId} class="w-full">
-        <Tabs.List>
-            {#each modules as module}
-                <Tabs.Trigger
-                    class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
-                    onclick={() => {
-                        lessonKey = null;
-                        const firstLesson = module.lessons[0];
-                        lesson = firstLesson;
-                        getLesson(firstLesson);
-                        setLesson(firstLesson, 0);
+    <Tabs.Root value={currentActiveTabId}>
+        <Tabs.List class="w-full h-full flex justify-start">
+            <div class="flex overflow-x-auto">
+                {#each modules as module}
+                    <Tabs.Trigger
+                        class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
+                        onclick={() => {
+                            lessonKey = null;
+                            const firstLesson = module.lessons[0];
+                            lesson = firstLesson;
+                            getLesson(firstLesson);
+                            setLesson(firstLesson, 0);
 
-                        const type = $page.params.slug_course ? 'cursos' : 'trilhas';
-                        const parentSlug = $page.params.slug_course || $page.params.slug_trail;
-                        const newUrl = `/dashboard/${type}/${parentSlug}/${module.slug}/${firstLesson.slug}`;
-                        goto(newUrl);
-                    }}
-                    value={module.id}>{module.name}</Tabs.Trigger>
-            {/each}
+                            const type = $page.params.slug_course ? 'cursos' : 'trilhas';
+                            const parentSlug = $page.params.slug_course || $page.params.slug_trail;
+                            const newUrl = `/dashboard/${type}/${parentSlug}/${module.slug}/${firstLesson.slug}`;
+                            goto(newUrl);
+                        }}
+                        value={module.id}>{module.name}</Tabs.Trigger>
+                {/each}
+            </div>
         </Tabs.List>
         {#each modules as module, moduleIndex}
             <Tabs.Content value={module.id}>
                 {#if module.lessons.length > 0}
                     {#if lesson}
-
                         <div class="flex flex-col gap-2 w-full p-8 bg-gray-100 rounded-sm">
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="flex justify-between items-center font-bold text-lg mb-2">
@@ -337,7 +338,7 @@
                                                bind:id={id} url={lesson.link ?? module.lessons[0].link} />
                                     </div>
 
-                                    <div class="col-span-1 p-4 grid" style="grid-template-rows: 1fr 20px;">
+                                    <div class="col-span-1 p-4 grid overflow-y-auto" style="grid-template-rows: 1fr 20px;">
                                         <div class="">
                                             {#each module.lessons as lessonCard, key}
                                                 <div class="flex items-end border-b border-gray-300">
