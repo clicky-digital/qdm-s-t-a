@@ -160,12 +160,12 @@
                     }}
                     class="w-full"
                 >
-                    <Carousel.Content class="h-60">
+                    <Carousel.Content>
                         {#each carrousels as carrousel}
-                            <Carousel.Item class="md:basis-1/2 lg:basis-1/3">
+                            <Carousel.Item class="md:basis-1/2 lg:basis-1/3 aspect-video">
                                 <a href="{carrousel.link}" target="_blank">
                                     <img
-                                        class="h-full w-full object-rescale"
+                                        class="aspect-video"
                                         src="{PUBLIC_URL_BASE_STORAGE + '/' + carrousel.thumbnails.path}"
                                         alt="{carrousel.name}"
                                     >

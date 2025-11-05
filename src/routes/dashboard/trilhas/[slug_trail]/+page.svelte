@@ -17,16 +17,16 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {#each modules as module}
             <div class="bg-white shadow-lg rounded-lg p-6">
-                <div class="w-full h-50 bg-gray-600 rounded-lg mb-4">
+                <div class="w-full bg-gray-600 rounded-lg mb-4">
                     {#if module.thumbnails && module.thumbnails.path}
                         <img
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-cover aspect-video"
                             src={`${PUBLIC_URL_BASE_STORAGE}/${module.thumbnails.path}`}
                             alt={module.name}
                         />
                     {:else}
                         <img
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-cover aspect-video"
                             src="/images/imagem_curso.png"
                             alt="Imagem padrão do curso"
                         />
