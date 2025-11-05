@@ -5,6 +5,7 @@
     import { createEventDispatcher, onMount } from "svelte";
     import * as Dialog from "$lib/components/ui/dialog/index.js";
     import { PUBLIC_URL_BASE_STORAGE } from "$env/static/public";
+    import Video from "@/components/assistir/video.svelte";
 
     let { lesson, isFavorited, type, parent_id } = $props();
     let monitor_phone = $state({});
@@ -172,20 +173,24 @@
                     <Dialog.Description>
                         <div class="flex flex-col mt-4">
                             {#each lesson.link_resolutions as resolution}
-                                <div class="flex flex-col">
-                                    <div class="flex items-end mb-4 gap-4">
-                                        <p class="text-md text-gray-800">{resolution.name}</p>
-                                        <Button
-                                            class="ml-auto cursor-pointer"
-                                            onclick={() => goto(`/dashboard/video-resolution?url=${encodeURIComponent(resolution.url)}&name=${encodeURIComponent(resolution.name)}`)}
-                                        >
-                                            Acessar Resolução
-                                        </Button>
-                                    </div>
-                                    {#if lesson.link_resolutions.length > 1}
-                                        <p class="border-b border-gray-400 mb-4"></p>
-                                    {/if}
-                                </div>
+                                <Dialog.Root>
+                                    <Dialog.Trigger>
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-md text-gray-800">{resolution.name}</p>
+                                            <Button class="flex gap-1 cursor-pointer hover:text-slate-600" variant="ghost">
+                                                Acessar Resolução
+                                            </Button>
+                                        </div>
+                                    </Dialog.Trigger>
+                                    <Dialog.Content class="h-96">
+                                        <Dialog.Header>
+                                            <Dialog.Title>{resolution.name}</Dialog.Title>
+                                            <Dialog.Description class="w-full h-full flex items-center justify-center">
+                                                <Video url={resolution.url} />
+                                            </Dialog.Description>
+                                        </Dialog.Header>
+                                    </Dialog.Content>
+                                </Dialog.Root>
                             {/each}
                         </div>
                     </Dialog.Description>
