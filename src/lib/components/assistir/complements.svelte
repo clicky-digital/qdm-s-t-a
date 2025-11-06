@@ -168,16 +168,16 @@
                 </Button>
             </Dialog.Trigger>
             <Dialog.Content>
-                <Dialog.Header>
+                <Dialog.Header class="h-[80vh]">
                     <Dialog.Title>Exercícios Resolvidos - Links</Dialog.Title>
-                    <Dialog.Description>
-                        <div class="flex flex-col mt-4">
+                    <Dialog.Description class="h-full overflow-y-auto">
+                        <div class="flex flex-col mt-4 gap-2">
                             {#each lesson.link_resolutions as resolution}
                                 <Dialog.Root>
                                     <Dialog.Trigger>
                                         <div class="flex items-center justify-between">
                                             <p class="text-md text-gray-800">{resolution.name}</p>
-                                            <Button class="flex gap-1 cursor-pointer hover:text-slate-600" variant="ghost">
+                                            <Button class="flex gap-1 p-5 cursor-pointer bg-gray-800 text-gray-50 hover:text-slate-600" variant="ghost">
                                                 Acessar Resolução
                                             </Button>
                                         </div>

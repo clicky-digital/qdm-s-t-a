@@ -91,7 +91,6 @@
                                             "Trilhas - " + lesson.parent.name}
                                         </p>
                                     </div>
-
                                 </div>
                             </button>
                             <hr>
@@ -165,7 +164,7 @@
                             <Carousel.Item class="md:basis-1/2 lg:basis-1/3 aspect-video">
                                 <a href="{carrousel.link}" target="_blank">
                                     <img
-                                        class="aspect-video"
+                                        class="aspect-video w-full"
                                         src="{PUBLIC_URL_BASE_STORAGE + '/' + carrousel.thumbnails.path}"
                                         alt="{carrousel.name}"
                                     >

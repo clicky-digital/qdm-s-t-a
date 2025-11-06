@@ -44,6 +44,10 @@
                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
                     <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Trilhas (Aulas)</div>
                 </button>
+
+                <button class="cursor-pointer" onclick={()=>{goto('/dashboard/concursos')}}>
+                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Provas Resolvidas</div>
+                </button>
             </div>
 
             <div class="flex items-center gap-4">
@@ -72,6 +76,10 @@
                                 <hr class="mx-2">
                                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
                                     <div class="hover:bg-slate-800 w-full p-5 rounded-b-2xl">Trilhas (Aulas)</div>
+                                </button>
+                                <hr class="mx-2">
+                                <button class="cursor-pointer" onclick={()=>{goto('/dashboard/concursos')}}>
+                                    <div class="hover:bg-slate-800 w-full p-5 rounded-b-2xl">Provas Resolvidas</div>
                                 </button>
                             </div>
                         </Button>
