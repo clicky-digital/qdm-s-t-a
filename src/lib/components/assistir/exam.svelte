@@ -112,11 +112,13 @@
                                                         </div>
                                                     </div>
                                                     <div class="flex">
-                                                        <Button class="cursor-pointer hover:text-slate-600" variant="ghost"
-                                                                onclick={() => downloadFile(contest_exam.exam.resolutions.path, contest_exam.exam.name)}>
-                                                            <Download />
-                                                            PDF
-                                                        </Button>
+                                                        {#if contest_exam.exam.resolutions}
+                                                            <Button class="cursor-pointer hover:text-slate-600" variant="ghost"
+                                                                    onclick={() => downloadFile(contest_exam.exam.resolutions.path, contest_exam.exam.name)}>
+                                                                <Download />
+                                                                PDF
+                                                            </Button>
+                                                        {/if}
                                                         <button class="cursor-pointer">
                                                             <Play class="w-4 h-4"
                                                                 onclick={() => {
