@@ -54,28 +54,29 @@
 
     async function downloadFile(sourceFilename: string, downloadFilename: string) {
         try {
-            const response = await fetch(`/api/files`, {
-                method: "POST",
-                body: JSON.stringify({
-                    url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error request: ${response.statusText}`);
-            }
-
-            const blob = await response.blob();
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = downloadFilename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
+            window.open(`${PUBLIC_URL_BASE_STORAGE}/${sourceFilename}`, '_blank');
+        //     const response = await fetch(`/api/files`, {
+        //         method: "POST",
+        //         body: JSON.stringify({
+        //             url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename
+        //         }),
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         }
+        //     });
+        //
+        //     if (!response.ok) {
+        //         throw new Error(`Error request: ${response.statusText}`);
+        //     }
+        //
+        //     const blob = await response.blob();
+        //     const link = document.createElement('a');
+        //     link.href = URL.createObjectURL(blob);
+        //     link.download = downloadFilename;
+        //     document.body.appendChild(link);
+        //     link.click();
+        //     document.body.removeChild(link);
+        //     URL.revokeObjectURL(link.href);
         } catch (error) {
             console.error("Error downloading file:", error);
             alert('Erro ao baixar o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
@@ -84,23 +85,7 @@
 
     async function openFileInNewTab(sourceFilename: string) {
         try {
-            const response = await fetch(`/api/files`, {
-                method: "POST",
-                body: JSON.stringify({
-                    url: PUBLIC_URL_BASE_STORAGE + '/' + sourceFilename,
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error request: ${response.statusText}`);
-            }
-
-            const blob = await response.blob();
-            const fileUrl = URL.createObjectURL(blob);
-            window.open(fileUrl, "_blank");
+            window.open(`${PUBLIC_URL_BASE_STORAGE}/${sourceFilename}`, '_blank');
         } catch (error) {
             console.error("Error opening file in new tab:", error);
             alert('Erro ao abrir o arquivo. Acesse seu perfil, e entre em contato com a nossa equipe.');
