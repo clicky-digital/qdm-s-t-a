@@ -1,29 +1,31 @@
 <script lang="ts">
-	import { User, Lock } from "lucide-svelte";
+import { User, Lock } from "lucide-svelte";
 
-    let { data, form } = $props();
+let { data, form } = $props();
 </script>
 
 <div class="bg-slate-900 h-screen flex justify-center items-center">
 	<div class="relative">
-		<img 
-			src="/images/logo.png" 
-			alt="logo" 
-			class="w-full absolute items-center"
-		/>
-
-		<div class="w-96">
-			<div class="flex items-center justify-center text-yellow-300 text-3xl font-bold">
+		<div class="-mb-4 md:mb-0">
+			<img 
+				src="/images/logo.png" 
+				alt="logo" 
+				class="w-full absolute items-center"
+			/>
+			<div class="flex items-center justify-center text-yellow-300 text-md sm:text-lg md:text-xl font-bold pb-2">
 				Painel do Aluno
 			</div>
+		</div>
+
+		<div class="w-full max-w-lg sm:w-72 md:w-80 lg:w-87 xl:w-96">
 			<div
-				class="bg-slate-800 w-full max-w-md p-6 rounded-2xl border border-gray-500 shadow-sm pt-10 mt-10"
+				class="bg-slate-800 w-full max-w-lg p-6 rounded-2xl border border-gray-500 shadow-sm pt-10 mt-10"
 			>
-                <div class="flex items-center justify-center text-yellow-300 text-lg font-bold pb-2">
-                    {form?.message}
-                </div>
+				<div class="flex items-center justify-center text-yellow-300 text-lg font-bold pb-2">
+					{form?.message}
+				</div>
 				<form
-                    method="POST" action="?/login"
+					method="POST" action="?/login"
 					class="w-full flex flex-col gap-3"
 				>
 					<div class="flex items-center justify-center w-full border-gray-300 sm:text-sm bg-white p-1 rounded-full">
@@ -32,7 +34,7 @@
 						</div>
 
 						<input
-                            value="{form?.email}"
+							value="{form?.email}"
 							type="email"
 							name="email"
 							id="email"
@@ -73,11 +75,11 @@
 							class="flex items-center justify-center w-full text-xs p-1 text-gray-100 gap-2"
 						>
 							<input
-                                name="rememeberPassword"
+								name="rememeberPassword"
 								type="checkbox"
 								class="w-4 h-4 border-gray-300 rounded-sm"
 							/>
-								Lembrar minha senha
+							Lembrar minha senha
 						</label>
 					</div>
 				</form>

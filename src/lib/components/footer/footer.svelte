@@ -23,8 +23,8 @@
         }
     });
 </script>
-<div class="container mx-auto">
-    <div class="flex flex-col items-center justify-center border-t p-8">
+<footer class="w-full mt-[calc(100vh-64px-64px-115px)] lg:mt-0 sticky">
+    <div class="flex flex-col items-center justify-center w-full border-t p-8">
         <div class="flex items-center gap-10">
             <img src="/images/logo.png" alt="logo" class="w-20" />
 
@@ -115,4 +115,4 @@
             {/await}
         </div>
     </div>
-</div>
+</footer>

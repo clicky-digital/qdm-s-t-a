@@ -29,7 +29,7 @@
 
 {#if showModal}
     <div class="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-2/3 lg:w-1/3">
             <h2 class="text-xl font-bold mb-4">Avalie esta aula</h2>
             <div class="flex justify-center mb-4">
                 {#each { length: 5 } as _, i}
