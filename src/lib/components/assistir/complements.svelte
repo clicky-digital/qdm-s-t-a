@@ -153,7 +153,7 @@
                 </Button>
             </Dialog.Trigger>
             <Dialog.Content>
-                <Dialog.Header class="h-[80vh]">
+                <Dialog.Header class="">
                     <Dialog.Title>Exercícios Resolvidos - Links</Dialog.Title>
                     <Dialog.Description class="h-full overflow-y-auto">
                         <div class="flex flex-col mt-4 gap-2">
@@ -162,15 +162,15 @@
                                     <Dialog.Trigger>
                                         <div class="flex items-center justify-between">
                                             <p class="text-md text-gray-800">{resolution.name}</p>
-                                            <Button class="flex gap-1 p-5 cursor-pointer bg-gray-800 text-gray-50 hover:text-slate-600" variant="ghost">
+                                            <Button class="flex gap-1 p-5 cursor-pointer bg-gray-800 text-gray-50 hover:bg-slate-600 hover:text-white hover:transform duration-150 " variant="ghost">
                                                 Acessar Resolução
                                             </Button>
                                         </div>
                                     </Dialog.Trigger>
-                                    <Dialog.Content class="h-96">
+                                    <Dialog.Content class="h-[80vh] lg:h-[70vh]">
                                         <Dialog.Header>
                                             <Dialog.Title>{resolution.name}</Dialog.Title>
-                                            <Dialog.Description class="w-full h-full flex items-center justify-center">
+                                            <Dialog.Description class="w-full h-full flex items-center justify-center mb-28 lg:mb-48">
                                                 <Video url={resolution.url} />
                                             </Dialog.Description>
                                         </Dialog.Header>
