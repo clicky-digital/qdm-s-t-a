@@ -36,7 +36,7 @@
 
         <div>
             {#if has_existing_lesson}
-                <Button onclick={() => goto(`/dashboard/trilhas/${slug}?action=continue`)} variant="default" class="cursor-pointer">
+                <Button onclick={() => goto(`/dashboard/trilhas/${slug}?action=continue`)} variant="default" class="cursor-pointer sm:mb-2 md:mb-0">
                     <Play class="w-4 h-4" />
                     Continuar
                 </Button>

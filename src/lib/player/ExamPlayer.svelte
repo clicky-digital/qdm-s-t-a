@@ -27,10 +27,10 @@
         logLevel="warn"
         crossOrigin
         src={url}
-        class="h-full"
+        class="h-[400px] lg:h-[600px]"
     >
         <media-provider>
-            <media-poster class="vds-poster"></media-poster>
+            <media-poster class="vds-poster h-[400px] lg:h-full"></media-poster>
             <source src={url} />
         </media-provider>
         <media-video-layout></media-video-layout>

@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="container mx-auto flex flex-col my-4">
+<div class="container mx-auto flex flex-col my-4 px-8 lg:px-0">
     <div class="flex items-center text-gray-500">
         <CornerUpLeft class="w-4 h-4" />
         <button class="cursor-pointer" onclick={()=>{goto('/dashboard/concursos')}}>Voltar ao Início</button>

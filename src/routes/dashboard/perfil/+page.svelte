@@ -1,44 +1,44 @@
 <script lang="ts">
-    import { User, MessageSquare, Mail, CreditCard } from "lucide-svelte";
-    import { Button } from "@/components/ui/button/index.js";
-    import { Input } from "@/components/ui/input/index.js";
-    import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public';
-    import { Whatsapp } from 'svelte-bootstrap-icons';
-    import { Time } from "vidstack";
-    import { goto } from "$app/navigation";
+import { User, MessageSquare, Mail, CreditCard } from "lucide-svelte";
+import { Button } from "@/components/ui/button/index.js";
+import { Input } from "@/components/ui/input/index.js";
+import { PUBLIC_URL_BASE_STORAGE } from '$env/static/public';
+import { Whatsapp } from 'svelte-bootstrap-icons';
+import { Time } from "vidstack";
+import { goto } from "$app/navigation";
 
-    let { data, form } = $props();
+let { data, form } = $props();
 
-    let view = $state('profile');
+let view = $state('profile');
 
-    let password = $state('');
-    let confirmPassword = $state('');
-    let passwordsMatch = $state(true);
-    let minimumPasswordLength = $state(false);
+let password = $state('');
+let confirmPassword = $state('');
+let passwordsMatch = $state(true);
+let minimumPasswordLength = $state(false);
 
-    let selectedFile = $state<File | null>(null);
+let selectedFile = $state<File | null>(null);
 
-    function handleSubmit(submitter?: string) {
-        if(submitter == "updatePassword") {
-            validatePassword();
+function handleSubmit(submitter?: string) {
+    if(submitter == "updatePassword") {
+        validatePassword();
 
-            if(password.length < 6) {
-                event.preventDefault()
-            }
-            if (!passwordsMatch) {
-                event.preventDefault();
-            }
+        if(password.length < 6) {
+            event.preventDefault()
+        }
+        if (!passwordsMatch) {
+            event.preventDefault();
         }
     }
-    function validatePassword()
+}
+function validatePassword()
     {
-        passwordsMatch = password === confirmPassword;
-        minimumPasswordLength = password.length >= 6
-    }
-    async function logout(){
-        let promise = await fetch('/api/logout', {method: 'POST'});
-        goto('/login')
-    }
+    passwordsMatch = password === confirmPassword;
+    minimumPasswordLength = password.length >= 6
+}
+async function logout(){
+    let promise = await fetch('/api/logout', {method: 'POST'});
+    goto('/login')
+}
 
 </script>
 
@@ -47,25 +47,25 @@
         <div class="flex justify-center items-center font-bold text-2xl w-full">
             Carregando Perfil...
         </div>
-    {:then profile}
-        <div class="w-9/12 h-full flex gap-2">
-            <div class="flex flex-col w-3/12 p-2 bg-slate-900/10 rounded-2xl">
+        {:then profile}
+        <div class="w-9/12 h-full flex flex-col lg:flex-row gap-2">
+            <div class="flex flex-col w-full lg:w-3/12 p-2 bg-slate-900/10 rounded-2xl">
                 <div class="w-full flex flex-col gap-5 justify-center items-center h-2/5">
-                    
+
                     {#if (profile?.student?.avatar && !selectedFile)}
-                    <img class="size-48 border-2 rounded-full" src="{PUBLIC_URL_BASE_STORAGE + '/' + profile?.student?.avatar}" alt="User Avatar">
+                        <img class="size-32 lg:size-48 border-2 rounded-full" src="{PUBLIC_URL_BASE_STORAGE + '/' + profile?.student?.avatar}" alt="User Avatar">
                     {:else}
-                    {#if selectedFile}
-                        <img
-                            class="size-48 p-5 rounded-full"
-                            src={URL.createObjectURL(selectedFile)}
-                            alt="Imagem selecionada"
-                            style="max-width: 300px; max-height: 300px;" />
-                    {:else}
-                        <div class="justify-center items-center flex flex-col">
-                            <User class="size-48 p-5 rounded-full" />
-                        </div>
-                    {/if}
+                        {#if selectedFile}
+                            <img
+                                class="size-48 p-5 rounded-full"
+                                src={URL.createObjectURL(selectedFile)}
+                                alt="Imagem selecionada"
+                                style="max-width: 300px; max-height: 300px;" />
+                        {:else}
+                            <div class="justify-center items-center flex flex-col">
+                                <User class="size-48 p-5 rounded-full" />
+                            </div>
+                        {/if}
                     {/if}
                 </div>
                 <div class="h-3/5 flex flex-col pt-10">
@@ -77,9 +77,9 @@
                 </div>
                 <Button onclick={() => logout()} class="bg-slate-900/10 text-red-500 cursor-pointer hover:text-white hover:bg-red-500">Sair</Button>
             </div>
-            <div class="w-9/12">
+            <div class="w-full lg:w-9/12">
                 <form class="w-full h-full {view !== 'profile' ? 'hidden' : ''}" method="POST" enctype="multipart/form-data" onsubmit={()=>handleSubmit(event.submitter.value)}>
-                <div class="{view !== 'profile' ? 'hidden' : ''} w-full h-full flex flex-col items-center bg-slate-900/10 rounded-2xl">
+                    <div class="{view !== 'profile' ? 'hidden' : ''} w-full h-full flex flex-col items-center py-4 bg-slate-900/10 rounded-2xl">
                         <div class="flex w-full h-1/2">
                             <div class="w-1/2 flex flex-col items-center justify-center">
                                 <div class="w-9/12">
@@ -118,7 +118,7 @@
                                     <Input bind:value={confirmPassword} oninput={()=>validatePassword()} name="confirmPassword" placeholder="Confirme sua Senha" type="password"></Input>
                                 </div>
                                 {#if !minimumPasswordLength}
-                                    <span class="text-xs p-0 m-0">A senha deve conter pelo menos 6 caracteres.</span>
+                                    <span class="text-xs p-0 m-0 w-9/12">A senha deve conter pelo menos 6 caracteres.</span>
                                 {/if}
                                 {#if !passwordsMatch && minimumPasswordLength}
                                     <span class="text-xs text-red-500 p-0 m-0">As senhas devem ser iguais.</span>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <div class="flex flex-col items-center w-full h-1/2">
-                            <div class="flex w-11/12 gap-5 p-5">
+                            <div class="flex w-11/12 gap-5 p-2">
                                 <div class="w-4/12">
                                     <label for="zip_code">CEP:</label>
                                     <Input name="zip_code" id="zip_code" placeholder="CEP" value={profile?.student?.zip_code}></Input>
@@ -138,7 +138,7 @@
                                     <label for="district">Bairro:</label>
                                     <Input name="district" id="district" placeholder="Bairro" value={profile?.student?.district}></Input>
                                 </div>
-                                <div class="w-1/12">
+                                <div class="w-2/12">
                                     <label for="uf">Estado:</label>
                                     <Input name="uf" id="uf" placeholder="Estado" value={profile?.student?.uf}></Input>
                                 </div>
@@ -147,30 +147,32 @@
                                     <Input name="city" id="city" placeholder="Cidade" value={profile?.student?.city}></Input>
                                 </div>
                             </div>
-                            <div class="flex w-11/12 gap-5 p-5">
+                            <div class="flex w-11/12 gap-5 p-2">
                                 <div class="w-8/12">
                                     <label for="address">Endereço:</label>
                                     <Input name="address" id="address" placeholder="Endereço" value={profile?.student?.address}></Input>
                                 </div>
-                                <div class="w-1/12">
+                                <div class="w-4/12">
                                     <label for="number">Número:</label>
                                     <Input name="number" id="number" placeholder="Número" value={profile?.student?.number}></Input>
                                 </div>
-                                <div class="w-3/12">
-                                    <label for="complement">Complemento:</label>
-                                    <Input name="complement" id="complement" placeholder="Complemento" value={profile?.student?.complement}></Input>
-                                </div>
                             </div>
-                            <Button value="update" type="submit" formaction="?/updateProfile" class="w-9/12 mt-10 cursor-pointer">
-                                Salvar
-                            </Button>
+                            <div class="w-11/12 p-2">
+                                <label for="complement">Complemento:</label>
+                                <Input name="complement" id="complement" placeholder="Complemento" value={profile?.student?.complement}></Input>
+                            </div>
+                            <div class="w-11/12 p-2 lg:mb-6">
+                                <Button value="update" type="submit" formaction="?/updateProfile" class="w-12/12 mt-2 cursor-pointer">
+                                    Salvar
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </form>
                 <div class="{view !== 'sell' ? 'hidden' : ''} w-full h-full bg-slate-900/10 rounded-2xl p-8 flex flex-col items-center">
                     {#await data.plans_promise}
                         <p>Carregando Informações de Compra...</p>
-                    {:then plans_promise}
+                        {:then plans_promise}
                         <div class="w-full h-full">
                             {#if plans_promise.length > 0}
                                 <table class="text-center w-full">

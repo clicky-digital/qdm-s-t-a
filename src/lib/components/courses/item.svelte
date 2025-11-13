@@ -52,10 +52,10 @@
 
         <div>
             {#if has_existing_lesson}
-                <Button onclick={() => goto(`/dashboard/cursos/${slug}`)} variant="default" class="cursor-pointer">
+                <Button onclick={() => goto(`/dashboard/cursos/${slug}`)} variant="default" class="cursor-pointer sm:mb-2 md:mb-0">
                     <Play class="w-4 h-4" />
                     Continuar
-                </Button>
+               </Button>
 
                 <Button onclick={() => goto(`/dashboard/cursos/${slug}?start=first`)} variant="default" class="bg-yellow-500 hover:bg-yellow-600 cursor-pointer">
                     <LogIn class="w-4 h-4" />
