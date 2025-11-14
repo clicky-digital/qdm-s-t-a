@@ -1,5 +1,4 @@
-<script lang="ts">
-    import { goto } from "$app/navigation";
+<script lang="ts"> import { goto } from "$app/navigation";
     import { BookCheck, Brain, Computer, Download, Heart, Megaphone, Puzzle } from "lucide-svelte";
     import Button from "../ui/button/button.svelte";
     import { createEventDispatcher, onMount } from "svelte";
@@ -98,7 +97,6 @@
         return `${materialType}_${cleanName}.${extension}`;
     }
 </script>
-
 <div class="flex gap-2 w-full font-normal text-2xl">
 
     {#if lesson.handout_url}
