@@ -16,14 +16,14 @@
         <button class="cursor-pointer" onclick={()=>{goto('./')}}>Voltar ao Início</button>
     </div>
 
-    <div class="title">Favoritos</div>
+    <div class="text-2xl font-bold text-slate-900">Favoritos</div>
     <div class="flex flex-col gap-4 my-4">
         {#await data['favorites']}
             <p>Carregando favoritos...</p>
         {:then favorites}
             {#if (favorites['courses'] && favorites['courses'].length > 0) || (favorites['trails'] && favorites['trails'].length > 0)}
                 {#if favorites['courses'] && favorites['courses'].length > 0}
-                    <div class="title">Cursos com Aulas Favoritas</div>
+                    <div class="text-xl font-bold text-slate-900">Cursos com Aulas Favoritas</div>
                     {#each favorites['courses'] as course}
                         <div class="bg-gray-100 rounded-lg shadow-md p-4 mb-4">
                             <h3 class="text-xl font-bold text-slate-900 mb-3">{course['name']}</h3>
@@ -42,7 +42,7 @@
                 {/if}
 
                 {#if favorites['trails'] && favorites['trails'].length > 0}
-                    <div class="title">Trilhas com Aulas Favoritas</div>
+                    <div class="text-xl font-bold text-slate-900">Trilhas com Aulas Favoritas</div>
                     {#each favorites['trails'] as trail}
                         <div class="bg-gray-100 rounded-lg shadow-md p-4 mb-4">
                             <h3 class="text-xl font-bold text-slate-900 mb-3">{trail['name']}</h3>

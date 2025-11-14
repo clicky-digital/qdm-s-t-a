@@ -3,14 +3,19 @@
     import * as Accordion from "@/components/ui/accordion";
     import { goto } from "$app/navigation";
     import Button from "../../../lib/components/ui/button/button.svelte";
+    import { CornerUpLeft } from "lucide-svelte";
 
     export let data;
 
     let contests = data.contests;
 </script>
 
-<div class="container mx-auto p-4">
-    <h1 class="text-3xl font-bold mb-6">Concursos</h1>
+<div class="container mx-auto flex flex-col my-4 px-8 lg:px-0">
+    <div class="flex items-center text-gray-500">
+        <CornerUpLeft class="w-4 h-4" />
+        <button class="cursor-pointer" onclick={()=>{goto('./')}}>Voltar ao Início</button>
+    </div>
+    <h1 class="text-3xl font-bold mb-8 text-slate-900">Concursos</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {#each contests as contest}

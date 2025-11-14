@@ -3,6 +3,10 @@ import { fail } from '@sveltejs/kit';
 
 export function load({ cookies }) {
 
+    const student_id = cookies.get('student_id');
+
+    console.log(student_id);
+
     let promise = fetch(URL_BASE_API + "/api/v1/profile", {
         method: "POST",
         body: JSON.stringify({
@@ -14,18 +18,25 @@ export function load({ cookies }) {
         },
     }).then((res) => res.json());
 
-    let plans_promise = fetch(URL_BASE_API + "/api/v1/get-student-plans", {
-        method: "POST",
-        body: JSON.stringify({
-            student_id: cookies.get('student_id')
-        }),
+    let plans_promise = fetch(URL_BASE_API + "/api/v1/get-student-plans/" + student_id, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
         },
     }).then((res) => res.json());
 
-    return {profile: promise, plans_promise: plans_promise};
+    console.log(plans_promise);
+
+    let product_promise = fetch(URL_BASE_API + "/api/v1/get-student-products/" + student_id, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `${cookies.get('token_type')} ${cookies.get('access_token')}`,
+        },
+    }).then((res) => res.json());
+
+    return {profile: promise, plans_promise: plans_promise, product_promise: product_promise};
 }
 
 export const actions = {

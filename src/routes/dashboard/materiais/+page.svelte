@@ -1,7 +1,8 @@
 <script lang="ts">
     import InputIcon from '@/components/ui/input-icon/input-icon.svelte';
-    import { FileText, BrainCircuit, Mic } from 'lucide-svelte';
+    import { FileText, BrainCircuit, Mic, CornerUpLeft } from 'lucide-svelte';
     import { PUBLIC_URL_BASE_STORAGE } from "$env/static/public";
+    import { goto } from '$app/navigation';
 
     export let data;
 
@@ -55,8 +56,13 @@
     }
 </script>
 
-<div class="p-4 md:p-8 w-full">
-    <h1 class="text-2xl md:text-3xl font-bold mb-8">Materiais de Apoio</h1>
+<div class="container mx-auto flex flex-col my-4 px-8 lg:px-0">
+    <div class="flex items-center text-gray-500">
+        <CornerUpLeft class="w-4 h-4" />
+        <button class="cursor-pointer" onclick={()=>{goto('./')}}>Voltar ao Início</button>
+    </div>
+
+    <h1 class="text-3xl font-bold mb-8 text-slate-900">Materiais de Apoio</h1>
 
     
 	<div class="mb-8">
