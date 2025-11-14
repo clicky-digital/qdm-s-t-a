@@ -49,7 +49,7 @@ async function logout(){
         </div>
         {:then profile}
         <div class="w-9/12 h-full flex flex-col lg:flex-row gap-2">
-            <div class="flex flex-col w-full lg:w-3/12 p-2 bg-slate-900/10 rounded-2xl">
+            <div class="flex flex-col w-full lg:w-3/12 p-7 bg-slate-900/10 rounded-2xl">
                 <div class="w-full flex flex-col gap-5 justify-center items-center h-2/5">
 
                     {#if (profile?.student?.avatar && !selectedFile)}
@@ -173,25 +173,57 @@ async function logout(){
                     {#await data.plans_promise}
                         <p>Carregando Informações de Compra...</p>
                         {:then plans_promise}
-                        <div class="w-full h-full">
+                        <div class="w-full">
+                            <h1 class="text-2xl font-bold mb-8">Planos</h1>
                             {#if plans_promise.length > 0}
-                                <table class="text-center w-full">
-                                    <thead class="w-full bg-yellow-300">
+                                <table class="text-center w-full bg-white text-white shadow-md rounded-2xl">
+                                    <thead class="w-full bg-slate-900">
                                         <tr>
-                                            <th class="p-2 rounded-tl-2xl" >Nome do Plano</th>
-                                            <th class="p-2" >Descrição</th>
-                                            <th class="p-2" >Preço</th>
-                                            <th class="p-2 rounded-tr-2xl" >Próxima Cobrança</th>
+                                            <th class="px-6 py-3 rounded-tl-2xl" >Nome do Plano</th>
+                                            <th class="px-6 py-3" >Descrição</th>
+                                            <th class="px-6 py-3" >Preço</th>
+                                            <th class="px-6 py-3 rounded-tr-2xl" >Próxima Cobrança</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {#each plans_promise as p}
                                             {@const date = p.date_next_charge ? new Date(p.date_next_charge) : null}
-                                            <tr>
-                                                <td class="p-2" >{p.plan.name}</td>
-                                                <td class="p-2" >{p.plan.description ?? "Sem descrição"}</td>
-                                                <td class="p-2" >R${p.plan.price}</td>
-                                                <td class="p-2" >{date ? `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}` : "Sem informações"}</td>
+                                            <tr class="text-black">
+                                                <td class="px-6 py-4" >{p.plan.name}</td>
+                                                <td class="px-6 py-4 text-start wrap-anywhere w-6/12" >{p.plan.description ?? "Sem descrição"}</td>
+                                                <td class="px-6 py-4" >R${p.plan.price}</td>
+                                                <td class="px-6 py-4" >{date ? `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}` : "Sem informações"}</td>
+                                            </tr>
+                                        {/each}
+                                    </tbody>
+                                </table>
+                            {:else}
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <h2 class="font-bold text-xl">Nenhuma informação disponível</h2>
+                                </div>
+                            {/if}
+                        </div>
+                    {/await}
+                    {#await data.product_promise}
+                        <p>Carregando Informações de Compra...</p>
+                        {:then product_promise}
+                        <div class="w-full h-full">
+                            <h1 class="text-2xl font-bold my-8">Produtos</h1>
+                            {#if product_promise.length > 0}
+                                <table class="text-center bg-white shadow-md w-full text-white rounded-2xl">
+                                    <thead class="w-full bg-slate-900">
+                                        <tr>
+                                            <th class="px-6 py-3 rounded-tl-2xl" >Nome do Produto</th>
+                                            <th class="px-6 py-3" >Descrição</th>
+                                            <th class="px-6 py-3 rounded-tr-2xl" >Preço</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {#each product_promise as p}
+                                            <tr class="text-black">
+                                                <td class="px-6 py-4" >{p.product.name}</td>
+                                                <td class="px-6 py-4 text-start wrap-anywhere w-6/12" >{p.product.description ?? "Sem descrição"}</td>
+                                                <td class="px-6 py-4" >R${p.product.price}</td>
                                             </tr>
                                         {/each}
                                     </tbody>
