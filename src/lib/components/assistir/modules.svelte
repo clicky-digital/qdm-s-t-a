@@ -5,12 +5,14 @@ import Lesson from "$lib/components/assistir/lesson.svelte";
 import Notes from "$lib/components/assistir/notes.svelte";
 import Complements from "$lib/components/assistir/complements.svelte";
 import Button from "../ui/button/button.svelte";
-import { ChevronsRightIcon, CircleCheck, CircleMinus, Play, RotateCw, Star } from "lucide-svelte";
+import { ChevronsRightIcon, CircleCheck, CircleMinus, DivideIcon, Play, RotateCw, Star } from "lucide-svelte";
 import { onMount } from "svelte";
 import { isEmptyObject } from "tailwind-variants/dist/utils";
 import { goto } from "$app/navigation";
 import { page } from "$app/stores";
 import EvaluationModal from "$lib/components/assistir/evaluation-modal.svelte";
+import * as Select from "$lib/components/ui/select/index.js";
+import Item from "../courses/item.svelte";
 
 let { modules, type, id, activeLesson = null, favorites, frente } = $props();
 
@@ -91,6 +93,7 @@ $effect(() => {
         })();
     }
 });
+
 
 let currentLessonRating = $derived(userRatings.find(r => r.lesson_id === lesson.id));
 
@@ -277,40 +280,79 @@ async function handleNextLesson() {
 }
 
 let initialTab = $derived(modules.find(m => m.slug === frente)?.id ?? modules[0]?.id);
+let initialTabName = $derived(modules.find(m => m.slug === frente)?.name ?? modules[0]?.name);
+let valueSelected = $state("");
+let nameModuleSelected = $derived(modules.find(m => m.id === valueSelected)?.name ?? modules[0]?.name);
+let valueSelectTrigger = $derived(valueSelected ? nameModuleSelected : initialTabName);
+let slugModuleSelected = $derived(modules.find(m => m.id === valueSelected)?.slug ?? modules[0]?.slug);
+let fistLessonModuleSelected = $derived(modules.find(m => m.id === valueSelected)?.lessons[0] ?? modules[0]?.lessons[0]);
+let moduleSelected = $derived(modules.find(m => m.id === valueSelected));
 let currentActiveTabId = $state(initialTab);
 
 function getCurrentLessonIndex(module, lesson) {
     return module.lessons.findIndex(l => l.id === lesson.id);
 }
+
 </script>
 
-{#if modules.length === 0}
-    <div class="flex justify-center items-center w-full h-full">
-        <div class="text-gray-500 text-xl">Nenhuma aula disponível</div>
-    </div>
-{:else}
-    <Tabs.Root value={currentActiveTabId}>
-        <Tabs.List class="w-full h-full flex justify-start">
-            <div class="flex overflow-x-auto">
-                {#each modules as module}
-                    <Tabs.Trigger
-                        class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
-                        onclick={() => {
-                            lessonKey = null;
-                            const firstLesson = module.lessons[0];
-                            lesson = firstLesson;
-                            getLesson(firstLesson);
-                            setLesson(firstLesson, 0);
+<Tabs.Root value={currentActiveTabId}>
+    <Tabs.List class="w-full max-w-[800px] hidden lg:max-w-full p-2 h-full md:flex justify-start overflow-x-auto">
+        <div class="flex gap-2">
+            {#each modules as module}
+                <Tabs.Trigger
+                    class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
+                    onclick={() => {
+                        lessonKey = null;
+                        const firstLesson = module.lessons[0];
+                        lesson = firstLesson;
+                        getLesson(firstLesson);
+                        setLesson(firstLesson, 0);
 
-                            const type = $page.params.slug_course ? 'cursos' : 'trilhas';
-                            const parentSlug = $page.params.slug_course || $page.params.slug_trail;
-                            const newUrl = `/dashboard/${type}/${parentSlug}/${module.slug}/${firstLesson.slug}`;
+                        const type = $page.params.slug_course ? 'cursos' : 'trilhas';
+                        const parentSlug = $page.params.slug_course || $page.params.slug_trail;
+                        const newUrl = `/dashboard/${type}/${parentSlug}/${module.slug}/${firstLesson.slug}`;
+                        goto(newUrl);
+                    }}
+                    value={module.id}>{module.name}</Tabs.Trigger>
+            {/each}
+        </div>
+    </Tabs.List>
+
+    <div class="flex items-end justify-end gap-2 md:hidden">
+        <span class="text-lg font-bold">{$page.params.slug_course ? "Semanas:" : "Frentes:"}</span>
+        <Select.Root type="single" bind:value={valueSelected}>
+            <Select.Trigger class="w-[180px] text-md">{valueSelectTrigger}</Select.Trigger>
+            <Select.Content class="overflow-y-auto max-h-[200px]">
+                {#each modules as module}
+                    <Select.Item onclick={() => {
+                        lessonKey = null;
+                        const firstLesson = fistLessonModuleSelected;
+                        lesson = firstLesson;
+                        getLesson(firstLesson);
+                        setLesson(firstLesson, 0);
+
+                        const type = $page.params.slug_course ? 'cursos' : 'trilhas';
+                        const parentSlug = $page.params.slug_course || $page.params.slug_trail;
+                        if(moduleSelected.lessons.length > 0){
+                            const newUrl = `/dashboard/${type}/${parentSlug}/${slugModuleSelected}/${firstLesson.slug}`;
                             goto(newUrl);
-                        }}
-                        value={module.id}>{module.name}</Tabs.Trigger>
+                        }
+                    }} value={module.id} class="text-md">{module.name}</Select.Item>
                 {/each}
-            </div>
-        </Tabs.List>
+            </Select.Content>
+        </Select.Root>
+    </div>
+
+    {#if modules.length === 0}
+        <div class="flex justify-center items-center w-full h-full mt-8">
+            <div class="text-gray-500 text-xl">Nenhuma aula disponível</div>
+        </div>
+
+    {:else if valueSelected && moduleSelected.lessons.length === 0}
+        <div class="flex justify-center items-center w-full h-full mt-8">
+            <div class="text-gray-500 text-xl">Nenhuma aula disponível</div>
+        </div>   
+    {:else}
         {#each modules as module, moduleIndex}
             <Tabs.Content value={module.id}>
                 {#if module.lessons.length > 0}
@@ -318,16 +360,19 @@ function getCurrentLessonIndex(module, lesson) {
                         <div class="flex flex-col gap-2 w-full p-8 bg-gray-100 rounded-sm relative">
                             <div class="flex flex-col gap-2 w-full">
                                 <div class="flex justify-between items-center font-bold text-lg mb-2">
-                                    <div>
+                                    <div class="">
                                         <span class="bg-slate-800 text-white p-2 rounded">
                                             {activeLesson.code}
                                         </span>
                                         {lesson.name ?? module.lessons[0].name}
                                     </div>
                                     {#if average_rating}
-                                        <div class="flex items-center text-md">
-                                            Avaliação da aula: {average_rating}
-                                            <Star class="w-4 h-4 ml-1 text-yellow-400 fill-yellow-400" />
+                                        <div class="flex flex-col md:flex-row gap-1">
+                                            Avaliação:
+                                            <span class="flex items-center">
+                                                {average_rating}
+                                                <Star class="w-4 h-4 ml-1 text-yellow-400 fill-yellow-400" />
+                                            </span>
                                         </div>
                                     {/if}
                                 </div>
@@ -338,9 +383,9 @@ function getCurrentLessonIndex(module, lesson) {
                                             bind:id={id} url={lesson.link ?? module.lessons[0].link} />
                                     </div>
 
-                                    <div class="absolute z-10 top-155 right-0 md:relative md:z-0 md:top-0 md:left-0 bg-slate-800 text-white rounded w-full h-[400px] lg:h-[500px]">
-                                        <div class="p-4 grid overflow-y-auto" style="grid-template-rows: 1fr 20px;">
-                                            <div class="w-full">
+                                    <div class="absolute z-10 top-170 right-0 md:relative md:z-0 md:top-0 md:left-0 bg-slate-800 text-white rounded w-full h-[400px] lg:h-[500px]">
+                                        <div class="p-4 grid" style="grid-template-rows: 1fr 20px;">
+                                            <div class="w-full overflow-y-auto max-h-[300px] lg:max-h-[400px]">
                                                 {#each module.lessons as lessonCard, key}
                                                     <div class="flex items-end border-b border-gray-300">
                                                         <Lesson lesson={lessonCard} metadata={lessonsMetadata[lessonCard.id]}
@@ -434,6 +479,6 @@ function getCurrentLessonIndex(module, lesson) {
 
             </Tabs.Content>
         {/each}
-    </Tabs.Root>
-    <EvaluationModal bind:showModal={showEvaluationModal} lesson={lesson} type={type} id={id} onSave={handleSaveEvaluation} />
-{/if}
+        <EvaluationModal bind:showModal={showEvaluationModal} lesson={lesson} type={type} id={id} onSave={handleSaveEvaluation} />
+    {/if}
+</Tabs.Root>

@@ -4,6 +4,7 @@ import Video from "$lib/components/assistir/video.svelte";
 import Lesson from "$lib/components/assistir/lesson.svelte";
 import Notes from "$lib/components/assistir/notes.svelte";
 import Complements from "$lib/components/assistir/complements.svelte";
+import * as Select from "$lib/components/ui/select/index.js";
 import Button from "../ui/button/button.svelte";
 import {
     BookCheck,
@@ -41,31 +42,57 @@ function formatTime(seconds: number) {
     }
     return `${mm.toString().padStart(2, "0")}:${ss}`;
 }
-</script>
 
-{#if !contests}
-    <div class="flex justify-center items-center w-full h-full">
-        <div class="text-gray-500 text-xl">Nenhuma prova resolvida</div>
-    </div>
-{:else}
-    <Tabs.Root value={activeContest}>
-        <Tabs.List class="w-full h-full flex justify-start">
-            <div class="flex overflow-x-auto">
+
+let valueSelected = $state("");
+let initialTabName = $derived(contests.find(c => c.slug === activeContest)?.name ?? contests[0]?.name);
+let nameConcursoSelected = $derived(contests.find(c => c.id === valueSelected)?.name ?? contests[0]?.name);
+let valueSelectTrigger = $derived(valueSelected ? nameConcursoSelected : initialTabName);
+
+
+</script>
+<Tabs.Root value={activeContest}>
+    <Tabs.List class="w-full max-w-[800px] hidden lg:max-w-full p-2 h-full md:flex justify-start overflow-x-auto">
+        <div class="flex gap-2">
+            {#each contests as contest}
+                <Tabs.Trigger
+                    class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
+                    onclick={() => {
+                        activeContest = contest.slug;
+                        activeExam = contest.contest_exams[0].exam.slug;
+                        url = contest.contest_exams[0].exam.link;
+                        const newUrl = `/dashboard/concursos/${activeContest}/${activeExam}`;
+                        goto(newUrl);
+                    }}
+                    value={activeContest}>{contest.name}
+                </Tabs.Trigger>
+            {/each}
+        </div>
+    </Tabs.List>
+
+    <div class="flex items-end justify-end gap-2 md:hidden">
+        <span class="text-lg font-bold">Concursos:</span>
+        <Select.Root type="single" bind:value={valueSelected}>
+            <Select.Trigger class="w-[180px] text-md">{valueSelectTrigger}</Select.Trigger>
+            <Select.Content class="overflow-y-auto max-h-[200px]">
                 {#each contests as contest}
-                    <Tabs.Trigger
-                        class="cursor-pointer hover:bg-gray-200 px-4 py-2 border-b-2 border-transparent data-[state=active]:font-bold text-gray-700"
-                        onclick={() => {
-                            activeContest = contest.slug;
-                            activeExam = contest.contest_exams[0].exam.slug;
-                            url = contest.contest_exams[0].exam.link;
-                            const newUrl = `/dashboard/concursos/${activeContest}/${activeExam}`;
-                            goto(newUrl);
-                        }}
-                        value={activeContest}>{contest.name}
-                    </Tabs.Trigger>
+                    <Select.Item onclick={() => {
+                        activeContest = contest.slug;
+                        activeExam = contest.contest_exams[0].exam.slug;
+                        url = contest.contest_exams[0].exam.link;
+                        const newUrl = `/dashboard/concursos/${activeContest}/${activeExam}`;
+                        goto(newUrl);
+                    }} value={contest.id} class="text-md">{contest.name}</Select.Item>
                 {/each}
-            </div>
-        </Tabs.List>
+            </Select.Content>
+        </Select.Root>
+    </div>
+
+    {#if !contests}
+        <div class="flex justify-center items-center w-full h-full mt-8">
+            <div class="text-gray-500 text-xl">Nenhuma prova resolvida</div>
+        </div>
+    {:else}
         {#each contests as contest}
             <Tabs.Content value={contest.slug}>
                 {#if contest.contest_exams.length > 0}
@@ -91,7 +118,7 @@ function formatTime(seconds: number) {
 
                                     <div class="absolute z-10 top-135 right-0 md:relative md:z-0 md:top-0 md:left-0 bg-slate-800 text-white rounded w-full h-[400px] lg:h-[600px]">
                                         <div class="p-4 grid overflow-y-auto" style="grid-template-rows: 1fr 20px;">
-                                            <div class="w-full">
+                                            <div class="w-full overflow-y-auto max-h-[350px] lg:max-h-[550px]">
                                                 {#each contest.contest_exams as contest_exam, key}
                                                     <div class="flex items-end border-b border-gray-300">
                                                         <div
@@ -151,5 +178,5 @@ function formatTime(seconds: number) {
                 {/if}
             </Tabs.Content>
         {/each}
-    </Tabs.Root>
-{/if}
+    {/if}
+</Tabs.Root>
