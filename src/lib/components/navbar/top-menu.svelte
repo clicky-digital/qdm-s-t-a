@@ -54,8 +54,7 @@ const handleTabClick = (tab: string) => {
                         <Button variant="link" class="text-gray-50 relative cursor-pointer"
                             onclick={()=>{dropdown ? dropdown = false : dropdown = true}}>
                             <Menu />
-                            <div
-                                class="{!dropdown ? 'hidden' : ''} bg-slate-900 z-10 rounded-b-2xl absolute top-12 w-36 flex flex-col">
+                            <div class="{!dropdown ? 'hidden' : ''} bg-slate-900 z-10 rounded-b-2xl absolute top-12 w-36 flex flex-col">
                                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard')}}>
                                     <div class="hover:bg-slate-800 w-full p-5">Página Inicial</div>
                                 </button>

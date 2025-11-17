@@ -42,7 +42,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-        <div class="text-slate-900 text-lg font-bold">
+        <div class="text-slate-900 text-2xl lg:text-xl font-bold">
             {courseName}
         </div>
 
