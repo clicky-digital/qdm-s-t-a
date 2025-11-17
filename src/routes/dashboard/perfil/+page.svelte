@@ -18,6 +18,13 @@ let minimumPasswordLength = $state(false);
 
 let selectedFile = $state<File | null>(null);
 
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    }).format(value);
+  };
+
 function handleSubmit(submitter?: string) {
     if(submitter == "updatePassword") {
         validatePassword();
@@ -191,7 +198,7 @@ async function logout(){
                                             <tr class="text-black">
                                                 <td class="px-6 py-4" >{p.plan.name}</td>
                                                 <td class="px-6 py-4 text-start wrap-anywhere w-6/12" >{p.plan.description ?? "Sem descrição"}</td>
-                                                <td class="px-6 py-4" >R${p.plan.price}</td>
+                                                <td class="px-6 py-4" >{formatCurrency(p.plan.price)}</td>
                                                 <td class="px-6 py-4" >{date ? `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}` : "Sem informações"}</td>
                                             </tr>
                                         {/each}
@@ -213,17 +220,13 @@ async function logout(){
                                 <table class="text-center bg-white shadow-md w-full text-white rounded-2xl">
                                     <thead class="w-full bg-slate-900">
                                         <tr>
-                                            <th class="px-6 py-3 rounded-tl-2xl" >Nome do Produto</th>
-                                            <th class="px-6 py-3" >Descrição</th>
-                                            <th class="px-6 py-3 rounded-tr-2xl" >Preço</th>
+                                            <th class="px-6 py-3 rounded-tl-2xl rounded-tr-2xl" >Nome do Produto</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {#each product_promise as p}
-                                            <tr class="text-black">
+                                            <tr class="text-black text-start">
                                                 <td class="px-6 py-4" >{p.product.name}</td>
-                                                <td class="px-6 py-4 text-start wrap-anywhere w-6/12" >{p.product.description ?? "Sem descrição"}</td>
-                                                <td class="px-6 py-4" >R${p.product.price}</td>
                                             </tr>
                                         {/each}
                                     </tbody>
