@@ -55,7 +55,7 @@ async function logout(){
             Carregando Perfil...
         </div>
         {:then profile}
-        <div class="w-9/12 h-full flex flex-col lg:flex-row gap-2">
+        <div class="w-12/12 lg:w-9/12 h-full flex flex-col lg:flex-row gap-2">
             <div class="flex flex-col w-full lg:w-3/12 p-7 bg-slate-900/10 rounded-2xl">
                 <div class="w-full flex flex-col gap-5 justify-center items-center h-2/5">
 
@@ -180,7 +180,7 @@ async function logout(){
                     {#await data.plans_promise}
                         <p>Carregando Informações de Compra...</p>
                         {:then plans_promise}
-                        <div class="w-full">
+                        <div class="w-full h-full">
                             <h1 class="text-2xl font-bold mb-8">Planos</h1>
                             {#if plans_promise.length > 0}
                                 <table class="text-center w-full bg-white text-white shadow-md rounded-2xl">
