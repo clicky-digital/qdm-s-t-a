@@ -25,7 +25,6 @@ const handleTabClick = (tab: string) => {
                     <img src="/images/logo.png" alt="logo" class="h-10 w-44" />
                 </div>
                 <div class="flex items-center hidden lg:block lg:flex">
-
                     <button class="cursor-pointer" onclick={()=>{goto('/dashboard')}}>
                         <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Página Inicial</div>
                     </button>
@@ -37,10 +36,6 @@ const handleTabClick = (tab: string) => {
                     <button class="cursor-pointer" onclick={()=>{goto('/dashboard/materiais')}}>
                         <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Materiais</div>
                     </button>
-
-                    <!--                <button class="cursor-pointer" onclick={()=>{goto('/dashboard/simulados')}}>-->
-                    <!--                    <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Simulados</div>-->
-                    <!--                </button>-->
 
                     <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
                         <div class="hover:underline hover:text-yellow-300 w-full p-5 text-lg text-white font-bold">Trilhas (Aulas)</div>
@@ -72,9 +67,6 @@ const handleTabClick = (tab: string) => {
                                     <div class="hover:bg-slate-800 w-full p-5">Materiais</div>
                                 </button>
                                 <hr class="mx-2">
-                                <button class="cursor-pointer" onclick={()=>{goto('/dashboard/simulados')}}>
-                                    <div class="hover:bg-slate-800 w-full p-5">Simulados</div>
-                                </button>
                                 <hr class="mx-2">
                                 <button class="cursor-pointer" onclick={()=>{goto('/dashboard/trilhas')}}>
                                     <div class="hover:bg-slate-800 w-full p-5 rounded-b-2xl">Trilhas (Aulas)</div>
